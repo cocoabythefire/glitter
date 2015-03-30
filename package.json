@@ -11,5 +11,12 @@
     "url": "git@bitbucket.org:brittanytarvin/glitter.git"
   },
   "author": "brit",
-  "license": "all rights reserved"
+  "license": "all rights reserved",
+  "dependencies": {
+    "express": "^4.12.3"
+  },
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "mocha": "^2.2.1"
+  }
 }
