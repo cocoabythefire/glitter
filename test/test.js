@@ -19,4 +19,24 @@ describe('glitter', function() {
       done();
     });
   });
+
+  it('POST /api/places', function(done) {
+    var requestBody = { name: 'salt and straw' };
+    request.post({ url: baseURL + '/api/places', json: true, body: requestBody }, function (err, response, body) {
+      expect(err).to.not.exist;
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({ id: 1, name: 'salt and straw' });
+      done();
+    });
+  });
+
+  it('POST /api/places with arbitrary names', function(done) {
+    var requestBody = { name: 'pine state biscuits' };
+    request.post({ url: baseURL + '/api/places', json: true, body: requestBody }, function (err, response, body) {
+      expect(err).to.not.exist;
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({ id: 1, name: 'pine state biscuits' });
+      done();
+    });
+  });
 });
