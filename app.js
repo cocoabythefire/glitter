@@ -5,4 +5,8 @@ app.get('/', function (req, res) {
   res.send('Hello World!');
 });
 
+app.get('/api/places', function (req, res) {
+  res.send({ places: [] });
+});
+
 module.exports = app;
