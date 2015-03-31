@@ -61,6 +61,16 @@ describe('glitter', function() {
         done();
       });
     });
+
+    it('POST /api/places with error', function(done) {
+      var requestBody = { name: 'salt and straw' };
+      request.post({ url: baseURL + '/api/places', json: true, body: requestBody }, function (err, response, body) {
+        expect(err).to.not.exist;
+        expect(response.statusCode).to.eql(500);
+        expect(body).to.eql({ error: 'unhandled error' });
+        done();
+      });
+    });
   });
 
   it('GET /api/places with places', function(done) {
