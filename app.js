@@ -1,6 +1,24 @@
 var express = require('express');
-var app = express();
 var bodyParser = require('body-parser');
+var azul = require('azul');
+
+/**
+ * Setup database
+ */
+
+var env = process.env.NODE_ENV || 'development';
+var config = require('./azulfile')[env];
+var db = azul(config);
+var Place = db.model('place', {
+  name: db.attr()
+});
+
+
+/**
+ * Setup application routes
+ */
+
+var app = express();
 
 app.use(bodyParser.json()); // for parsing application/json
 
