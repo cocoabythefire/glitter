@@ -2,8 +2,10 @@ process.env.NODE_ENV = 'test';
 
 var chai = require('chai');
 var expect = chai.expect;
+var sinon = require('sinon');
 var request = require('request');
 
+var pg = require('pg');
 var app = require('../app');
 var server;
 var port = 93845;
@@ -37,6 +39,27 @@ describe('glitter', function() {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ places: [] });
       done();
+    });
+  });
+
+  describe('when the db throws errors', function() {
+    beforeEach(function() {
+      sinon.stub(pg.Client.prototype, 'query', function() {
+        throw new Error('Intentional test db error.');
+      });
+    });
+
+    afterEach(function() {
+      pg.Client.prototype.query.restore();
+    });
+
+    it('GET /api/places with error', function(done) {
+      request({ url: baseURL + '/api/places', json: true }, function (err, response, body) {
+        expect(err).to.not.exist;
+        expect(response.statusCode).to.eql(500);
+        expect(body).to.eql({ error: 'unhandled error' });
+        done();
+      });
     });
   });
 
