@@ -32,7 +32,7 @@ app.set('db', db);
 app.use(bodyParser.json()); // for parsing application/json
 
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+  res.send('Hello Whiiiiiiiiy Blair!');
 });
 
 app.get('/api/places', function (req, res) {

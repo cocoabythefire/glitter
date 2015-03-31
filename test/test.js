@@ -47,6 +47,7 @@ describe('glitter', function() {
     .then(function() { return placeB.save(); })
     .then(function() { return placeC.save(); })
     .then(function() {
+      // TODO: promisify
       request({ url: baseURL + '/api/places', json: true }, function (err, response, body) {
         expect(err).to.not.exist;
         expect(response.statusCode).to.eql(200);
