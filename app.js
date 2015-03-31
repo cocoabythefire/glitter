@@ -19,6 +19,13 @@ var Place = db.model('place', {
  * Setup application routes
  */
 
+var handleError = function(res) {
+  return function(e) {
+    console.log(e)
+    res.status(500).send({ error: 'unhandled error' });
+  };
+};
+
 var app = express();
 
 app.set('db', db);
@@ -34,7 +41,8 @@ app.get('/api/places', function (req, res) {
     .limit(100);
   query.fetch().then(function(places) {
     res.send({ places: _.map(places, 'attrs') });
-  });
+  })
+  .catch(handleError(res));
 });
 
 app.post('/api/places', function (req, res) {
@@ -43,8 +51,8 @@ app.post('/api/places', function (req, res) {
   });
   newPlace.save().then(function() {
     res.send(newPlace.attrs);
-  });
-  // TODO: more promise stuff needs to go here later
+  })
+  .catch(handleError(res));
 });
 
 module.exports = app;
