@@ -20,6 +20,7 @@ var Place = db.model('place', {
 
 var app = express();
 
+app.set('db', db);
 app.use(bodyParser.json()); // for parsing application/json
 
 app.get('/', function (req, res) {
@@ -31,7 +32,13 @@ app.get('/api/places', function (req, res) {
 });
 
 app.post('/api/places', function (req, res) {
-  res.send({ id: 1, name: req.body.name });
+  var newPlace = Place.create({
+    name: req.body.name
+  });
+  newPlace.save().then(function() {
+    res.send(newPlace.attrs);
+  });
+  // TODO: more promise stuff needs to go here later
 });
 
 module.exports = app;
