@@ -5,10 +5,12 @@ var expect = chai.expect;
 var request = require('request');
 
 var app = require('../app');
-var db = app.get('db');
 var server;
 var port = 93845;
 var baseURL = 'http://localhost:' + port;
+
+var db = app.get('db');
+var Place = db.model('place');
 
 describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });
@@ -21,12 +23,42 @@ describe('glitter', function() {
     .then(function() { done(); }, done);
   });
 
-  it('GET /api/places', function(done) {
+  it('GET /api/places with no places', function(done) {
     request({ url: baseURL + '/api/places', json: true }, function (err, response, body) {
       expect(err).to.not.exist;
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ places: [] });
       done();
+    });
+  });
+
+  it('GET /api/places with places', function(done) {
+    var placeA = Place.create({
+      name: 'pine state biscuits'
+    });
+    var placeB = Place.create({
+      name: 'barista'
+    });
+    var placeC = Place.create({
+      name: 'aviary'
+    });
+
+    placeA.save()
+    .then(function() { return placeB.save(); })
+    .then(function() { return placeC.save(); })
+    .then(function() {
+      request({ url: baseURL + '/api/places', json: true }, function (err, response, body) {
+        expect(err).to.not.exist;
+        expect(response.statusCode).to.eql(200);
+        expect(body).to.eql({
+          places: [
+            { id: 1, name: 'pine state biscuits' },
+            { id: 2, name: 'barista' },
+            { id: 3, name: 'aviary' }
+          ]
+        });
+        done();
+      });
     });
   });
 

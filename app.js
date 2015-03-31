@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var express = require('express');
 var bodyParser = require('body-parser');
 var azul = require('azul');
@@ -28,7 +29,12 @@ app.get('/', function (req, res) {
 });
 
 app.get('/api/places', function (req, res) {
-  res.send({ places: [] });
+  var query = Place.objects
+    .order('id')
+    .limit(100);
+  query.fetch().then(function(places) {
+    res.send({ places: _.map(places, 'attrs') });
+  });
 });
 
 app.post('/api/places', function (req, res) {
