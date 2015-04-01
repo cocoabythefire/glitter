@@ -72,6 +72,10 @@ app.post('/api/lists', function (req, res) {
   var newList = List.create({
     name: req.body.name
   });
+  newList.save().then(function() {
+    res.send(newList.attrs);
+  })
+  .catch(handleError(res));
 });
 
 module.exports = app;
