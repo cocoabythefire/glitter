@@ -12,9 +12,11 @@ var config = require('./azulfile')[env];
 var db = azul(config);
 var Place = db.model('place', {
   name: db.attr()
+  lists: db.hasMany({ through: 'list_places' })
 });
 var List = db.model('list', {
   name: db.attr()
+  places: db.hasMany({ through: 'list_places' })
 });
 var User = db.model('user', {
   name: db.attr()
