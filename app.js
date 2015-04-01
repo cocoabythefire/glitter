@@ -16,6 +16,9 @@ var Place = db.model('place', {
 var List = db.model('list', {
   name: db.attr()
 });
+var User = db.model('user', {
+  name: db.attr()
+});
 
 
 /**
@@ -74,6 +77,16 @@ app.post('/api/lists', function (req, res) {
   });
   newList.save().then(function() {
     res.send(newList.attrs);
+  })
+  .catch(handleError(res));
+});
+
+app.post('/api/users/signup', function (req, res) {
+  var newUser = User.create({
+    name: req.body.name
+  });
+  newUser.save().then(function() {
+    res.send(newUser.attrs);
   })
   .catch(handleError(res));
 });

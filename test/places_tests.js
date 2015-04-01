@@ -26,14 +26,6 @@ describe('glitter', function() {
     .then(function() { done(); }, done);
   });
 
-  it('GET /', function(done) {
-    request({ url: baseURL + '/' }, function (err, response, body) {
-      expect(err).to.not.exist;
-      expect(response.statusCode).to.eql(200);
-      done();
-    });
-  });
-
   it('GET /api/places with no places', function(done) {
     request({ url: baseURL + '/api/places', json: true }, function (err, response, body) {
       expect(err).to.not.exist;
