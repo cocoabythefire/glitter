@@ -14,16 +14,23 @@ var baseURL = 'http://localhost:' + port;
 
 var db = app.get('db');
 var Place = db.model('place');
+var List = db.model('list');
 
 describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });
   after(function(done) { server.close(done); });
 
   afterEach(function(done) {
-    db.query.delete('places').then(function() {
+    BPromise.resolve()
+    .then(function() { return db.query.delete('places'); })
+    .then(function() {
       return db.query.raw('ALTER SEQUENCE places_id_seq restart');
     })
-    .then(function() { done(); }, done);
+    .then(function() { return db.query.delete('lists'); })
+    .then(function() {
+      return db.query.raw('ALTER SEQUENCE lists_id_seq restart');
+    })
+    .then(function() { done(); }).catch(done);
   });
 
   it('GET /api/places with no places', function(done) {
@@ -33,6 +40,21 @@ describe('glitter', function() {
       expect(body).to.eql({ places: [] });
       done();
     });
+  });
+
+  it('GET /api/lists/1/places with no places', function(done) {
+    var listA = List.create({
+      name: 'London Hot List'
+    });
+
+    BPromise.resolve()
+    .then(function() { return listA.save(); })
+    .then(function() { return request({ url: baseURL + '/api/lists/1/places', json: true }); })
+    .spread(function (response, body) {
+      // expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({ places: [] });
+    })
+    .then(done).catch(done);
   });
 
   describe('when the db throws errors', function() {

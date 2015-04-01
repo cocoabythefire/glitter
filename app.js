@@ -11,11 +11,11 @@ var env = process.env.NODE_ENV || 'development';
 var config = require('./azulfile')[env];
 var db = azul(config);
 var Place = db.model('place', {
-  name: db.attr()
+  name: db.attr(),
   lists: db.hasMany({ through: 'list_places' })
 });
 var List = db.model('list', {
-  name: db.attr()
+  name: db.attr(),
   places: db.hasMany({ through: 'list_places' })
 });
 var User = db.model('user', {
@@ -59,6 +59,19 @@ app.get('/api/lists', function (req, res) {
     .limit(100);
   query.fetch().then(function(lists) {
     res.send({ lists: _.map(lists, 'attrs') });
+  })
+  .catch(handleError(res));
+});
+
+// get the places for a specific list
+app.get('/api/lists/:id/places', function (req, res) {
+
+  // TODO: figure out if there's a better way to write this with azul
+  var query = Place.objects
+    .where({ 'list_places.list_id': req.params.id });
+
+  query.fetch().then(function(places) {
+    res.send({ places: _.map(places, 'attrs') });
   })
   .catch(handleError(res));
 });
