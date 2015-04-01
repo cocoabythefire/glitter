@@ -13,6 +13,9 @@ var db = azul(config);
 var Place = db.model('place', {
   name: db.attr()
 });
+var List = db.model('list', {
+  name: db.attr()
+});
 
 
 /**
@@ -45,6 +48,16 @@ app.get('/api/places', function (req, res) {
   .catch(handleError(res));
 });
 
+app.get('/api/lists', function (req, res) {
+  var query = List.objects
+    .order('id')
+    .limit(100);
+  query.fetch().then(function(lists) {
+    res.send({ lists: _.map(lists, 'attrs') });
+  })
+  .catch(handleError(res));
+});
+
 app.post('/api/places', function (req, res) {
   var newPlace = Place.create({
     name: req.body.name
@@ -53,6 +66,12 @@ app.post('/api/places', function (req, res) {
     res.send(newPlace.attrs);
   })
   .catch(handleError(res));
+});
+
+app.post('/api/lists', function (req, res) {
+  var newList = List.create({
+    name: req.body.name
+  });
 });
 
 module.exports = app;
