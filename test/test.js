@@ -3,7 +3,8 @@ process.env.NODE_ENV = 'test';
 var chai = require('chai');
 var expect = chai.expect;
 var sinon = require('sinon');
-var request = require('request');
+var BPromise = require('bluebird');
+var request = BPromise.promisify(require('request'));
 
 var pg = require('pg');
 var app = require('../app');
@@ -84,23 +85,21 @@ describe('glitter', function() {
       name: 'aviary'
     });
 
-    placeA.save()
+    BPromise.resolve()
+    .then(function() { return placeA.save(); })
     .then(function() { return placeB.save(); })
     .then(function() { return placeC.save(); })
-    .then(function() {
-      // TODO: promisify
-      request({ url: baseURL + '/api/places', json: true }, function (err, response, body) {
-        expect(err).to.not.exist;
-        expect(response.statusCode).to.eql(200);
-        expect(body).to.eql({
-          places: [
-            { id: 1, name: 'pine state biscuits' },
-            { id: 2, name: 'barista' },
-            { id: 3, name: 'aviary' }
-          ]
-        });
-        done();
+    .then(function() { return request({ url: baseURL + '/api/places', json: true }); })
+    .spread(function (response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        places: [
+          { id: 1, name: 'pine state biscuits' },
+          { id: 2, name: 'barista' },
+          { id: 3, name: 'aviary' }
+        ]
       });
+      done();
     });
   });
 
