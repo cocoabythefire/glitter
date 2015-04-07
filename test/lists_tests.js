@@ -85,10 +85,11 @@ describe('glitter', function() {
     .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({
+        //TODO: fix this user id null thing
         lists: [
-          { id: 1, name: 'romantic dinner spots' },
-          { id: 2, name: 'sweet treats' },
-          { id: 3, name: 'girly shops' }
+          { id: 1, name: 'romantic dinner spots', user_id: null },
+          { id: 2, name: 'sweet treats', user_id: null  },
+          { id: 3, name: 'girly shops', user_id: null  }
         ]
       });
     })
