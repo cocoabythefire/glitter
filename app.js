@@ -16,10 +16,12 @@ var Place = db.model('place', {
 });
 var List = db.model('list', {
   name: db.attr(),
-  places: db.hasMany({ through: 'list_places' })
+  places: db.hasMany({ through: 'list_places' }),
+  user: db.belongsTo()
 });
 var User = db.model('user', {
-  name: db.attr()
+  name: db.attr(),
+  lists: db.hasMany()
 });
 
 
