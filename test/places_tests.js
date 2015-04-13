@@ -113,8 +113,8 @@ describe('glitter', function() {
           { id: 3, name: 'aviary' }
         ]
       });
-      done();
-    });
+    })
+    .then(function() { done(); }).catch(done);
   });
 
   it('POST /api/places', function(done) {

@@ -24,6 +24,12 @@ var User = db.model('user', {
   lists: db.hasMany()
 });
 
+// TODO: this should be removable and is related to issue https://github.com/wbyoung/azul/issues/8
+var ListPlace = db.model('list_place', {
+  place: db.belongsTo(),
+  list: db.belongsTo()
+});
+
 
 /**
  * Setup application routes
