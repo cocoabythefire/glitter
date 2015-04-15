@@ -95,9 +95,37 @@ describe('glitter', function() {
     var requestBody = { id: '99' };
     request.post({ url: baseURL + '/api/lists/1/places', json: true, body: requestBody }, function (err, response, body) {
       expect(err).to.not.exist;
-      expect(response.statusCode).to.eql(404);
+      expect(response.statusCode).to.eql(500);
       // expect(body).to.eql({});
       done();
     });
+  });
+
+  it('POST /api/lists/1/places with valid place', function(done) {
+    var list1 = List.create({
+      name: 'list1'
+    });
+    var list2 = List.create({
+      name: 'list2'
+    });
+    var placeA = Place.create({
+      name: 'Alma Chocolates'
+    });
+
+    var requestBody = { id: '1' };
+
+    BPromise.resolve()
+    .then(function() { return list1.save(); })
+    .then(function() { return list2.save(); })
+    .then(function() { return placeA.save(); })
+    .then(function() { return request({ url: baseURL + '/api/lists/1/places', method: 'post', json: true, body: requestBody }); })
+    .spread(function(response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        status: "OK"
+      });
+    })
+    // TODO: check to see that the api call actually did what you want
+    .then(function() { done(); }).catch(done);
   });
 });

@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var express = require('express');
 var bodyParser = require('body-parser');
+var BPromise = require('bluebird');
 var azul = require('azul');
 
 /**
@@ -101,6 +102,20 @@ app.post('/api/lists', function (req, res) {
   newList.save().then(function() {
     res.send(newList.attrs);
   })
+  .catch(handleError(res));
+});
+
+app.post('/api/lists/:id/places', function (req, res) {
+  BPromise.all([
+    List.objects.find(req.params.id),
+    Place.objects.find(req.body.id)
+  ])
+  .spread(function(list, place) {
+    return list.addPlace(place);
+  })
+  .then(function() {
+    res.send({ status: "OK" });
+   })
   .catch(handleError(res));
 });
 
