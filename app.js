@@ -122,10 +122,10 @@ app.post('/api/users/signup', function (req, res) {
   .catch(handleError(res));
 });
 
-app.delete('/api/lists', function (req, res) {
+app.delete('/api/lists/:id', function (req, res) {
   BPromise.resolve()
   .then(function() {
-    return List.objects.find(req.body.id);
+    return List.objects.find(req.params.id);
   })
   .then(function(listToDelete) {
     listToDelete.delete();

@@ -121,9 +121,7 @@ describe('glitter', function() {
     // .then(done).catch(done);
   });
 
-  it('DELETE /api/lists with valid list', function(done) {
-    var requestBody = { id: '3' };
-
+  it('DELETE /api/lists/3 with valid list', function(done) {
     var listA = List.create({
       name: 'romantic dinner spots'
     });
@@ -150,7 +148,7 @@ describe('glitter', function() {
         ]
       });
     })
-    .then(function() { return request({ url: baseURL + '/api/lists', method: 'delete', body: requestBody, json: true }); })
+    .then(function() { return request({ url: baseURL + '/api/lists/3', method: 'delete', json: true }); })
     .spread(function (response, body) {
       expect(body).to.eql({
         status: "OK"
@@ -171,10 +169,7 @@ describe('glitter', function() {
     .then(done).catch(done);
   });
 
-  // TODO: change to DELETE /api/lists/99
-  it('DELETE /api/lists/ with invalid list', function(done) {
-    var requestBody = { id: '99' };
-
+  it('DELETE /api/lists/99 with invalid list', function(done) {
     var listA = List.create({
       name: 'romantic dinner spots'
     });
@@ -201,7 +196,7 @@ describe('glitter', function() {
         ]
       });
     })
-    .then(function() { return request({ url: baseURL + '/api/lists', method: 'delete', body: requestBody, json: true }); })
+    .then(function() { return request({ url: baseURL + '/api/lists/99', method: 'delete', json: true }); })
     .spread(function (response, body) {
       expect(response.statusCode).to.eql(404);
       //TODO: what should this be?
