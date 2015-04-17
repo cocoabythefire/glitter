@@ -134,6 +134,12 @@ app.delete('/api/lists', function (req, res) {
   .then(function() {
     res.send({ status: "OK" });
    })
+  .catch(function(e) {
+    if (e.code === 'NO_RESULTS_FOUND') {
+      res.status(404).send({ message: 'not found' });
+    }
+    else { throw e; }
+  })
   .catch(handleError(res));
 });
 

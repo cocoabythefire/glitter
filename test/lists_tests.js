@@ -121,7 +121,7 @@ describe('glitter', function() {
     // .then(done).catch(done);
   });
 
-  it('DELETE /api/lists', function(done) {
+  it('DELETE /api/lists with valid list', function(done) {
     var requestBody = { id: '3' };
 
     var listA = List.create({
@@ -167,6 +167,46 @@ describe('glitter', function() {
           { id: 2, name: 'sweet treats', user_id: null  }
         ]
       });
+    })
+    .then(done).catch(done);
+  });
+
+  // TODO: change to DELETE /api/lists/99
+  it('DELETE /api/lists/ with invalid list', function(done) {
+    var requestBody = { id: '99' };
+
+    var listA = List.create({
+      name: 'romantic dinner spots'
+    });
+    var listB = List.create({
+      name: 'sweet treats'
+    });
+    var listC = List.create({
+      name: 'girly shops'
+    });
+
+    BPromise.resolve()
+    .then(function() { return listA.save(); })
+    .then(function() { return listB.save(); })
+    .then(function() { return listC.save(); })
+    .then(function() { return request({ url: baseURL + '/api/lists', json: true }); })
+    .spread(function (response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        //TODO: fix this user id null thing
+        lists: [
+          { id: 1, name: 'romantic dinner spots', user_id: null },
+          { id: 2, name: 'sweet treats', user_id: null  },
+          { id: 3, name: 'girly shops', user_id: null  }
+        ]
+      });
+    })
+    .then(function() { return request({ url: baseURL + '/api/lists', method: 'delete', body: requestBody, json: true }); })
+    .spread(function (response, body) {
+      expect(response.statusCode).to.eql(404);
+      //TODO: what should this be?
+      // expect(body).to.eql({
+      // });
     })
     .then(done).catch(done);
   });
