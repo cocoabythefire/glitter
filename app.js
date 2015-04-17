@@ -122,6 +122,21 @@ app.post('/api/users/signup', function (req, res) {
   .catch(handleError(res));
 });
 
+app.delete('/api/lists', function (req, res) {
+  BPromise.resolve()
+  .then(function() {
+    return List.objects.find(req.body.id);
+  })
+  .then(function(listToDelete) {
+    listToDelete.delete();
+    return listToDelete.save();
+  })
+  .then(function() {
+    res.send({ status: "OK" });
+   })
+  .catch(handleError(res));
+});
+
 app.delete('/api/lists/:id/places', function (req, res) {
   BPromise.all([
       List.objects.find(req.params.id),
