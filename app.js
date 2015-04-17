@@ -13,22 +13,16 @@ var config = require('./azulfile')[env];
 var db = azul(config);
 var Place = db.model('place', {
   name: db.attr(),
-  lists: db.hasMany({ through: 'list_places' })
+  lists: db.hasMany({ join: 'list_places' })
 });
 var List = db.model('list', {
   name: db.attr(),
-  places: db.hasMany({ through: 'list_places' }),
+  places: db.hasMany({ join: 'list_places' }),
   user: db.belongsTo()
 });
 var User = db.model('user', {
   name: db.attr(),
   lists: db.hasMany()
-});
-
-// TODO: this should be removable and is related to issue https://github.com/wbyoung/azul/issues/8
-var ListPlace = db.model('list_place', {
-  place: db.belongsTo(),
-  list: db.belongsTo()
 });
 
 
@@ -75,9 +69,8 @@ app.get('/api/lists', function (req, res) {
 // get the places for a specific list
 app.get('/api/lists/:id/places', function (req, res) {
 
-  // TODO: figure out if there's a better way to write this with azul
   var query = Place.objects
-    .where({ 'list_places.list_id': req.params.id });
+    .where({ 'lists.id': req.params.id });
 
   query.fetch().then(function(places) {
     res.send({ places: _.map(places, 'attrs') });
