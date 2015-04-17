@@ -143,6 +143,27 @@ app.delete('/api/lists/:id', function (req, res) {
   .catch(handleError(res));
 });
 
+app.delete('/api/places/:id', function (req, res) {
+  BPromise.resolve()
+  .then(function() {
+    return Place.objects.find(req.params.id);
+  })
+  .then(function(placeToDelete) {
+    placeToDelete.delete();
+    return placeToDelete.save();
+  })
+  .then(function() {
+    res.send({ status: "OK" });
+   })
+  .catch(function(e) {
+    if (e.code === 'NO_RESULTS_FOUND') {
+      res.status(404).send({ message: 'not found' });
+    }
+    else { throw e; }
+  })
+  .catch(handleError(res));
+});
+
 app.delete('/api/lists/:id/places', function (req, res) {
   BPromise.all([
       List.objects.find(req.params.id),

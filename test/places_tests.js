@@ -126,4 +126,86 @@ describe('glitter', function() {
       done();
     });
   });
+
+  it('DELETE /api/places/99 with invalid place', function(done) {
+    var placeA = Place.create({
+      name: 'pine state biscuits'
+    });
+    var placeB = Place.create({
+      name: 'barista'
+    });
+    var placeC = Place.create({
+      name: 'aviary'
+    });
+
+    BPromise.resolve()
+    .then(function() { return placeA.save(); })
+    .then(function() { return placeB.save(); })
+    .then(function() { return placeC.save(); })
+    .then(function() { return request({ url: baseURL + '/api/places/', json: true }); })
+    .spread(function (response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        places: [
+          { id: 1, name: 'pine state biscuits' },
+          { id: 2, name: 'barista' },
+          { id: 3, name: 'aviary' }
+        ]
+      });
+    })
+    .then(function() { return request({ url: baseURL + '/api/places/99', method: 'delete', json: true }); })
+    .spread(function (response, body) {
+      expect(response.statusCode).to.eql(404);
+      //TODO: what should this be?
+      // expect(body).to.eql({
+      // });
+    })
+    .then(done).catch(done);
+  });
+
+  it('DELETE /api/places/2 with valid place', function(done) {
+    var placeA = Place.create({
+      name: 'pine state biscuits'
+    });
+    var placeB = Place.create({
+      name: 'barista'
+    });
+    var placeC = Place.create({
+      name: 'aviary'
+    });
+
+    BPromise.resolve()
+    .then(function() { return placeA.save(); })
+    .then(function() { return placeB.save(); })
+    .then(function() { return placeC.save(); })
+    .then(function() { return request({ url: baseURL + '/api/places/', json: true }); })
+    .spread(function (response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        places: [
+          { id: 1, name: 'pine state biscuits' },
+          { id: 2, name: 'barista' },
+          { id: 3, name: 'aviary' }
+        ]
+      });
+    })
+    .then(function() { return request({ url: baseURL + '/api/places/2', method: 'delete', json: true }); })
+    .spread(function (response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        status: "OK"
+      });
+    })
+    .then(function() { return request({ url: baseURL + '/api/places/', json: true }); })
+    .spread(function (response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        places: [
+          { id: 1, name: 'pine state biscuits' },
+          { id: 3, name: 'aviary' }
+        ]
+      });
+    })
+    .then(done).catch(done);
+  });
 });
