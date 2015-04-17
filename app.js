@@ -122,4 +122,18 @@ app.post('/api/users/signup', function (req, res) {
   .catch(handleError(res));
 });
 
+app.delete('/api/lists/:id/places', function (req, res) {
+  BPromise.all([
+      List.objects.find(req.params.id),
+      Place.objects.find(req.body.id)
+    ])
+    .spread(function(list, place) {
+      return list.removePlace(place);
+    })
+    .then(function() {
+      res.send({ status: "OK" });
+     })
+    .catch(handleError(res));
+});
+
 module.exports = app;

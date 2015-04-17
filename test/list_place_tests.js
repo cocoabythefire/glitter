@@ -1,5 +1,6 @@
 process.env.NODE_ENV = 'test';
 
+var _ = require('lodash');
 var chai = require('chai');
 var expect = chai.expect;
 var sinon = require('sinon');
@@ -125,7 +126,95 @@ describe('glitter', function() {
         status: "OK"
       });
     })
-    // TODO: check to see that the api call actually did what you want
+    .then(function() { return request({ url: baseURL + '/api/lists/1/places', json: true }); })
+    .spread(function(response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        places: [
+          { id: 1, name: 'Alma Chocolates' }
+        ]
+      });
+    })
     .then(function() { done(); }).catch(done);
   });
+
+  it('DELETE /api/lists/1/places with invalid place', function(done) {
+    var requestBody = { id: '99' };
+    request.post({ url: baseURL + '/api/lists/1/places', method: 'delete', json: true, body: requestBody }, function (err, response, body) {
+      expect(err).to.not.exist;
+      expect(response.statusCode).to.eql(500);
+      //TODO: what should this error body be?
+      // expect(body).to.eql({});
+      done();
+    });
+  });
+
+  it('DELETE /api/lists/1/places with valid place', function(done) {
+    var list1 = List.create({
+      name: 'list1'
+    });
+    var placeA = Place.create({
+      name: 'Alma Chocolates'
+    });
+    var placeB = Place.create({
+      name: 'Barista'
+    });
+
+    var baseRequest = {
+      url: baseURL + '/api/lists/1/places',
+      method: 'post',
+      json: true,
+    };
+    var postRequest1 = _.extend({}, baseRequest, { body: { id: '1' } });
+    var postRequest2 = _.extend({}, baseRequest, { body: { id: '2' } });
+    var deleteRequest = _.extend({}, postRequest2, { method: 'delete' });
+    var getRequest = _.extend({}, baseRequest, { method: 'get' });
+
+    BPromise.resolve()
+    .then(function() { return list1.save(); })
+    .then(function() { return placeA.save(); })
+    .then(function() { return placeB.save(); })
+    .then(function() { return request(postRequest1); })
+    .spread(function(response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        status: "OK"
+      });
+    })
+    .then(function() { return request(postRequest2); })
+    .spread(function(response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        status: "OK"
+      });
+    })
+    .then(function() { return request(getRequest); })
+    .spread(function(response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        places: [
+          { id: 1, name: 'Alma Chocolates' },
+          { id: 2, name: 'Barista' }
+        ]
+      });
+    })
+    .then(function() { return request(deleteRequest); })
+    .spread(function(response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        status: "OK"
+      });
+    })
+    .then(function() { return request(getRequest); })
+    .spread(function(response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        places: [
+          { id: 1, name: 'Alma Chocolates' }
+        ]
+      });
+    })
+    .then(function() { done(); }).catch(done);
+  });
+
 });
