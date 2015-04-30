@@ -90,6 +90,41 @@ describe('glitter', function() {
     .then(function() { done(); }).catch(done);
   });
 
+  it ('GET /api/profile with invalid token', function (done) {
+    var tokenHeader = { 'x-glitter-token' : 'goofy123' };
+    var userA = User.create({
+      name: 'Whit McNasty'
+    });
+    var userB = User.create({
+      name: 'Brit McNastier'
+    });
+    var tokenA = Token.create({
+      value: 'abc1234'
+    });
+    var tokenB = Token.create({
+      value: 'def6789'
+    });
+    BPromise.resolve()
+    .then(function() { return userA.save(); })
+    .then(function() { return userB.save(); })
+    .then(function() {
+      tokenA.user = userA;
+      return tokenA.save();
+    })
+    .then(function() {
+      tokenB.user = userB;
+      return tokenB.save();
+    })
+    .then(function() {
+      return request({ url: baseURL + '/api/profile', headers: tokenHeader, json: true });
+    })
+    .spread(function (response, body) {
+      expect(response.statusCode).to.eql(403);
+      expect(body).to.eql({ message: 'invalid token' });
+    })
+    .then(function() { done(); }).catch(done);
+  });
+
   it('POST /api/users/signup', function(done) {
     var requestBody = { name: 'Whit McNasty' };
     request.post({ url: baseURL + '/api/users/signup', json: true, body: requestBody }, function (err, response, body) {

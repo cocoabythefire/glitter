@@ -86,13 +86,19 @@ app.get('/api/profile', function (req, res) {
   var tokenQuery = Token.objects.where({ 'value': req.headers['x-glitter-token'] });
   BPromise.resolve()
   .then(function() {
-    return tokenQuery.fetch();
+    return tokenQuery.fetchOne();
   })
   .then(function(token) {
-    return User.objects.find(token[0].userId);
+    return User.objects.find(token.userId);
   })
   .then(function(user) {
     res.send(user.attrs);
+  })
+  .catch(function(e) {
+    if (e.code === 'NO_RESULTS_FOUND') {
+      res.status(403).send({ message: 'invalid token' });
+    }
+    else { throw e; }
   })
   .catch(handleError(res));
 });
