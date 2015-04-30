@@ -83,10 +83,9 @@ app.get('/api/lists/:id/places', function (req, res) {
 });
 
 app.get('/api/profile', function (req, res) {
-  var tokenQuery = Token.objects.where({ 'value': req.headers['x-glitter-token'] });
   BPromise.resolve()
   .then(function() {
-    return tokenQuery.fetchOne();
+    return Token.objects.where({ 'value': req.headers['x-glitter-token'] }).fetchOne();
   })
   .then(function(token) {
     return User.objects.find(token.userId);

@@ -19,10 +19,10 @@ describe('glitter', function() {
   after(function(done) { server.close(done); });
 
   it('GET /', function(done) {
-    request({ url: baseURL + '/' }, function (err, response, body) {
-      expect(err).to.not.exist;
+    request({ url: baseURL + '/' })
+    .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
-      done();
-    });
+    })
+    .return().then(done).catch(done);
   });
 });

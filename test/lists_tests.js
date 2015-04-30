@@ -23,16 +23,16 @@ describe('glitter', function() {
     db.query.delete('lists').then(function() {
       return db.query.raw('ALTER SEQUENCE lists_id_seq restart');
     })
-    .then(function() { done(); }, done);
+    .return().then(done).catch(done);
   });
 
   it('GET /api/lists with no lists', function(done) {
-    request({ url: baseURL + '/api/lists', json: true }, function (err, response, body) {
-      expect(err).to.not.exist;
+    request({ url: baseURL + '/api/lists', json: true })
+    .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ lists: [] });
-      done();
-    });
+    })
+    .return().then(done).catch(done);
   });
 
   describe('when the db throws errors', function() {
@@ -47,22 +47,22 @@ describe('glitter', function() {
     });
 
     it('GET /api/lists with error', function(done) {
-      request({ url: baseURL + '/api/lists', json: true }, function (err, response, body) {
-        expect(err).to.not.exist;
+      request({ url: baseURL + '/api/lists', json: true })
+      .spread(function(response, body) {
         expect(response.statusCode).to.eql(500);
         expect(body).to.eql({ error: 'unhandled error' });
-        done();
-      });
+      })
+      .return().then(done).catch(done);
     });
 
     it('POST /api/lists with error', function(done) {
       var requestBody = { name: 'favorite brunch spots' };
-      request.post({ url: baseURL + '/api/lists', json: true, body: requestBody }, function (err, response, body) {
-        expect(err).to.not.exist;
+      request({ url: baseURL + '/api/lists', method: 'post', json: true, body: requestBody })
+      .spread(function (response, body) {
         expect(response.statusCode).to.eql(500);
         expect(body).to.eql({ error: 'unhandled error' });
-        done();
-      });
+      })
+      .return().then(done).catch(done);
     });
   });
 
@@ -93,32 +93,17 @@ describe('glitter', function() {
         ]
       });
     })
-    .then(done).catch(done);
+    .return().then(done).catch(done);
   });
 
   it('POST /api/lists', function(done) {
     var requestBody = { name: 'best coffee' };
-    request.post({ url: baseURL + '/api/lists', json: true, body: requestBody }, function (err, response, body) {
-      expect(err).to.not.exist;
+    request({ url: baseURL + '/api/lists', method: 'post', json: true, body: requestBody })
+    .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ id: 1, name: 'best coffee' });
-      done();
-    });
-
-    // TODO: this uses promises instead of a callback. understand this code &
-    // covert all callbacks in tests to promises.
-    // var requestBody = { name: 'best coffee' };
-    // request({
-    //   url: baseURL + '/api/lists',
-    //   method: 'post',
-    //   json: true,
-    //   body: requestBody
-    // })
-    // .spread(function (response, body) {
-    //   expect(response.statusCode).to.eql(200);
-    //   expect(body).to.eql({ id: 1, name: 'best coffee' });
-    // })
-    // .then(done).catch(done);
+    })
+    .return().then(done).catch(done);
   });
 
   it('DELETE /api/lists/3 with valid list', function(done) {
@@ -150,9 +135,7 @@ describe('glitter', function() {
     })
     .then(function() { return request({ url: baseURL + '/api/lists/3', method: 'delete', json: true }); })
     .spread(function (response, body) {
-      expect(body).to.eql({
-        status: "OK"
-      });
+      expect(body).to.eql({ status: "OK" });
       expect(response.statusCode).to.eql(200);
     })
     .then(function() { return request({ url: baseURL + '/api/lists', json: true }); })
@@ -166,7 +149,7 @@ describe('glitter', function() {
         ]
       });
     })
-    .then(done).catch(done);
+    .return().then(done).catch(done);
   });
 
   it('DELETE /api/lists/99 with invalid list', function(done) {
@@ -203,6 +186,6 @@ describe('glitter', function() {
       // expect(body).to.eql({
       // });
     })
-    .then(done).catch(done);
+    .return().then(done).catch(done);
   });
 });

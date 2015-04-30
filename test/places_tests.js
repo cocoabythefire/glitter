@@ -30,16 +30,16 @@ describe('glitter', function() {
     .then(function() {
       return db.query.raw('ALTER SEQUENCE lists_id_seq restart');
     })
-    .then(function() { done(); }).catch(done);
+    .return().then(done).catch(done);
   });
 
   it('GET /api/places with no places', function(done) {
-    request({ url: baseURL + '/api/places', json: true }, function (err, response, body) {
-      expect(err).to.not.exist;
+    request({ url: baseURL + '/api/places', json: true })
+    .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ places: [] });
-      done();
-    });
+    })
+    .return().then(done).catch(done);
   });
 
   it('GET /api/lists/1/places with no places', function(done) {
@@ -51,10 +51,10 @@ describe('glitter', function() {
     .then(function() { return listA.save(); })
     .then(function() { return request({ url: baseURL + '/api/lists/1/places', json: true }); })
     .spread(function (response, body) {
-      // expect(response.statusCode).to.eql(200);
+      expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ places: [] });
     })
-    .then(done).catch(done);
+    .return().then(done).catch(done);
   });
 
   describe('when the db throws errors', function() {
@@ -69,22 +69,22 @@ describe('glitter', function() {
     });
 
     it('GET /api/places with error', function(done) {
-      request({ url: baseURL + '/api/places', json: true }, function (err, response, body) {
-        expect(err).to.not.exist;
+      request({ url: baseURL + '/api/places', json: true })
+      .spread(function (response, body) {
         expect(response.statusCode).to.eql(500);
         expect(body).to.eql({ error: 'unhandled error' });
-        done();
-      });
+      })
+      .return().then(done).catch(done);
     });
 
     it('POST /api/places with error', function(done) {
       var requestBody = { name: 'salt and straw' };
-      request.post({ url: baseURL + '/api/places', json: true, body: requestBody }, function (err, response, body) {
-        expect(err).to.not.exist;
+      request({ url: baseURL + '/api/places', method: 'post', json: true, body: requestBody })
+      .spread(function (response, body) {
         expect(response.statusCode).to.eql(500);
         expect(body).to.eql({ error: 'unhandled error' });
-        done();
-      });
+      })
+      .return().then(done).catch(done);
     });
   });
 
@@ -114,17 +114,17 @@ describe('glitter', function() {
         ]
       });
     })
-    .then(function() { done(); }).catch(done);
+    .return().then(done).catch(done);
   });
 
   it('POST /api/places', function(done) {
     var requestBody = { name: 'salt and straw' };
-    request.post({ url: baseURL + '/api/places', json: true, body: requestBody }, function (err, response, body) {
-      expect(err).to.not.exist;
+    request({ url: baseURL + '/api/places', method: 'post', json: true, body: requestBody })
+    .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ id: 1, name: 'salt and straw' });
-      done();
-    });
+    })
+    .return().then(done).catch(done);
   });
 
   it('DELETE /api/places/99 with invalid place', function(done) {
@@ -160,7 +160,7 @@ describe('glitter', function() {
       // expect(body).to.eql({
       // });
     })
-    .then(done).catch(done);
+    .return().then(done).catch(done);
   });
 
   it('DELETE /api/places/2 with valid place', function(done) {
@@ -206,6 +206,6 @@ describe('glitter', function() {
         ]
       });
     })
-    .then(done).catch(done);
+    .return().then(done).catch(done);
   });
 });

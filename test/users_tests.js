@@ -30,7 +30,7 @@ describe('glitter', function() {
     .then(function() {
       return db.query.raw('ALTER SEQUENCE users_id_seq restart');
     })
-    .then(function() { done(); }).catch(done);
+    .return().then(done).catch(done);
   });
 
   describe('when the db throws errors', function() {
@@ -46,12 +46,12 @@ describe('glitter', function() {
 
     it('POST /api/users/signup with error', function(done) {
       var requestBody = { name: 'Brit McVillain' };
-      request.post({ url: baseURL + '/api/users/signup', json: true, body: requestBody }, function (err, response, body) {
-        expect(err).to.not.exist;
+      request({ url: baseURL + '/api/users/signup', method: 'post', json: true, body: requestBody })
+      .spread(function (response, body) {
         expect(response.statusCode).to.eql(500);
         expect(body).to.eql({ error: 'unhandled error' });
-        done();
-      });
+      })
+      .return().then(done).catch(done);
     });
   });
 
@@ -87,7 +87,7 @@ describe('glitter', function() {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ id: 2, name: 'Brit McNastier' });
     })
-    .then(function() { done(); }).catch(done);
+    .return().then(done).catch(done);
   });
 
   it ('GET /api/profile with invalid token', function (done) {
@@ -122,16 +122,16 @@ describe('glitter', function() {
       expect(response.statusCode).to.eql(403);
       expect(body).to.eql({ message: 'invalid token' });
     })
-    .then(function() { done(); }).catch(done);
+    .return().then(done).catch(done);
   });
 
   it('POST /api/users/signup', function(done) {
     var requestBody = { name: 'Whit McNasty' };
-    request.post({ url: baseURL + '/api/users/signup', json: true, body: requestBody }, function (err, response, body) {
-      expect(err).to.not.exist;
+    request({ url: baseURL + '/api/users/signup', method: 'post', json: true, body: requestBody })
+    .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ id: 1, name: 'Whit McNasty' });
-      done();
-    });
+    })
+    .return().then(done).catch(done);
   });
 });

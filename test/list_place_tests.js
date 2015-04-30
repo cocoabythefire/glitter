@@ -32,7 +32,7 @@ describe('glitter', function() {
     .then(function() {
       return db.query.raw('ALTER SEQUENCE lists_id_seq restart');
     })
-    .then(function() { done(); }).catch(done);
+    .return().then(done).catch(done);
   });
 
   it('GET /api/lists/2/places with no places', function(done) {
@@ -50,8 +50,7 @@ describe('glitter', function() {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ places: [] });
     })
-    // TODO: fix done syntax to match everywhere
-    .then(function() { done(); }).catch(done);
+    .return().then(done).catch(done);
   });
 
   it('GET /api/lists/2/places with places', function(done) {
@@ -89,17 +88,16 @@ describe('glitter', function() {
         ]
       });
     })
-    .then(function() { done(); }).catch(done);
+    .return().then(done).catch(done);
   });
 
   it('POST /api/lists/1/places with invalid place', function(done) {
     var requestBody = { id: '99' };
-    request.post({ url: baseURL + '/api/lists/1/places', json: true, body: requestBody }, function (err, response, body) {
-      expect(err).to.not.exist;
-      expect(response.statusCode).to.eql(500);
-      // expect(body).to.eql({});
-      done();
-    });
+    request({ url: baseURL + '/api/lists/1/places', method: 'post', json: true, body: requestBody })
+    .spread(function(response, body) {
+     // expect(body).to.eql({});
+    })
+    .return().then(done).catch(done);
   });
 
   it('POST /api/lists/1/places with valid place', function(done) {
@@ -135,18 +133,18 @@ describe('glitter', function() {
         ]
       });
     })
-    .then(function() { done(); }).catch(done);
+    .return().then(done).catch(done);
   });
 
   it('DELETE /api/lists/1/places with invalid place', function(done) {
     var requestBody = { id: '99' };
-    request.post({ url: baseURL + '/api/lists/1/places', method: 'delete', json: true, body: requestBody }, function (err, response, body) {
-      expect(err).to.not.exist;
+    request({ url: baseURL + '/api/lists/1/places', method: 'delete', json: true, body: requestBody })
+    .spread(function(response, body) {
       expect(response.statusCode).to.eql(500);
       //TODO: what should this error body be?
       // expect(body).to.eql({});
-      done();
-    });
+    })
+    .return().then(done).catch(done);
   });
 
   it('DELETE /api/lists/1/places with valid place', function(done) {
@@ -159,7 +157,6 @@ describe('glitter', function() {
     var placeB = Place.create({
       name: 'Barista'
     });
-
     var baseRequest = {
       url: baseURL + '/api/lists/1/places',
       method: 'post',
@@ -214,7 +211,6 @@ describe('glitter', function() {
         ]
       });
     })
-    .then(function() { done(); }).catch(done);
+    .return().then(done).catch(done);
   });
-
 });
