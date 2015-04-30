@@ -56,7 +56,7 @@ describe('glitter', function() {
   });
 
   it ('GET /api/profile with valid token', function (done) {
-    var tokenHeader = { 'X-Glitter-Token' : 'def6789' };
+    var tokenHeader = { 'x-glitter-token' : 'def6789' };
     var userA = User.create({
       name: 'Whit McNasty'
     });
@@ -64,19 +64,25 @@ describe('glitter', function() {
       name: 'Brit McNastier'
     });
     var tokenA = Token.create({
-      value: 'abc1234',
-      user_id: userA
+      value: 'abc1234'
     });
     var tokenB = Token.create({
-      value: 'def6789',
-      user: userB
+      value: 'def6789'
     });
     BPromise.resolve()
     .then(function() { return userA.save(); })
     .then(function() { return userB.save(); })
-    .then(function() { return tokenA.save(); })
-    .then(function() { return tokenB.save(); })
-    .then(function() { return request({ url: baseURL + '/api/profile', headers: tokenHeader, json: true }); })
+    .then(function() {
+      tokenA.user = userA;
+      return tokenA.save();
+    })
+    .then(function() {
+      tokenB.user = userB;
+      return tokenB.save();
+    })
+    .then(function() {
+      return request({ url: baseURL + '/api/profile', headers: tokenHeader, json: true });
+    })
     .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ id: 2, name: 'Brit McNastier' });

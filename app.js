@@ -24,6 +24,10 @@ var User = db.model('user', {
   name: db.attr(),
   lists: db.hasMany()
 });
+var Token = db.model('token', {
+  value: db.attr(),
+  user: db.belongsTo()
+});
 
 
 /**
@@ -79,13 +83,13 @@ app.get('/api/lists/:id/places', function (req, res) {
 });
 
 app.get('/api/profile', function (req, res) {
-  var tokenQuery = Token.objects.where({ 'value': req.headers['X-Glitter-Token'] });
+  var tokenQuery = Token.objects.where({ 'value': req.headers['x-glitter-token'] });
   BPromise.resolve()
   .then(function() {
     return tokenQuery.fetch();
   })
   .then(function(token) {
-    return User.objects.find(token.user_id);
+    return User.objects.find(token[0].userId);
   })
   .then(function(user) {
     res.send(user.attrs);
