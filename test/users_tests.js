@@ -14,16 +14,23 @@ var baseURL = 'http://localhost:' + port;
 
 var db = app.get('db');
 var User = db.model('user');
+var Token = db.model('token');
 
 describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });
   after(function(done) { server.close(done); });
 
   afterEach(function(done) {
-    db.query.delete('users').then(function() {
+    BPromise.resolve()
+    .then (function () { return db.query.delete('tokens'); })
+    .then(function() {
+      return db.query.raw('ALTER SEQUENCE tokens_id_seq restart');
+    })
+    .then (function() { return db.query.delete('users'); })
+    .then(function() {
       return db.query.raw('ALTER SEQUENCE users_id_seq restart');
     })
-    .then(function() { done(); }, done);
+    .then(function() { done(); }).catch(done);
   });
 
   describe('when the db throws errors', function() {
@@ -46,6 +53,35 @@ describe('glitter', function() {
         done();
       });
     });
+  });
+
+  it ('GET /api/profile with valid token', function (done) {
+    var tokenHeader = { 'X-Glitter-Token' : 'def6789' };
+    var userA = User.create({
+      name: 'Whit McNasty'
+    });
+    var userB = User.create({
+      name: 'Brit McNastier'
+    });
+    var tokenA = Token.create({
+      value: 'abc1234',
+      user_id: userA
+    });
+    var tokenB = Token.create({
+      value: 'def6789',
+      user: userB
+    });
+    BPromise.resolve()
+    .then(function() { return userA.save(); })
+    .then(function() { return userB.save(); })
+    .then(function() { return tokenA.save(); })
+    .then(function() { return tokenB.save(); })
+    .then(function() { return request({ url: baseURL + '/api/profile', headers: tokenHeader, json: true }); })
+    .spread(function (response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({ id: 2, name: 'Brit McNastier' });
+    })
+    .then(function() { done(); }).catch(done);
   });
 
   it('POST /api/users/signup', function(done) {

@@ -78,6 +78,21 @@ app.get('/api/lists/:id/places', function (req, res) {
   .catch(handleError(res));
 });
 
+app.get('/api/profile', function (req, res) {
+  var tokenQuery = Token.objects.where({ 'value': req.headers['X-Glitter-Token'] });
+  BPromise.resolve()
+  .then(function() {
+    return tokenQuery.fetch();
+  })
+  .then(function(token) {
+    return User.objects.find(token.user_id);
+  })
+  .then(function(user) {
+    res.send(user.attrs);
+  })
+  .catch(handleError(res));
+});
+
 app.post('/api/places', function (req, res) {
   var newPlace = Place.create({
     name: req.body.name
