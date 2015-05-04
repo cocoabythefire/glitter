@@ -1,3 +1,5 @@
+'use strict';
+
 var _ = require('lodash');
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -36,12 +38,19 @@ var Token = db.model('token', {
 
 var handleError = function(res) {
   return function(e) {
-    console.log(e)
-    res.status(500).send({ error: 'unhandled error' });
+    if (e.status) {
+      res.status(e.status).send({ status: e.message });
+    }
+    else {
+      console.log(e);
+      res.status(500).send({ error: 'unhandled error' });
+    }
   };
 };
 
 var app = express();
+var api = express.Router();
+var secureAPI = express.Router();
 
 app.set('db', db);
 app.use(bodyParser.json()); // for parsing application/json
@@ -50,6 +59,29 @@ app.get('/', function (req, res) {
   res.send('Hello Whiiiiiiiiy Blair!');
 });
 
+// Authentication Middleware
+secureAPI.use(function(req, res, next) {
+  BPromise.bind({})
+  .then(function() {
+    return Token.objects.where({
+      'value': req.headers['x-glitter-token']
+    }).fetchOne();
+  })
+  .tap(function(token) { req.token = token; })
+  .then(function(token) { return User.objects.find(token.userId); })
+  .then(function(user) { req.user = user; })
+  .catch(function(e) {
+    if (e.code === 'NO_RESULTS_FOUND') {
+      throw _.extend(new Error('invalid user'), { status: 401 });
+    }
+    else { throw e; }
+  })
+  .then(function() { next(); })
+  .catch(handleError(res));
+  // TODO: install real express error handling middleware
+});
+
+// Get all Places
 app.get('/api/places', function (req, res) {
   var query = Place.objects
     .order('id')
@@ -60,6 +92,7 @@ app.get('/api/places', function (req, res) {
   .catch(handleError(res));
 });
 
+// Get all Lists
 app.get('/api/lists', function (req, res) {
   var query = List.objects
     .order('id')
@@ -70,11 +103,10 @@ app.get('/api/lists', function (req, res) {
   .catch(handleError(res));
 });
 
-// get the places for a specific list
+// Get the Places for a specific List
 app.get('/api/lists/:id/places', function (req, res) {
-
   var query = Place.objects
-    .where({ 'lists.id': req.params.id });
+  .where({ 'lists.id': req.params.id });
 
   query.fetch().then(function(places) {
     res.send({ places: _.map(places, 'attrs') });
@@ -82,6 +114,7 @@ app.get('/api/lists/:id/places', function (req, res) {
   .catch(handleError(res));
 });
 
+// Get a User's Profile
 app.get('/api/profile', function (req, res) {
   BPromise.resolve()
   .then(function() {
@@ -102,6 +135,7 @@ app.get('/api/profile', function (req, res) {
   .catch(handleError(res));
 });
 
+// Create a new Place
 app.post('/api/places', function (req, res) {
   var newPlace = Place.create({
     name: req.body.name
@@ -112,6 +146,7 @@ app.post('/api/places', function (req, res) {
   .catch(handleError(res));
 });
 
+// Create a new List
 app.post('/api/lists', function (req, res) {
   var newList = List.create({
     name: req.body.name
@@ -122,20 +157,29 @@ app.post('/api/lists', function (req, res) {
   .catch(handleError(res));
 });
 
-app.post('/api/lists/:id/places', function (req, res) {
-  BPromise.all([
-    List.objects.find(req.params.id),
-    Place.objects.find(req.body.id)
-  ])
-  .spread(function(list, place) {
-    return list.addPlace(place);
-  })
+// Add a Place to a List
+secureAPI.post('/lists/:id/places', function (req, res) {
+  BPromise.bind({})
+  .then(function() { return List.objects.find(req.params.id); })
+  .then(function(list) { this.list = list; })
   .then(function() {
-    res.send({ status: "OK" });
-   })
+    if(this.list.userId !== req.user.id) {
+      throw _.extend(new Error('invalid action'), { status: 403 });
+    }
+  })
+  .then(function() { return Place.objects.find(req.body.id); })
+  .then(function(place) { return this.list.addPlace(place); })
+  .then(function() { res.send({ status: "OK" }); })
+  .catch(function(e) {
+    if (e.code === 'NO_RESULTS_FOUND') {
+      res.status(404).send({ message: 'not found' });
+    }
+    else { throw e; }
+  })
   .catch(handleError(res));
 });
 
+// User Signup
 app.post('/api/users/signup', function (req, res) {
   var newUser = User.create({
     name: req.body.name
@@ -146,6 +190,7 @@ app.post('/api/users/signup', function (req, res) {
   .catch(handleError(res));
 });
 
+// Delete a List
 app.delete('/api/lists/:id', function (req, res) {
   BPromise.resolve()
   .then(function() {
@@ -167,6 +212,7 @@ app.delete('/api/lists/:id', function (req, res) {
   .catch(handleError(res));
 });
 
+// Delete a Place
 app.delete('/api/places/:id', function (req, res) {
   BPromise.resolve()
   .then(function() {
@@ -188,18 +234,35 @@ app.delete('/api/places/:id', function (req, res) {
   .catch(handleError(res));
 });
 
-app.delete('/api/lists/:id/places', function (req, res) {
-  BPromise.all([
-      List.objects.find(req.params.id),
-      Place.objects.find(req.body.id)
-    ])
-    .spread(function(list, place) {
-      return list.removePlace(place);
-    })
-    .then(function() {
-      res.send({ status: "OK" });
-     })
-    .catch(handleError(res));
+// Remove a Place from a List
+secureAPI.delete('/lists/:id/places', function (req, res) {
+   BPromise.bind({})
+  .then(function() { return List.objects.find(req.params.id); })
+  .then(function(list) { this.list = list; })
+  .then(function() {
+    if(this.list.userId !== req.user.id) {
+      throw _.extend(new Error('invalid action'), { status: 403 });
+    }
+  })
+  .then(function() {
+    return Place.objects.find(req.body.id);
+  })
+  .then(function(place) {
+    return this.list.removePlace(place);
+  })
+  .then(function() {
+    res.send({ status: "OK" });
+  })
+  .catch(function(e) {
+    if (e.code === 'NO_RESULTS_FOUND') {
+      res.status(404).send({ message: 'not found' });
+    }
+    else { throw e; }
+  })
+  .catch(handleError(res));
 });
+
+app.use('/api', api);
+app.use('/api', secureAPI);
 
 module.exports = app;
