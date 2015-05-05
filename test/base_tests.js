@@ -20,11 +20,10 @@ describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });
   after(function(done) { server.close(done); });
 
-  it('GET /', function(done) {
-    request({ url: baseURL + '/' })
+  it('GET /', function() {
+    return request({ url: baseURL + '/' })
     .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
-    })
-    .return().then(done).catch(done);
+    });
   });
 });

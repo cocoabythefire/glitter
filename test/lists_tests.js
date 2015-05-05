@@ -2,11 +2,13 @@
 
 process.env.NODE_ENV = 'test';
 
+var _ = require('lodash');
 var chai = require('chai');
 var expect = chai.expect;
 var sinon = require('sinon');
 var BPromise = require('bluebird');
 var request = BPromise.promisify(require('request'));
+var helpers = require('./helpers');
 
 var pg = require('pg');
 var app = require('../app');
@@ -21,20 +23,40 @@ describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });
   after(function(done) { server.close(done); });
 
-  afterEach(function(done) {
-    db.query.delete('lists').then(function() {
-      return db.query.raw('ALTER SEQUENCE lists_id_seq restart');
-    })
-    .return().then(done).catch(done);
+  beforeEach(function() {
+    return BPromise.bind(this) // bind to mocha context
+    .then(function() { return helpers.createSomePlaces.call(this); })
+    .then(function() { return helpers.createAuthenticatedUser('Whitney'); })
+    .then(function(user) { this.user = user; });
   });
 
-  it('GET /api/lists with no lists', function(done) {
-    request({ url: baseURL + '/api/lists', json: true })
+  afterEach(function() {
+    return BPromise.resolve()
+    .then(function() { return db.query.delete('list_places'); })
+    .then (function() { return db.query.delete('places'); })
+    .then(function() {
+      return db.query.raw('ALTER SEQUENCE places_id_seq restart');
+    })
+    .then (function() { return db.query.delete('lists'); })
+    .then(function() {
+      return db.query.raw('ALTER SEQUENCE lists_id_seq restart');
+    })
+    .then (function () { return db.query.delete('tokens'); })
+    .then(function() {
+      return db.query.raw('ALTER SEQUENCE tokens_id_seq restart');
+    })
+    .then (function() { return db.query.delete('users'); })
+    .then(function() {
+      return db.query.raw('ALTER SEQUENCE users_id_seq restart');
+    });
+  });
+
+  it('GET /api/lists with no lists', function() {
+    return request({ url: baseURL + '/api/lists', json: true })
     .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ lists: [] });
-    })
-    .return().then(done).catch(done);
+    });
   });
 
   describe('when the db throws errors', function() {
@@ -48,146 +70,112 @@ describe('glitter', function() {
       pg.Client.prototype.query.restore();
     });
 
-    it('GET /api/lists with error', function(done) {
-      request({ url: baseURL + '/api/lists', json: true })
+    it('GET /api/lists with error', function() {
+      return request({ url: baseURL + '/api/lists', json: true })
       .spread(function(response, body) {
         expect(response.statusCode).to.eql(500);
         expect(body).to.eql({ error: 'unhandled error' });
-      })
-      .return().then(done).catch(done);
+      });
     });
 
-    it('POST /api/lists with error', function(done) {
+    it('POST /api/lists with error', function() {
       var requestBody = { name: 'favorite brunch spots' };
-      request({ url: baseURL + '/api/lists', method: 'post', json: true, body: requestBody })
+      return request({ url: baseURL + '/api/lists', method: 'post', json: true, body: requestBody })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(500);
         expect(body).to.eql({ error: 'unhandled error' });
+      });
+    });
+  });
+
+  it('POST /api/lists', function() {
+    var requestBody = { name: 'Best Coffee' };
+    return request({ url: baseURL + '/api/lists', method: 'post', json: true, body: requestBody })
+    .spread(function (response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({ id: 1, name: 'Best Coffee' });
+    });
+  });
+
+  describe('when lists exist and are owned by the authenticated user', function() {
+    beforeEach(function() {
+      return BPromise.bind(this)
+      .then(function() { return helpers.createSomeLists.call(this); })
+      .then(function() {
+        this.list1.user = this.user
+        return this.list1.save();
       })
-      .return().then(done).catch(done);
-    });
-  });
-
-  it('GET /api/lists with lists', function(done) {
-    var listA = List.create({
-      name: 'romantic dinner spots'
-    });
-    var listB = List.create({
-      name: 'sweet treats'
-    });
-    var listC = List.create({
-      name: 'girly shops'
-    });
-
-    BPromise.resolve()
-    .then(function() { return listA.save(); })
-    .then(function() { return listB.save(); })
-    .then(function() { return listC.save(); })
-    .then(function() { return request({ url: baseURL + '/api/lists', json: true }); })
-    .spread(function (response, body) {
-      expect(response.statusCode).to.eql(200);
-      expect(body).to.eql({
-        //TODO: fix this user id null thing
-        lists: [
-          { id: 1, name: 'romantic dinner spots', user_id: null },
-          { id: 2, name: 'sweet treats', user_id: null  },
-          { id: 3, name: 'girly shops', user_id: null  }
-        ]
+      .then(function() {
+        this.list2.user = this.user
+        return this.list2.save();
+      })
+      .then(function() {
+        this.list3.user = this.user
+        return this.list3.save();
+      })
+      .then(function() {
+        this.list4.user = this.user
+        return this.list4.save();
+      })
+      .then(function() {
+        this.list5.user = this.user
+        return this.list5.save();
       });
-    })
-    .return().then(done).catch(done);
-  });
-
-  it('POST /api/lists', function(done) {
-    var requestBody = { name: 'best coffee' };
-    request({ url: baseURL + '/api/lists', method: 'post', json: true, body: requestBody })
-    .spread(function (response, body) {
-      expect(response.statusCode).to.eql(200);
-      expect(body).to.eql({ id: 1, name: 'best coffee' });
-    })
-    .return().then(done).catch(done);
-  });
-
-  it('DELETE /api/lists/3 with valid list', function(done) {
-    var listA = List.create({
-      name: 'romantic dinner spots'
-    });
-    var listB = List.create({
-      name: 'sweet treats'
-    });
-    var listC = List.create({
-      name: 'girly shops'
     });
 
-    BPromise.resolve()
-    .then(function() { return listA.save(); })
-    .then(function() { return listB.save(); })
-    .then(function() { return listC.save(); })
-    .then(function() { return request({ url: baseURL + '/api/lists', json: true }); })
-    .spread(function (response, body) {
-      expect(response.statusCode).to.eql(200);
-      expect(body).to.eql({
-        //TODO: fix this user id null thing
-        lists: [
-          { id: 1, name: 'romantic dinner spots', user_id: null },
-          { id: 2, name: 'sweet treats', user_id: null  },
-          { id: 3, name: 'girly shops', user_id: null  }
-        ]
+    it('GET /api/lists with lists', function() {
+      return BPromise.bind(this)
+      .then(function() { return request({ url: baseURL + '/api/lists', json: true }); })
+      .spread(function (response, body) {
+        expect(response.statusCode).to.eql(200);
+        expect(body).to.eql({ lists: _.map(this.lists, 'attrs') });
       });
-    })
-    .then(function() { return request({ url: baseURL + '/api/lists/3', method: 'delete', json: true }); })
-    .spread(function (response, body) {
-      expect(body).to.eql({ status: "OK" });
-      expect(response.statusCode).to.eql(200);
-    })
-    .then(function() { return request({ url: baseURL + '/api/lists', json: true }); })
-    .spread(function (response, body) {
-      expect(response.statusCode).to.eql(200);
-      expect(body).to.eql({
-        //TODO: fix this user id null thing
-        lists: [
-          { id: 1, name: 'romantic dinner spots', user_id: null },
-          { id: 2, name: 'sweet treats', user_id: null  }
-        ]
-      });
-    })
-    .return().then(done).catch(done);
-  });
-
-  it('DELETE /api/lists/99 with invalid list', function(done) {
-    var listA = List.create({
-      name: 'romantic dinner spots'
-    });
-    var listB = List.create({
-      name: 'sweet treats'
-    });
-    var listC = List.create({
-      name: 'girly shops'
     });
 
-    BPromise.resolve()
-    .then(function() { return listA.save(); })
-    .then(function() { return listB.save(); })
-    .then(function() { return listC.save(); })
-    .then(function() { return request({ url: baseURL + '/api/lists', json: true }); })
-    .spread(function (response, body) {
-      expect(response.statusCode).to.eql(200);
-      expect(body).to.eql({
-        //TODO: fix this user id null thing
-        lists: [
-          { id: 1, name: 'romantic dinner spots', user_id: null },
-          { id: 2, name: 'sweet treats', user_id: null  },
-          { id: 3, name: 'girly shops', user_id: null  }
-        ]
+    it('DELETE /api/lists/3 with valid list', function() {
+      return BPromise.bind(this)
+      .then(function() {
+        return request({ url: baseURL + '/api/lists', json: true });
+      })
+      .spread(function (response, body) {
+        expect(response.statusCode).to.eql(200);
+        expect(body).to.eql({ lists: _.map(this.lists, 'attrs') });
+      })
+      .then(function() {
+        return request({ url: baseURL + '/api/lists/3', method: 'delete', json: true });
+      })
+      .spread(function (response, body) {
+        expect(body).to.eql({ status: "OK" });
+        expect(response.statusCode).to.eql(200);
+      })
+      .then(function() { return request({ url: baseURL + '/api/lists', json: true }); })
+      .spread(function (response, body) {
+        expect(response.statusCode).to.eql(200);
+        expect(body).to.eql({
+          lists: [
+            { id: 1, name: 'Coffee Shops', user_id: 1 },
+            { id: 2, name: 'Sweet Treats', user_id: 1  },
+            { id: 4, name: 'Bakeries', user_id: 1  },
+            { id: 5, name: 'Healthy Food', user_id: 1  }
+          ]
+        });
       });
-    })
-    .then(function() { return request({ url: baseURL + '/api/lists/99', method: 'delete', json: true }); })
-    .spread(function (response, body) {
-      expect(response.statusCode).to.eql(404);
-      //TODO: what should this be?
-      // expect(body).to.eql({
-      // });
-    })
-    .return().then(done).catch(done);
+    });
+
+    it('DELETE /api/lists/99 with invalid list', function() {
+      return BPromise.bind(this)
+      .then(function() { return request({ url: baseURL + '/api/lists', json: true }); })
+      .spread(function (response, body) {
+        expect(response.statusCode).to.eql(200)
+        expect(body).to.eql({ lists: _.map(this.lists, 'attrs') });
+      })
+      .then(function() {
+        return request({ url: baseURL + '/api/lists/99', method: 'delete', json: true });
+      })
+      .spread(function (response, body) {
+        expect(response.statusCode).to.eql(404);
+        expect(body).to.eql({ message: 'not found' });
+      });
+    });
   });
 });

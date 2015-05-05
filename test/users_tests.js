@@ -24,8 +24,8 @@ describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });
   after(function(done) { server.close(done); });
 
-  afterEach(function(done) {
-    BPromise.resolve()
+  afterEach(function() {
+    return BPromise.resolve()
     .then(function() { return db.query.delete('list_places'); })
     .then (function() { return db.query.delete('places'); })
     .then(function() {
@@ -42,8 +42,7 @@ describe('glitter', function() {
     .then (function() { return db.query.delete('users'); })
     .then(function() {
       return db.query.raw('ALTER SEQUENCE users_id_seq restart');
-    })
-    .return().then(done).catch(done);
+    });
   });
 
   describe('when the db throws errors', function() {
@@ -57,18 +56,17 @@ describe('glitter', function() {
       pg.Client.prototype.query.restore();
     });
 
-    it('POST /api/users/signup with error', function(done) {
+    it('POST /api/users/signup with error', function() {
       var requestBody = { name: 'Brit McVillain' };
-      request({ url: baseURL + '/api/users/signup', method: 'post', json: true, body: requestBody })
+      return request({ url: baseURL + '/api/users/signup', method: 'post', json: true, body: requestBody })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(500);
         expect(body).to.eql({ error: 'unhandled error' });
-      })
-      .return().then(done).catch(done);
+      });
     });
   });
 
-  it ('GET /api/profile with valid token', function (done) {
+  it ('GET /api/profile with valid token', function () {
     var tokenHeader = { 'x-glitter-token' : 'def6789' };
     var userA = User.create({
       name: 'Whit McNasty'
@@ -82,7 +80,7 @@ describe('glitter', function() {
     var tokenB = Token.create({
       value: 'def6789'
     });
-    BPromise.resolve()
+    return BPromise.resolve()
     .then(function() { return userA.save(); })
     .then(function() { return userB.save(); })
     .then(function() {
@@ -99,11 +97,10 @@ describe('glitter', function() {
     .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ id: 2, name: 'Brit McNastier' });
-    })
-    .return().then(done).catch(done);
+    });
   });
 
-  it ('GET /api/profile with invalid token', function (done) {
+  it ('GET /api/profile with invalid token', function () {
     var tokenHeader = { 'x-glitter-token' : 'goofy123' };
     var userA = User.create({
       name: 'Whit McNasty'
@@ -117,7 +114,7 @@ describe('glitter', function() {
     var tokenB = Token.create({
       value: 'def6789'
     });
-    BPromise.resolve()
+    return BPromise.resolve()
     .then(function() { return userA.save(); })
     .then(function() { return userB.save(); })
     .then(function() {
@@ -134,22 +131,20 @@ describe('glitter', function() {
     .spread(function (response, body) {
       expect(response.statusCode).to.eql(403);
       expect(body).to.eql({ message: 'invalid token' });
-    })
-    .return().then(done).catch(done);
+    });
   });
 
-  it('POST /api/users/signup', function(done) {
+  it('POST /api/users/signup', function() {
     var requestBody = { name: 'Whit McNasty' };
-    request({ url: baseURL + '/api/users/signup', method: 'post', json: true, body: requestBody })
+    return request({ url: baseURL + '/api/users/signup', method: 'post', json: true, body: requestBody })
     .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ id: 1, name: 'Whit McNasty' });
-    })
-    .return().then(done).catch(done);
+    });
   });
 
 // test adding a place to your own list (should work fine)
-  it ('POST /api/lists/1/places with valid user', function(done) {
+  it ('POST /api/lists/1/places with valid user', function() {
     var list1 = List.create({
       name: 'list1'
     });
@@ -175,7 +170,7 @@ describe('glitter', function() {
     var requestBody = { id: '1' };
     var tokenHeader = { 'x-glitter-token' : 'def6789' };
 
-    BPromise.resolve()
+    return BPromise.resolve()
     .then(function() { return placeA.save(); })
     .then(function() { return userA.save(); })
     .then(function() { return userB.save(); })
@@ -210,12 +205,11 @@ describe('glitter', function() {
           { id: 1, name: 'Alma Chocolates' }
         ]
       });
-    })
-    .return().then(done).catch(done);
+    });
   });
 
-// Adding a place to someone else's list (should fail)
-  it ('POST /api/lists/1/places to another user\'s list', function(done) {
+// Adding a Place to someone else's List (should fail)
+  it ('POST /api/lists/1/places to another user\'s list', function() {
     var list1 = List.create({
       name: 'list1'
     });
@@ -241,7 +235,7 @@ describe('glitter', function() {
     var requestBody = { id: '1' };
     var tokenHeader = { 'x-glitter-token' : 'abc1234' };
 
-    BPromise.resolve()
+    return BPromise.resolve()
     .then(function() { return placeA.save(); })
     .then(function() { return userA.save(); })
     .then(function() { return userB.save(); })
@@ -267,12 +261,11 @@ describe('glitter', function() {
       expect(body).to.eql({
         status: "invalid action"
       });
-    })
-    .return().then(done).catch(done);
+    });
   });
 
-  // Adding a place to when not logged in (should fail)
-  it ('POST /api/lists/1/places when not logged in', function(done) {
+  // Adding a Place to a List when not logged in (should fail)
+  it ('POST /api/lists/1/places when not logged in', function() {
     var list1 = List.create({
       name: 'list1'
     });
@@ -286,7 +279,7 @@ describe('glitter', function() {
     var requestBody = { id: '1' };
     var tokenHeader = { 'x-glitter-token' : 'abc1234' };
 
-    BPromise.resolve()
+    return BPromise.resolve()
     .then(function() { return placeA.save(); })
     .then(function() { return userA.save(); })
     .then(function() {
@@ -299,7 +292,6 @@ describe('glitter', function() {
       expect(body).to.eql({
         status: "invalid user"
       });
-    })
-    .return().then(done).catch(done);
+    });
   });
 });

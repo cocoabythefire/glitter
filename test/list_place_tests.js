@@ -28,15 +28,14 @@ describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });
   after(function(done) { server.close(done); });
 
-  beforeEach(function(done) {
-    BPromise.bind(this) // bind to mocha context
+  beforeEach(function() {
+    return BPromise.bind(this) // bind to mocha context
     .then(function() { return helpers.createSomePlaces.call(this); })
-    .then(function() { return helpers.createSomeLists.call(this); })
-    .return(null).then(done).catch(done);
+    .then(function() { return helpers.createSomeLists.call(this); });
   });
 
-  afterEach(function(done) {
-    BPromise.resolve()
+  afterEach(function() {
+    return BPromise.resolve()
     .then(function() { return db.query.delete('list_places'); })
     .then (function() { return db.query.delete('places'); })
     .then(function() {
@@ -53,23 +52,21 @@ describe('glitter', function() {
     .then (function() { return db.query.delete('users'); })
     .then(function() {
       return db.query.raw('ALTER SEQUENCE users_id_seq restart');
-    })
-    .return().then(done).catch(done);
+    });
   });
 
-  it('GET /api/lists/2/places with no places', function(done) {
-    BPromise.resolve()
+  it('GET /api/lists/2/places with no places', function() {
+    return BPromise.resolve()
     .then(function() { return request({ url: baseURL + '/api/lists/2/places', json: true }); })
     .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ places: [] });
-    })
-    .return().then(done).catch(done);
+    });
   });
 
-  it('GET /api/lists/2/places with places', function(done) {
+  it('GET /api/lists/2/places with places', function() {
     var getRequest = { url: baseURL + '/api/lists/2/places', json: true, };
-    BPromise.bind(this)
+    return BPromise.bind(this)
     .then(function() { return this.list1.addPlaces(this.placeB); })
     .then(function() { return this.list2.addPlaces(this.placeA, this.placeC); })
     .then(function() { return request(getRequest); })
@@ -81,12 +78,11 @@ describe('glitter', function() {
           { id: 3, name: 'Coava Coffee' }
         ]
       });
-    })
-    .return(null).then(done).catch(done);
+    });
   });
 
   // Try to add a Place that doesn't exist to a List
-  it('POST /api/lists/1/places with invalid place', function(done) {
+  it('POST /api/lists/1/places with invalid place', function() {
     var postRequest = {
       url: baseURL + '/api/lists/1/places',
       method: 'post',
@@ -95,7 +91,7 @@ describe('glitter', function() {
       json: true,
     };
 
-    BPromise.bind(this)
+    return BPromise.bind(this)
     .then(function() { return helpers.createAuthenticatedUser('Whitney'); })
     .then(function(user) { this.user = user; })
     .then(function() {
@@ -106,12 +102,11 @@ describe('glitter', function() {
     .spread(function(response, body) {
       expect(response.statusCode).to.eql(404);
       expect(body).to.eql({ message: 'not found' });
-    })
-    .return(null).then(done).catch(done);
+    });
   });
 
   // Try to add a Place to a List
-  it('POST /api/lists/1/places with valid place', function(done) {
+  it('POST /api/lists/1/places with valid place', function() {
     var baseRequest = {
       url: baseURL + '/api/lists/1/places',
       method: 'post',
@@ -121,7 +116,7 @@ describe('glitter', function() {
     var postRequest = _.extend({}, baseRequest, { body: { id: '1' } });
     var getRequest = _.extend({}, baseRequest, { method: 'get' });
 
-    BPromise.bind(this)
+    return BPromise.bind(this)
     .then(function() { return helpers.createAuthenticatedUser('Whitney'); })
     .then(function(user) { this.user = user; })
     .then(function() {
@@ -147,12 +142,11 @@ describe('glitter', function() {
           { id: 1, name: 'Alma Chocolates' }
         ]
       });
-    })
-    .return(null).then(done).catch(done);
+    });
   });
 
   // Try to remove a Place that does not exist from a List
-  it('DELETE /api/lists/1/places with invalid place', function(done) {
+  it('DELETE /api/lists/1/places with invalid place', function() {
     var deleteRequest = {
       url: baseURL + '/api/lists/1/places',
       method: 'delete',
@@ -160,7 +154,7 @@ describe('glitter', function() {
       body: { id: '99' },
       json: true,
     };
-    BPromise.bind(this)
+    return BPromise.bind(this)
     .then(function() { return helpers.createAuthenticatedUser('Whitney'); })
     .then(function(user) { this.user = user; })
     .then(function() {
@@ -171,12 +165,11 @@ describe('glitter', function() {
     .spread(function(response, body) {
       expect(response.statusCode).to.eql(404);
       expect(body).to.eql({ message: 'not found' });
-    })
-    .return(null).then(done).catch(done);
+    });
   });
 
   // Try to remove a Place from a List
-  it('DELETE /api/lists/1/places with valid place', function(done) {
+  it('DELETE /api/lists/1/places with valid place', function() {
     var baseRequest = {
       url: baseURL + '/api/lists/1/places',
       method: 'post',
@@ -188,7 +181,7 @@ describe('glitter', function() {
     var deleteRequest = _.extend({}, postRequest2, { method: 'delete' });
     var getRequest = _.extend({}, baseRequest, { method: 'get' });
 
-    BPromise.bind(this)
+    return BPromise.bind(this)
     .then(function() { return helpers.createAuthenticatedUser('Whitney'); })
     .then(function(user) { this.user = user; })
     .then(function() {
@@ -235,7 +228,6 @@ describe('glitter', function() {
           { id: 2, name: 'Barista' }
         ]
       });
-    })
-    .return(null).then(done).catch(done);
+    });
   });
 });
