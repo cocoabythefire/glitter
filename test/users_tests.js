@@ -123,8 +123,8 @@ describe('glitter', function() {
       return request({ url: baseURL + '/api/profile', headers: tokenHeader, json: true });
     })
     .spread(function (response, body) {
-      expect(response.statusCode).to.eql(403);
-      expect(body).to.eql({ message: 'invalid token' });
+      expect(response.statusCode).to.eql(401);
+      expect(body).to.eql({ message: 'invalid user' });
     });
   });
 

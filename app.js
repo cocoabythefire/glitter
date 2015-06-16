@@ -150,24 +150,8 @@ app.get('/api/lists/:id/places', function (req, res) {
 });
 
 // Get a User's Profile
-app.get('/api/profile', function (req, res) {
-  BPromise.resolve()
-  .then(function() {
-    return Token.objects.where({ 'value': req.headers['x-glitter-token'] }).fetchOne();
-  })
-  .then(function(token) {
-    return User.objects.find(token.userId);
-  })
-  .then(function(user) {
-    res.send(_.omit(user.attrs, 'password_digest'));
-  })
-  .catch(function(e) {
-    if (e.code === 'NO_RESULTS_FOUND') {
-      res.status(403).send({ message: 'invalid token' });
-    }
-    else { throw e; }
-  })
-  .catch(handleError(res));
+secureAPI.get('/profile', function (req, res) {
+  res.send(_.omit(req.user.attrs, 'password_digest'));
 });
 
 // Create a new Place
