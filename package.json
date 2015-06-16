@@ -15,6 +15,7 @@
   "dependencies": {
     "azul": "0.0.1-alpha.9",
     "azul-logger": "^0.1.0",
+    "bcrypt": "^0.8.3",
     "bluebird": "^2.9.21",
     "body-parser": "^1.12.2",
     "express": "^4.12.3",

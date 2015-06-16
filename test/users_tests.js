@@ -2,6 +2,7 @@
 
 process.env.NODE_ENV = 'test';
 
+var _ = require('lodash');
 var chai = require('chai');
 var expect = chai.expect;
 var sinon = require('sinon');
@@ -55,17 +56,9 @@ describe('glitter', function() {
     afterEach(function() {
       pg.Client.prototype.query.restore();
     });
-
-    it('POST /api/users/signup with error', function() {
-      var requestBody = { name: 'Brit McVillain' };
-      return request({ url: baseURL + '/api/users/signup', method: 'post', json: true, body: requestBody })
-      .spread(function (response, body) {
-        expect(response.statusCode).to.eql(500);
-        expect(body).to.eql({ error: 'unhandled error' });
-      });
-    });
   });
 
+  // successful user profile request
   it ('GET /api/profile with valid token', function () {
     var tokenHeader = { 'x-glitter-token' : 'def6789' };
     var userA = User.create({
@@ -100,6 +93,7 @@ describe('glitter', function() {
     });
   });
 
+  // unsuccessful user profile request
   it ('GET /api/profile with invalid token', function () {
     var tokenHeader = { 'x-glitter-token' : 'goofy123' };
     var userA = User.create({
@@ -134,16 +128,7 @@ describe('glitter', function() {
     });
   });
 
-  it('POST /api/users/signup', function() {
-    var requestBody = { name: 'Whit McNasty' };
-    return request({ url: baseURL + '/api/users/signup', method: 'post', json: true, body: requestBody })
-    .spread(function (response, body) {
-      expect(response.statusCode).to.eql(200);
-      expect(body).to.eql({ id: 1, name: 'Whit McNasty' });
-    });
-  });
-
-// test adding a place to your own list (should work fine)
+  // adding a place to your own list (should work fine)
   it ('POST /api/lists/1/places with valid user', function() {
     var list1 = List.create({
       name: 'list1'
@@ -208,7 +193,7 @@ describe('glitter', function() {
     });
   });
 
-// Adding a Place to someone else's List (should fail)
+  // Adding a Place to someone else's List (should fail)
   it ('POST /api/lists/1/places to another user\'s list', function() {
     var list1 = List.create({
       name: 'list1'
@@ -259,7 +244,7 @@ describe('glitter', function() {
     .spread(function(response, body) {
       expect(response.statusCode).to.eql(403);
       expect(body).to.eql({
-        status: "invalid action"
+        message: "invalid action"
       });
     });
   });
@@ -290,7 +275,7 @@ describe('glitter', function() {
     .spread(function(response, body) {
       expect(response.statusCode).to.eql(401);
       expect(body).to.eql({
-        status: "invalid user"
+        message: "invalid user"
       });
     });
   });

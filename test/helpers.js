@@ -17,7 +17,9 @@ var assign = function(propertyName) {
 };
 
 module.exports.createAuthenticatedUser = function(name) {
-  var user = User.create({ name: name });
+  // password is `ocean2space4planet`
+  var digest = '$2a$10$b7nBSJ4fw.l91aAx8vQ4FOGNzJ201ab6uny9jx12W9jW0Py2TaNdy';
+  var user = User.create({ name: name, passwordDigest: digest });
   var token = Token.create({ value: 'abc1234' });
 
   return BPromise.resolve()

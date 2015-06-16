@@ -5,6 +5,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var BPromise = require('bluebird');
 var azul = require('azul');
+var crypto = BPromise.promisifyAll(require('crypto'));
+var bcrypt = BPromise.promisifyAll(require('bcrypt'));
 
 /**
  * Setup database
@@ -24,7 +26,9 @@ var List = db.model('list', {
 });
 var User = db.model('user', {
   name: db.attr(),
-  lists: db.hasMany()
+  passwordDigest: db.attr(),
+  lists: db.hasMany(),
+  tokens: db.hasMany()
 });
 var Token = db.model('token', {
   value: db.attr(),
@@ -39,7 +43,7 @@ var Token = db.model('token', {
 var handleError = function(res) {
   return function(e) {
     if (e.status) {
-      res.status(e.status).send({ status: e.message });
+      res.status(e.status).send({ message: e.message });
     }
     else {
       console.log(e);
@@ -47,6 +51,37 @@ var handleError = function(res) {
     }
   };
 };
+
+var generateToken = function() {
+  return crypto.randomBytesAsync(256).then(function(data) {
+    var shasum = crypto.createHash('sha1');
+    shasum.update(data);
+    var tokenValue = shasum.digest('hex');
+    var newToken = Token.create({
+      value: tokenValue
+    });
+    return newToken.save();
+  });
+};
+
+var deleteToken = function(tokenValue) {
+  var errorMessage = 'could not logout: token is not a valid session';
+  return BPromise.resolve()
+  .then(function() {
+    return Token.objects.where({ value: tokenValue }).limit(1).fetchOne();
+  })
+  .then(function(token) {
+    token.delete();
+    return token.save();
+  })
+  .catch(function(e) {
+    if (e.code === 'NO_RESULTS_FOUND') {
+      throw _.extend(new Error(errorMessage), { status: 401 });
+    }
+    else { throw e; }
+  })
+};
+
 
 var app = express();
 var api = express.Router();
@@ -124,7 +159,7 @@ app.get('/api/profile', function (req, res) {
     return User.objects.find(token.userId);
   })
   .then(function(user) {
-    res.send(user.attrs);
+    res.send(_.omit(user.attrs, 'password_digest'));
   })
   .catch(function(e) {
     if (e.code === 'NO_RESULTS_FOUND') {
@@ -181,11 +216,65 @@ secureAPI.post('/lists/:id/places', function (req, res) {
 
 // User Signup
 app.post('/api/users/signup', function (req, res) {
-  var newUser = User.create({
-    name: req.body.name
-  });
-  newUser.save().then(function() {
-    res.send(newUser.attrs);
+  BPromise.bind({})
+  .then(function() { return generateToken(); })
+  .then(function(newToken) { this.newToken = newToken; })
+  .then(function() { return bcrypt.genSaltAsync(); })
+  .then(function(salt) { return bcrypt.hashAsync(req.body.password, salt); })
+  .then(function(hash) { this.passwordDigest = hash; })
+  .then(function() {
+    var newUser = User.create({
+      name: req.body.name,
+      passwordDigest: this.passwordDigest
+    });
+    newUser.addToken(this.newToken);
+    res.setHeader('x-glitter-token', this.newToken.value);
+    return newUser.save();
+  })
+  .then(function(newUser) {
+    res.send(_.omit(newUser.attrs, 'password_digest'));
+  })
+  .catch(handleError(res));
+});
+
+// User Login
+app.post('/api/users/login', function (req, res) {
+  var errorMessage = 'username and/or password incorrect';
+  BPromise.bind({})
+  .then(function() {
+    this.username = req.body.name;
+    this.password = req.body.password;
+    return User.objects.where({name: this.username}).limit(1).fetchOne();
+  })
+  .then(function(theUser) {
+    return bcrypt.compareAsync(this.password, theUser.passwordDigest);
+  })
+  .then(function(result) {
+    if (!result) {
+      throw _.extend(new Error(errorMessage), { status: 403 });
+    }
+    return generateToken();
+  })
+  .then(function(token) {
+    res.setHeader('x-glitter-token', token.value);
+    res.send({ message: 'OK' });
+  })
+  .catch(function(e) {
+    if (e.code === 'NO_RESULTS_FOUND') {
+      throw _.extend(new Error(errorMessage), { status: 403 });
+    }
+    else { throw e; }
+  })
+  .catch(handleError(res));
+});
+
+
+// User Logout
+secureAPI.delete('/users/logout', function (req, res) {
+  deleteToken(req.headers['x-glitter-token'])
+  .then(function(token) {
+    res.setHeader('x-glitter-token', '');
+    res.send({ message: 'OK' });
   })
   .catch(handleError(res));
 });
