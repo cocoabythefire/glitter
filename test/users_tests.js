@@ -182,7 +182,7 @@ describe('glitter', function() {
         status: "OK"
       });
     })
-    .then(function() { return request({ url: baseURL + '/api/lists/1/places', json: true }); })
+    .then(function() { return request({ url: baseURL + '/api/lists/1/places', headers: tokenHeader, json: true }); })
     .spread(function(response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({

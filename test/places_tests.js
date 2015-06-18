@@ -24,6 +24,13 @@ describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });
   after(function(done) { server.close(done); });
 
+  beforeEach(function() {
+    return BPromise.bind(this) // bind to mocha context
+    .then(function() { return helpers.createAuthenticatedUser('Whitney'); })
+    .then(function(user) { this.user = user; })
+    .then(function(user) { this.tokenHeader = { 'x-glitter-token' : 'abc1234' }; })
+  });
+
   afterEach(function() {
     return BPromise.resolve()
     .then(function() { return db.query.delete('list_places'); })
@@ -84,12 +91,12 @@ describe('glitter', function() {
 
   it('GET /api/lists/1/places with no places', function() {
     var listA = List.create({
-      name: 'London Hot List'
+      name: 'London Hot List',
+      user: this.user
     });
-
-    return BPromise.resolve()
+    return BPromise.bind(this)
     .then(function() { return listA.save(); })
-    .then(function() { return request({ url: baseURL + '/api/lists/1/places', json: true }); })
+    .then(function() { return request({ url: baseURL + '/api/lists/1/places', headers: this.tokenHeader, json: true }); })
     .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ places: [] });
@@ -104,7 +111,8 @@ describe('glitter', function() {
         url: baseURL + '/api/places',
         method: 'post',
         json: true,
-        body: requestBody
+        body: requestBody,
+        headers: { 'x-glitter-token' : 'abc1234' }
       });
     })
     .spread(function (response, body) {
@@ -130,13 +138,13 @@ describe('glitter', function() {
 
     it('DELETE /api/places/99 with invalid place', function() {
       return BPromise.bind(this)
-      .then(function() { return request({ url: baseURL + '/api/places/', json: true }); })
+      .then(function() { return request({ url: baseURL + '/api/places/', headers: this.tokenHeader, json: true }); })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(200);
         expect(body).to.eql({ places: _.map(this.places, 'attrs') });
       })
       .then(function() {
-        return request({ url: baseURL + '/api/places/99', method: 'delete', json: true });
+        return request({ url: baseURL + '/api/places/99', method: 'delete', headers: this.tokenHeader, json: true });
       })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(404);
@@ -152,7 +160,7 @@ describe('glitter', function() {
         expect(body).to.eql({ places: _.map(this.places, 'attrs') });
       })
       .then(function() {
-        return request({ url: baseURL + '/api/places/2', method: 'delete', json: true });
+        return request({ url: baseURL + '/api/places/2', method: 'delete', headers: this.tokenHeader, json: true });
       })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(200);

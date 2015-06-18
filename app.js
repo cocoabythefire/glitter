@@ -116,7 +116,7 @@ secureAPI.use(function(req, res, next) {
   // TODO: install real express error handling middleware
 });
 
-// Get all Places
+// Get all Places - not a secure request
 app.get('/api/places', function (req, res) {
   var query = Place.objects
     .order('id')
@@ -140,10 +140,13 @@ secureAPI.get('/lists', function (req, res) {
   .catch(handleError(res));
 });
 
-// Get the Places for a specific List
-app.get('/api/lists/:id/places', function (req, res) {
+// Get the Places for a specific List for a specific User
+secureAPI.get('/lists/:id/places', function (req, res) {
   var query = Place.objects
-  .where({ 'lists.id': req.params.id });
+  // TODO: file bug with azul if this isn't fixed after updating to latest
+  // it should be .where({ user: req.user })
+  .where({ 'lists.userId': req.user.id })
+  .where({ listId: req.params.id });
 
   query.fetch().then(function(places) {
     res.send({ places: _.map(places, 'attrs') });
@@ -157,7 +160,7 @@ secureAPI.get('/profile', function (req, res) {
 });
 
 // Create a new Place
-app.post('/api/places', function (req, res) {
+secureAPI.post('/places', function (req, res) {
   var newPlace = Place.create({
     name: req.body.name
   });
@@ -168,7 +171,7 @@ app.post('/api/places', function (req, res) {
 });
 
 // Create a new List
-app.post('/api/lists', function (req, res) {
+secureAPI.post('/lists', function (req, res) {
   var newList = List.create({
     name: req.body.name
   });
@@ -200,7 +203,7 @@ secureAPI.post('/lists/:id/places', function (req, res) {
   .catch(handleError(res));
 });
 
-// User Signup
+// User Signup - not secure request
 app.post('/api/users/signup', function (req, res) {
   BPromise.bind({})
   .then(function() { return generateToken(); })
@@ -223,7 +226,7 @@ app.post('/api/users/signup', function (req, res) {
   .catch(handleError(res));
 });
 
-// User Login
+// User Login - not secure request
 app.post('/api/users/login', function (req, res) {
   var errorMessage = 'username and/or password incorrect';
   BPromise.bind({})
@@ -266,7 +269,7 @@ secureAPI.delete('/users/logout', function (req, res) {
 });
 
 // Delete a List
-app.delete('/api/lists/:id', function (req, res) {
+secureAPI.delete('/lists/:id', function (req, res) {
   BPromise.resolve()
   .then(function() {
     return List.objects.find(req.params.id);
@@ -288,7 +291,7 @@ app.delete('/api/lists/:id', function (req, res) {
 });
 
 // Delete a Place
-app.delete('/api/places/:id', function (req, res) {
+secureAPI.delete('/places/:id', function (req, res) {
   BPromise.resolve()
   .then(function() {
     return Place.objects.find(req.params.id);

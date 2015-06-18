@@ -30,6 +30,9 @@ describe('glitter', function() {
 
   beforeEach(function() {
     return BPromise.bind(this) // bind to mocha context
+    .then(function() { return helpers.createAuthenticatedUser('Whitney'); })
+    .then(function(user) { this.user = user; })
+    .then(function(user) { this.tokenHeader = { 'x-glitter-token' : 'abc1234' }; })
     .then(function() { return helpers.createSomePlaces.call(this); })
     .then(function() { return helpers.createSomeLists.call(this); });
   });
@@ -56,8 +59,12 @@ describe('glitter', function() {
   });
 
   it('GET /api/lists/2/places with no places', function() {
-    return BPromise.resolve()
-    .then(function() { return request({ url: baseURL + '/api/lists/2/places', json: true }); })
+    return BPromise.bind(this)
+    .then(function() {
+      this.list2.user = this.user;
+      return this.list2.save();
+    })
+    .then(function() { return request({ url: baseURL + '/api/lists/2/places', headers: this.tokenHeader, json: true }); })
     .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ places: [] });
@@ -65,9 +72,12 @@ describe('glitter', function() {
   });
 
   it('GET /api/lists/2/places with places', function() {
-    var getRequest = { url: baseURL + '/api/lists/2/places', json: true, };
+    var getRequest = { url: baseURL + '/api/lists/2/places', headers: this.tokenHeader, json: true, };
     return BPromise.bind(this)
-    .then(function() { return this.list1.addPlaces(this.placeB); })
+    .then(function() {
+      this.list2.user = this.user;
+      return this.list2.save();
+    })
     .then(function() { return this.list2.addPlaces(this.placeA, this.placeC); })
     .then(function() { return request(getRequest); })
     .spread(function(response, body) {
@@ -86,14 +96,12 @@ describe('glitter', function() {
     var postRequest = {
       url: baseURL + '/api/lists/1/places',
       method: 'post',
-      headers: { 'x-glitter-token' : 'abc1234' },
+      headers: this.tokenHeader,
       body: { id: '99' },
       json: true,
     };
 
     return BPromise.bind(this)
-    .then(function() { return helpers.createAuthenticatedUser('Whitney'); })
-    .then(function(user) { this.user = user; })
     .then(function() {
       this.list1.user = this.user
       return this.list1.save();
@@ -110,15 +118,13 @@ describe('glitter', function() {
     var baseRequest = {
       url: baseURL + '/api/lists/1/places',
       method: 'post',
-      headers: { 'x-glitter-token' : 'abc1234' },
+      headers: this.tokenHeader,
       json: true,
     };
     var postRequest = _.extend({}, baseRequest, { body: { id: '1' } });
     var getRequest = _.extend({}, baseRequest, { method: 'get' });
 
     return BPromise.bind(this)
-    .then(function() { return helpers.createAuthenticatedUser('Whitney'); })
-    .then(function(user) { this.user = user; })
     .then(function() {
       this.list1.user = this.user;
       return this.list1.save();
@@ -150,13 +156,11 @@ describe('glitter', function() {
     var deleteRequest = {
       url: baseURL + '/api/lists/1/places',
       method: 'delete',
-      headers: { 'x-glitter-token' : 'abc1234' },
+      headers: this.tokenHeader,
       body: { id: '99' },
       json: true,
     };
     return BPromise.bind(this)
-    .then(function() { return helpers.createAuthenticatedUser('Whitney'); })
-    .then(function(user) { this.user = user; })
     .then(function() {
       this.list1.user = this.user
       return this.list1.save();
@@ -173,7 +177,7 @@ describe('glitter', function() {
     var baseRequest = {
       url: baseURL + '/api/lists/1/places',
       method: 'post',
-      headers: { 'x-glitter-token' : 'abc1234' },
+      headers: this.tokenHeader,
       json: true,
     };
     var postRequest1 = _.extend({}, baseRequest, { body: { id: '2' } });
@@ -182,8 +186,6 @@ describe('glitter', function() {
     var getRequest = _.extend({}, baseRequest, { method: 'get' });
 
     return BPromise.bind(this)
-    .then(function() { return helpers.createAuthenticatedUser('Whitney'); })
-    .then(function(user) { this.user = user; })
     .then(function() {
       this.list1.user = this.user
       return this.list1.save();
