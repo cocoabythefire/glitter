@@ -133,7 +133,7 @@ describe('glitter', function() {
       });
     });
 
-    it('DELETE /api/lists/3 with valid list', function() {
+    it('DELETE /api/lists/3 with valid list and user', function() {
       return BPromise.bind(this)
       .then(function() {
         return request({ url: baseURL + '/api/lists', headers: this.tokenHeader, json: true });
