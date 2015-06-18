@@ -127,11 +127,13 @@ app.get('/api/places', function (req, res) {
   .catch(handleError(res));
 });
 
-// Get all Lists
-app.get('/api/lists', function (req, res) {
+// Get all Lists for a specific User
+secureAPI.get('/lists', function (req, res) {
   var query = List.objects
-    .order('id')
-    .limit(100);
+    // TODO: file bug with azul if this isn't fixed after updating to latest
+    // it should be .where({ user: req.user })
+    .where({ userId: req.user.id })
+    .order('id');
   query.fetch().then(function(lists) {
     res.send({ lists: _.map(lists, 'attrs') });
   })

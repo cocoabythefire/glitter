@@ -52,7 +52,8 @@ describe('glitter', function() {
   });
 
   it('GET /api/lists with no lists', function() {
-    return request({ url: baseURL + '/api/lists', json: true })
+    var tokenHeader = { 'x-glitter-token' : 'abc1234' };
+    return request({ url: baseURL + '/api/lists', headers: tokenHeader, json: true })
     .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({ lists: [] });
@@ -124,8 +125,9 @@ describe('glitter', function() {
     });
 
     it('GET /api/lists with lists', function() {
+      var tokenHeader = { 'x-glitter-token' : 'abc1234' };
       return BPromise.bind(this)
-      .then(function() { return request({ url: baseURL + '/api/lists', json: true }); })
+      .then(function() { return request({ url: baseURL + '/api/lists', headers: tokenHeader, json: true }); })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(200);
         expect(body).to.eql({ lists: _.map(this.lists, 'attrs') });
@@ -133,22 +135,23 @@ describe('glitter', function() {
     });
 
     it('DELETE /api/lists/3 with valid list', function() {
+      var tokenHeader = { 'x-glitter-token' : 'abc1234' };
       return BPromise.bind(this)
       .then(function() {
-        return request({ url: baseURL + '/api/lists', json: true });
+        return request({ url: baseURL + '/api/lists', headers: tokenHeader, json: true });
       })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(200);
         expect(body).to.eql({ lists: _.map(this.lists, 'attrs') });
       })
       .then(function() {
-        return request({ url: baseURL + '/api/lists/3', method: 'delete', json: true });
+        return request({ url: baseURL + '/api/lists/3', method: 'delete', headers: tokenHeader, json: true });
       })
       .spread(function (response, body) {
         expect(body).to.eql({ status: "OK" });
         expect(response.statusCode).to.eql(200);
       })
-      .then(function() { return request({ url: baseURL + '/api/lists', json: true }); })
+      .then(function() { return request({ url: baseURL + '/api/lists', headers: tokenHeader, json: true }); })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(200);
         expect(body).to.eql({
@@ -163,14 +166,15 @@ describe('glitter', function() {
     });
 
     it('DELETE /api/lists/99 with invalid list', function() {
+      var tokenHeader = { 'x-glitter-token' : 'abc1234' };
       return BPromise.bind(this)
-      .then(function() { return request({ url: baseURL + '/api/lists', json: true }); })
+      .then(function() { return request({ url: baseURL + '/api/lists', headers: tokenHeader, json: true }); })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(200)
         expect(body).to.eql({ lists: _.map(this.lists, 'attrs') });
       })
       .then(function() {
-        return request({ url: baseURL + '/api/lists/99', method: 'delete', json: true });
+        return request({ url: baseURL + '/api/lists/99', method: 'delete', headers: tokenHeader, json: true });
       })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(404);
