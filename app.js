@@ -91,7 +91,7 @@ app.set('db', db);
 app.use(bodyParser.json()); // for parsing application/json
 
 app.get('/', function (req, res) {
-  res.send('Hello Whiiiiiiiiy Blair!');
+  res.send('This is the glitter service!');
 });
 
 // Authentication Middleware
