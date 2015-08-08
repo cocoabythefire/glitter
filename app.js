@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var express = require('express');
+var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var BPromise = require('bluebird');
 var azul = require('azul');
@@ -88,6 +89,12 @@ var api = express.Router();
 var secureAPI = express.Router();
 
 app.set('db', db);
+if (env === 'development') {
+  app.use(morgan('dev'));
+}
+else if (env === 'production') {
+  app.use(morgan('combined'));
+}
 app.use(bodyParser.json()); // for parsing application/json
 
 app.get('/', function (req, res) {
