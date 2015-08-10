@@ -179,6 +179,7 @@ secureAPI.post('/places', function (req, res) {
 
 // Create a new List
 secureAPI.post('/lists', function (req, res) {
+  //TODO new lists should be assigned to the logged in user
   var newList = List.create({
     name: req.body.name
   });
