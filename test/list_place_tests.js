@@ -22,7 +22,7 @@ var Place = db.model('place');
 var Token = db.model('token');
 var User = db.model('user');
 
-require('azul-logger')(db.query);
+// require('azul-logger')(db.query);
 
 describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });

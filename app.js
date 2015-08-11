@@ -47,7 +47,6 @@ var handleError = function(res) {
       res.status(e.status).send({ message: e.message });
     }
     else {
-      console.log(e);
       res.status(500).send({ error: 'unhandled error' });
     }
   };
@@ -137,8 +136,8 @@ app.get('/api/places', function (req, res) {
 // Get all Lists for a specific User
 secureAPI.get('/lists', function (req, res) {
   var query = List.objects
-    .where({ user: req.user })
-    .order('id');
+    .order('id')
+    .limit(100);
   query.fetch().then(function(lists) {
     res.send({ lists: _.map(lists, 'attrs') });
   })
