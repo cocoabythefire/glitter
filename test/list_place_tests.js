@@ -22,7 +22,7 @@ var Place = db.model('place');
 var Token = db.model('token');
 var User = db.model('user');
 
-// require('azul-logger')(db.query);
+require('azul-logger')(db.query);
 
 describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });
@@ -39,7 +39,7 @@ describe('glitter', function() {
 
   afterEach(function() {
     return BPromise.resolve()
-    .then(function() { return db.query.delete('list_places'); })
+    .then(function() { return db.query.delete('lists_places'); })
     .then (function() { return db.query.delete('places'); })
     .then(function() {
       return db.query.raw('ALTER SEQUENCE places_id_seq restart');

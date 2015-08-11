@@ -18,11 +18,11 @@ var config = require('./azulfile')[env];
 var db = azul(config);
 var Place = db.model('place', {
   name: db.attr(),
-  lists: db.hasMany({ join: 'list_places' })
+  lists: db.hasMany({ join: 'lists_places' })
 });
 var List = db.model('list', {
   name: db.attr(),
-  places: db.hasMany({ join: 'list_places' }),
+  places: db.hasMany({ join: 'lists_places' }),
   user: db.belongsTo()
 });
 var User = db.model('user', {
@@ -137,9 +137,7 @@ app.get('/api/places', function (req, res) {
 // Get all Lists for a specific User
 secureAPI.get('/lists', function (req, res) {
   var query = List.objects
-    // TODO: file bug with azul if this isn't fixed after updating to latest
-    // it should be .where({ user: req.user })
-    .where({ userId: req.user.id })
+    .where({ user: req.user })
     .order('id');
   query.fetch().then(function(lists) {
     res.send({ lists: _.map(lists, 'attrs') });
@@ -150,11 +148,8 @@ secureAPI.get('/lists', function (req, res) {
 // Get the Places for a specific List for a specific User
 secureAPI.get('/lists/:id/places', function (req, res) {
   var query = Place.objects
-  // TODO: file bug with azul if this isn't fixed after updating to latest
-  // it should be .where({ user: req.user })
-  .where({ 'lists.userId': req.user.id })
-  .where({ listId: req.params.id });
-
+  .where({ 'lists.user':req.user })
+  .where({ 'lists.id': req.params.id });
   query.fetch().then(function(places) {
     res.send({ places: _.map(places, 'attrs') });
   })
@@ -179,9 +174,9 @@ secureAPI.post('/places', function (req, res) {
 
 // Create a new List
 secureAPI.post('/lists', function (req, res) {
-  //TODO new lists should be assigned to the logged in user
   var newList = List.create({
-    name: req.body.name
+    name: req.body.name,
+    user: req.user
   });
   newList.save().then(function() {
     res.send(newList.attrs);

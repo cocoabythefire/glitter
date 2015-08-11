@@ -33,7 +33,7 @@ describe('glitter', function() {
 
   afterEach(function() {
     return BPromise.resolve()
-    .then(function() { return db.query.delete('list_places'); })
+    .then(function() { return db.query.delete('lists_places'); })
     .then (function() { return db.query.delete('places'); })
     .then(function() {
       return db.query.raw('ALTER SEQUENCE places_id_seq restart');
@@ -94,7 +94,7 @@ describe('glitter', function() {
     return request({ url: baseURL + '/api/lists', method: 'post', headers: this.tokenHeader, json: true, body: requestBody })
     .spread(function (response, body) {
       expect(response.statusCode).to.eql(200);
-      expect(body).to.eql({ id: 1, name: 'Best Coffee' });
+      expect(body).to.eql({ id: 1, name: 'Best Coffee', user_id: 1 });
     });
   });
 

@@ -33,7 +33,7 @@ describe('glitter', function() {
 
   afterEach(function() {
     return BPromise.resolve()
-    .then(function() { return db.query.delete('list_places'); })
+    .then(function() { return db.query.delete('lists_places'); })
     .then (function() { return db.query.delete('places'); })
     .then(function() {
       return db.query.raw('ALTER SEQUENCE places_id_seq restart');
