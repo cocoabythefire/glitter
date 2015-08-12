@@ -47,6 +47,7 @@ var handleError = function(res) {
       res.status(e.status).send({ message: e.message });
     }
     else {
+      console.log(e);
       res.status(500).send({ error: 'unhandled error' });
     }
   };
@@ -203,18 +204,28 @@ secureAPI.post('/lists', function (req, res) {
   .catch(handleError(res));
 });
 
-// Add a Place to a List
+// Add a Place to a List, Create it if it's new
 secureAPI.post('/lists/:id/places', function (req, res) {
   BPromise.bind({})
-  .then(function() { return List.objects.find(req.params.id); })
+  .then(function() {
+    return List.objects.find(req.params.id);
+  })
   .then(function(list) { this.list = list; })
   .then(function() {
     if(this.list.userId !== req.user.id) {
       throw _.extend(new Error('invalid action'), { status: 403 });
     }
   })
-  .then(function() { return Place.objects.find(req.body.id); })
-  .then(function(place) { return this.list.addPlace(place); })
+  .then(function() {
+    if (req.body.name) {
+      return Place.objects.findOrCreate({name: req.body.name});
+    } else {
+      return Place.objects.find(req.body.id);
+    }
+  })
+  .then(function(place) {
+    return this.list.addPlace(place);
+  })
   .then(function() { res.send({ status: "OK" }); })
   .catch(function(e) {
     if (e.code === 'NO_RESULTS_FOUND') {
@@ -292,13 +303,18 @@ secureAPI.delete('/users/logout', function (req, res) {
 
 // Delete a List
 secureAPI.delete('/lists/:id', function (req, res) {
-  BPromise.resolve()
+  BPromise.bind({})
   .then(function() {
     return List.objects.find(req.params.id);
   })
   .then(function(listToDelete) {
-    listToDelete.delete();
-    return listToDelete.save();
+    this.list = listToDelete;
+    this.list.clearPlaces();
+    return this.list.save();
+  })
+  .then(function() {
+    this.list.delete();
+    return this.list.save();
   })
   .then(function() {
     res.send({ status: "OK" });
@@ -313,14 +329,23 @@ secureAPI.delete('/lists/:id', function (req, res) {
 });
 
 // Delete a Place
-secureAPI.delete('/places/:id', function (req, res) {
-  BPromise.resolve()
+//TODO ask whit why i have to remove from list first in order to delete
+secureAPI.delete('/lists/:listId/places/:placeId', function (req, res) {
+  BPromise.bind({})
   .then(function() {
-    return Place.objects.find(req.params.id);
+    return Place.objects.find(req.params.placeId);
   })
-  .then(function(placeToDelete) {
-    placeToDelete.delete();
-    return placeToDelete.save();
+  .then(function(place) {
+    this.place = place;
+    return List.objects.find(req.params.listId);
+  })
+  .then(function(list) {
+    list.removePlace(this.place);
+    return list.save();
+  })
+  .then(function() {
+    this.place.delete();
+    return this.place.save();
   })
   .then(function() {
     res.send({ status: "OK" });
@@ -349,6 +374,33 @@ secureAPI.delete('/lists/:id/places', function (req, res) {
   })
   .then(function(place) {
     return this.list.removePlace(place);
+  })
+  .then(function() {
+    res.send({ status: "OK" });
+  })
+  .catch(function(e) {
+    if (e.code === 'NO_RESULTS_FOUND') {
+      res.status(404).send({ message: 'not found' });
+    }
+    else { throw e; }
+  })
+  .catch(handleError(res));
+});
+
+// Delete a Place and remove from all Lists
+secureAPI.delete('/places/:id', function (req, res) {
+   BPromise.bind({})
+  .then(function() {
+    return Place.objects.find(req.params.id); })
+  .then(function(place) { this.place = place; })
+  .then(function() {
+    this.place.removeLists();
+    this.place.clearLists();
+    return this.place.save();
+  })
+  .then(function() {
+    this.place.delete();
+    return this.place.save();
   })
   .then(function() {
     res.send({ status: "OK" });
