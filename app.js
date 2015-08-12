@@ -144,6 +144,26 @@ secureAPI.get('/lists', function (req, res) {
   .catch(handleError(res));
 });
 
+// Get a single list for a specific User
+secureAPI.get('/lists/:id', function (req, res) {
+  BPromise.bind({})
+  .then(function() {
+    var query = List.objects
+    .where({ 'id' : req.params.id });
+    return query.limit(1).fetchOne();
+  })
+  .then(function(list) { this.list = list; })
+  .then(function() {
+    var query = Place.objects
+    .where({ 'lists.id': req.params.id });
+    return query.fetch();
+  })
+  .then(function(places) {
+    res.send({ list: this.list, places: _.map(places, 'attrs') });
+  })
+  .catch(handleError(res));
+});
+
 // Get the Places for a specific List for a specific User
 secureAPI.get('/lists/:id/places', function (req, res) {
   var query = Place.objects
