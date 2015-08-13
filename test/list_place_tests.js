@@ -94,10 +94,9 @@ describe('glitter', function() {
   // Try to add a Place that doesn't exist to a List
   it('POST /api/lists/1/places with invalid place', function() {
     var postRequest = {
-      url: baseURL + '/api/lists/1/places',
+      url: baseURL + '/api/lists/1/places/99',
       method: 'post',
       headers: this.tokenHeader,
-      body: { id: '99' },
       json: true,
     };
 
@@ -121,7 +120,7 @@ describe('glitter', function() {
       headers: this.tokenHeader,
       json: true,
     };
-    var postRequest = _.extend({}, baseRequest, { body: { id: '1' } });
+    var postRequest = _.extend({}, baseRequest, { url: baseURL + '/api/lists/1/places/1' });
     var getRequest = _.extend({}, baseRequest, { method: 'get' });
 
     return BPromise.bind(this)
@@ -151,7 +150,7 @@ describe('glitter', function() {
     });
   });
 
-  // Try to add Create and Add a New Place to a List
+  // Try to Create and Add a New Place to a List
   it('POST /api/lists/1/places with new place', function() {
     var baseRequest = {
       url: baseURL + '/api/lists/1/places',
@@ -217,8 +216,8 @@ describe('glitter', function() {
       headers: this.tokenHeader,
       json: true,
     };
-    var postRequest1 = _.extend({}, baseRequest, { body: { id: '2' } });
-    var postRequest2 = _.extend({}, baseRequest, { body: { id: '4' } });
+    var postRequest1 = _.extend({}, baseRequest, { url: baseURL + '/api/lists/1/places/2' });
+    var postRequest2 = _.extend({}, baseRequest, { url: baseURL + '/api/lists/1/places/4' });
     var deleteRequest = _.extend({}, postRequest2, { url: baseURL + '/api/lists/1/places/4', method: 'delete' });
     var getRequest = _.extend({}, baseRequest, { method: 'get' });
 

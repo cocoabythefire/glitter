@@ -175,7 +175,7 @@ describe('glitter', function() {
       list2.user = userA;
       return list2.save();
     })
-    .then(function() { return request({ url: baseURL + '/api/lists/1/places', headers: tokenHeader, method: 'post', json: true, body: requestBody }); })
+    .then(function() { return request({ url: baseURL + '/api/lists/1/places/1', headers: tokenHeader, method: 'post', json: true, body: requestBody }); })
     .spread(function(response, body) {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({

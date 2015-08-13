@@ -204,8 +204,8 @@ secureAPI.post('/lists', function (req, res) {
   .catch(handleError(res));
 });
 
-// Add a Place to a List, Create it if it's new
-secureAPI.post('/lists/:id/places', function (req, res) {
+// Create a Place and Add to a List
+secureAPI.post('/lists/:id/places/', function (req, res) {
   BPromise.bind({})
   .then(function() {
     return List.objects.find(req.params.id);
@@ -219,8 +219,38 @@ secureAPI.post('/lists/:id/places', function (req, res) {
   .then(function() {
     if (req.body.placeName) {
       return Place.objects.findOrCreate({name: req.body.placeName});
-    } else if (req.body.id) {
-      return Place.objects.find(req.body.id);
+    } else {
+      throw _.extend(new Error('invalid action'), { status: 403 });
+    }
+  })
+  .then(function(place) {
+    return this.list.addPlace(place);
+  })
+  .then(function() { res.send({ status: "OK" }); })
+  .catch(function(e) {
+    if (e.code === 'NO_RESULTS_FOUND') {
+      res.status(404).send({ message: 'not found' });
+    }
+    else { throw e; }
+  })
+  .catch(handleError(res));
+});
+
+// Add an Existing Place to a List
+secureAPI.post('/lists/:id/places/:pid', function (req, res) {
+  BPromise.bind({})
+  .then(function() {
+    return List.objects.find(req.params.id);
+  })
+  .then(function(list) { this.list = list; })
+  .then(function() {
+    if(this.list.userId !== req.user.id) {
+      throw _.extend(new Error('invalid action'), { status: 403 });
+    }
+  })
+  .then(function() {
+    if (req.params.pid) {
+      return Place.objects.find(req.params.pid);
     } else {
       throw _.extend(new Error('invalid action'), { status: 403 });
     }
@@ -331,7 +361,6 @@ secureAPI.delete('/lists/:id', function (req, res) {
 });
 
 // Remove a Place from a List
-//TODO ask whit why i have to remove from list first in order to delete
 secureAPI.delete('/lists/:listId/places/:placeId', function (req, res) {
   BPromise.bind({})
   .then(function() {
