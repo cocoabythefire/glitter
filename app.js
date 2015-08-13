@@ -217,10 +217,12 @@ secureAPI.post('/lists/:id/places', function (req, res) {
     }
   })
   .then(function() {
-    if (req.body.name) {
-      return Place.objects.findOrCreate({name: req.body.name});
-    } else {
+    if (req.body.placeName) {
+      return Place.objects.findOrCreate({name: req.body.placeName});
+    } else if (req.body.id) {
       return Place.objects.find(req.body.id);
+    } else {
+      throw _.extend(new Error('invalid action'), { status: 403 });
     }
   })
   .then(function(place) {

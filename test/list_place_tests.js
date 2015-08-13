@@ -113,7 +113,7 @@ describe('glitter', function() {
     });
   });
 
-  // Try to add a Place to a List
+  // Try to add an Existing Place to a List
   it('POST /api/lists/1/places with valid place', function() {
     var baseRequest = {
       url: baseURL + '/api/lists/1/places',
@@ -146,6 +146,44 @@ describe('glitter', function() {
       expect(body).to.eql({
         places: [
           { id: 1, name: 'Alma Chocolates' }
+        ]
+      });
+    });
+  });
+
+  // Try to add Create and Add a New Place to a List
+  it('POST /api/lists/1/places with new place', function() {
+    var baseRequest = {
+      url: baseURL + '/api/lists/1/places',
+      method: 'post',
+      headers: this.tokenHeader,
+      json: true,
+    };
+    var postRequest = _.extend({}, baseRequest, { body: { placeName: 'New Place' } });
+    var getRequest = _.extend({}, baseRequest, { method: 'get' });
+
+    return BPromise.bind(this)
+    .then(function() {
+      this.list1.user = this.user;
+      return this.list1.save();
+    })
+    .then(function() {
+      this.list2.user = this.user;
+      return this.list2.save();
+    })
+    .then(function() { return request(postRequest); })
+    .spread(function(response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        status: "OK"
+      });
+    })
+    .then(function() { return request(getRequest); })
+    .spread(function(response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        places: [
+          { id: 9, name: 'New Place' } //id is 9 bc helpers created 8 already
         ]
       });
     });
