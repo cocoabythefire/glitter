@@ -330,7 +330,7 @@ secureAPI.delete('/lists/:id', function (req, res) {
   .catch(handleError(res));
 });
 
-// Delete a Place
+// Remove a Place from a List
 //TODO ask whit why i have to remove from list first in order to delete
 secureAPI.delete('/lists/:listId/places/:placeId', function (req, res) {
   BPromise.bind({})
@@ -346,40 +346,8 @@ secureAPI.delete('/lists/:listId/places/:placeId', function (req, res) {
     return list.save();
   })
   .then(function() {
-    this.place.delete();
-    return this.place.save();
-  })
-  .then(function() {
     res.send({ status: "OK" });
    })
-  .catch(function(e) {
-    if (e.code === 'NO_RESULTS_FOUND') {
-      res.status(404).send({ message: 'not found' });
-    }
-    else { throw e; }
-  })
-  .catch(handleError(res));
-});
-
-// Remove a Place from a List
-secureAPI.delete('/lists/:id/places', function (req, res) {
-   BPromise.bind({})
-  .then(function() { return List.objects.find(req.params.id); })
-  .then(function(list) { this.list = list; })
-  .then(function() {
-    if(this.list.userId !== req.user.id) {
-      throw _.extend(new Error('invalid action'), { status: 403 });
-    }
-  })
-  .then(function() {
-    return Place.objects.find(req.body.id);
-  })
-  .then(function(place) {
-    return this.list.removePlace(place);
-  })
-  .then(function() {
-    res.send({ status: "OK" });
-  })
   .catch(function(e) {
     if (e.code === 'NO_RESULTS_FOUND') {
       res.status(404).send({ message: 'not found' });

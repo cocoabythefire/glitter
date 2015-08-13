@@ -192,10 +192,9 @@ describe('glitter', function() {
   // Try to remove a Place that does not exist from a List
   it('DELETE /api/lists/1/places with invalid place', function() {
     var deleteRequest = {
-      url: baseURL + '/api/lists/1/places',
+      url: baseURL + '/api/lists/1/places/99',
       method: 'delete',
       headers: this.tokenHeader,
-      body: { id: '99' },
       json: true,
     };
     return BPromise.bind(this)
@@ -220,7 +219,7 @@ describe('glitter', function() {
     };
     var postRequest1 = _.extend({}, baseRequest, { body: { id: '2' } });
     var postRequest2 = _.extend({}, baseRequest, { body: { id: '4' } });
-    var deleteRequest = _.extend({}, postRequest2, { method: 'delete' });
+    var deleteRequest = _.extend({}, postRequest2, { url: baseURL + '/api/lists/1/places/4', method: 'delete' });
     var getRequest = _.extend({}, baseRequest, { method: 'get' });
 
     return BPromise.bind(this)
