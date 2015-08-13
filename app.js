@@ -301,6 +301,7 @@ app.post('/api/users/login', function (req, res) {
     return User.objects.where({name: this.username}).limit(1).fetchOne();
   })
   .then(function(theUser) {
+    this.user = theUser;
     return bcrypt.compareAsync(this.password, theUser.passwordDigest);
   })
   .then(function(result) {
@@ -310,7 +311,12 @@ app.post('/api/users/login', function (req, res) {
     return generateToken();
   })
   .then(function(token) {
-    res.setHeader('x-glitter-token', token.value);
+    this.token = token;
+    token.user = this.user;
+    return token.save();
+  })
+  .then(function() {
+    res.setHeader('x-glitter-token', this.token.value);
     res.send({ message: 'OK' });
   })
   .catch(function(e) {
