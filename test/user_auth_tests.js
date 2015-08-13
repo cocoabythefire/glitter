@@ -129,7 +129,7 @@ describe('glitter', function() {
     var response, body, token;
     beforeEach(_.partial(helpers.createAuthenticatedUser, 'Brit Tiger'));
     beforeEach(function() {
-      var requestBody = { name: 'Brit Tiger', password: 'oceans4theplanet' };
+      var requestBody = { username: 'Brit Tiger', password: 'oceans4theplanet' };
       return request({ url: baseURL + '/api/users/login', method: 'post', json: true, body: requestBody })
       .spread(function (_response, _body) {
         response = _response;
@@ -151,7 +151,7 @@ describe('glitter', function() {
     var response, body, token;
     beforeEach(_.partial(helpers.createAuthenticatedUser, 'Brit Tiger'));
     beforeEach(function() {
-      var requestBody = { name: 'Whit IsWrong', password: 'ocean2space4planet' };
+      var requestBody = { username: 'Whit IsWrong', password: 'ocean2space4planet' };
       return request({ url: baseURL + '/api/users/login', method: 'post', json: true, body: requestBody })
       .spread(function (_response, _body) {
         response = _response;
@@ -173,7 +173,7 @@ describe('glitter', function() {
     var response, body, token;
     beforeEach(_.partial(helpers.createAuthenticatedUser, 'Brit Lion'));
     beforeEach(function() {
-      var requestBody = { name: 'Brit Lion', password: 'ocean2space4planet' };
+      var requestBody = { username: 'Brit Lion', password: 'ocean2space4planet' };
       return request({ url: baseURL + '/api/users/login', method: 'post', json: true, body: requestBody })
       .spread(function (_response, _body) {
         response = _response;

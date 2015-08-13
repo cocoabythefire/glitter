@@ -296,7 +296,7 @@ app.post('/api/users/login', function (req, res) {
   var errorMessage = 'username and/or password incorrect';
   BPromise.bind({})
   .then(function() {
-    this.username = req.body.name;
+    this.username = req.body.username;
     this.password = req.body.password;
     return User.objects.where({name: this.username}).limit(1).fetchOne();
   })
