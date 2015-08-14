@@ -47,7 +47,6 @@ var handleError = function(res) {
       res.status(e.status).send({ message: e.message });
     }
     else {
-      console.log(e);
       res.status(500).send({ error: 'unhandled error' });
     }
   };
@@ -103,10 +102,12 @@ app.get('/', function (req, res) {
 
 // Authentication Middleware
 secureAPI.use(function(req, res, next) {
+  var tokenValue = "";
+  tokenValue = req.headers['x-glitter-token'];
   BPromise.bind({})
   .then(function() {
     return Token.objects.where({
-      'value': req.headers['x-glitter-token']
+      'value': tokenValue
     }).fetchOne();
   })
   .tap(function(token) { req.token = token; })
@@ -331,8 +332,7 @@ app.post('/api/users/login', function (req, res) {
 
 // User Logout
 secureAPI.delete('/users/logout', function (req, res) {
-  deleteToken(req.headers['x-glitter-token'])
-  .then(function(token) {
+  deleteToken(req.headers['x-glitter-token']).then(function() {
     res.setHeader('x-glitter-token', '');
     res.send({ message: 'OK' });
   })
