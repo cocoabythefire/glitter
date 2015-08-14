@@ -279,7 +279,7 @@ app.post('/api/users/signup', function (req, res) {
   .then(function(hash) { this.passwordDigest = hash; })
   .then(function() {
     var newUser = User.create({
-      name: req.body.name,
+      name: req.body.username,
       passwordDigest: this.passwordDigest
     });
     newUser.addToken(this.newToken);

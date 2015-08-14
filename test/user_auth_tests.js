@@ -73,7 +73,7 @@ describe('glitter', function() {
   describe('POST /api/users/signup', function() {
     var response, body, token;
     beforeEach(function() {
-      var requestBody = { name: 'Whit McNasty', password: 'ocean2space4planet' };
+      var requestBody = { username: 'Whit McNasty', password: 'ocean2space4planet' };
       return request({ url: baseURL + '/api/users/signup', method: 'post', json: true, body: requestBody })
       .spread(function (_response, _body) {
         response = _response;
