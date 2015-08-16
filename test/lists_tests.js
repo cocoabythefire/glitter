@@ -19,6 +19,11 @@ var baseURL = 'http://localhost:' + port;
 var db = app.get('db');
 var List = db.model('list');
 
+
+// TODO: Add/edit tests to ensure that the GET for lists only
+// returns the list of the authenticated user and not those
+// belonging to other users
+
 describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });
   after(function(done) { server.close(done); });

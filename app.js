@@ -138,6 +138,7 @@ app.get('/api/places', function (req, res) {
 // Get all Lists for a specific User
 secureAPI.get('/lists', function (req, res) {
   var query = List.objects
+    .where({ user: req.user })
     .order('id')
     .limit(100);
   query.fetch().then(function(lists) {
