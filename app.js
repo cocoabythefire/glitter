@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var url = require('url');
 var express = require('express');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
@@ -8,6 +9,8 @@ var BPromise = require('bluebird');
 var azul = require('azul');
 var crypto = BPromise.promisifyAll(require('crypto'));
 var bcrypt = BPromise.promisifyAll(require('bcrypt'));
+var proxies = require('./proxies');
+var googleAPIKey = 'AIzaSyBF0MrwABAJ_Nf1bbNjBMeSps0aigriEJg';
 
 /**
  * Setup database
@@ -133,6 +136,21 @@ app.get('/api/places', function (req, res) {
     res.send({ places: _.map(places, 'attrs') });
   })
   .catch(handleError(res));
+});
+
+
+
+// Get Google Places for location
+// format is https://maps.googleapis.com/maps/api/place/nearbysearch/json?parameters
+// https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food&key=API_KEY
+//       http://localhost:3000/api/maps/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food
+app.all('/api/maps/*', function (req, res) {
+  var parsedURL = url.parse(req.url, true);
+  parsedURL.search = null;
+  parsedURL.query.key = googleAPIKey;
+  parsedURL.pathname = parsedURL.pathname.replace(/^\/api\/maps/, '');
+  req.url = url.format(parsedURL);
+  proxies.googleMaps.web(req, res);
 });
 
 // Get all Lists for a specific User

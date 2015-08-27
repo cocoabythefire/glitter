@@ -9,6 +9,7 @@ var sinon = require('sinon');
 var BPromise = require('bluebird');
 var request = BPromise.promisify(require('request'));
 var helpers = require('./helpers');
+var proxies = require('../proxies');
 
 var pg = require('pg');
 var app = require('../app');
@@ -19,6 +20,8 @@ var baseURL = 'http://localhost:' + port;
 var db = app.get('db');
 var Place = db.model('place');
 var List = db.model('list');
+
+chai.use(require('sinon-chai'));
 
 describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });
@@ -77,6 +80,38 @@ describe('glitter', function() {
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(500);
         expect(body).to.eql({ error: 'unhandled error' });
+      });
+    });
+  });
+
+  describe('maps proxy', function() {
+    beforeEach(function() {
+      this.proxySpy = sinon.stub(proxies.googleMaps, 'web', function(req, res) {
+        res.end();
+      });
+    });
+
+    afterEach(function() {
+      proxies.googleMaps.web.restore();
+    });
+
+    it('GET /api/maps/boo', function() {
+      var proxySpy = this.proxySpy;
+      return request({ url: baseURL + '/api/maps/boo', json: true })
+      .spread(function (response, body) {
+        expect(proxySpy).to.have.been.calledOnce;
+        var req = proxySpy.getCall(0).args[0];
+        expect(req).to.have.property('url', '/boo?key=AIzaSyBF0MrwABAJ_Nf1bbNjBMeSps0aigriEJg');
+      });
+    });
+
+    it('GET /api/maps/boo?foo=bar', function() {
+      var proxySpy = this.proxySpy;
+      return request({ url: baseURL + '/api/maps/boo?foo=bar', json: true })
+      .spread(function (response, body) {
+        expect(proxySpy).to.have.been.calledOnce;
+        var req = proxySpy.getCall(0).args[0];
+        expect(req).to.have.property('url', '/boo?foo=bar&key=AIzaSyBF0MrwABAJ_Nf1bbNjBMeSps0aigriEJg');
       });
     });
   });
