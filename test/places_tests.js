@@ -192,7 +192,6 @@ describe('glitter', function() {
       .then(function() { return request({ url: baseURL + '/api/places/', json: true }); })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(200);
-        console.log(_.map(this.places, 'attrs'));
         expect(body).to.eql({
           places: _.map(this.places, 'attrs') });
       })

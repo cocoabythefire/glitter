@@ -112,6 +112,20 @@ var deleteToken = function(tokenValue) {
   })
 };
 
+var filterPlaceDetails = function(placeDetails) {
+  if (placeDetails) {
+    return _.omit(placeDetails.attrs, 'google_place_id');
+  }
+  return {};
+};
+
+var filterCommentary = function(commentary) {
+  if(commentary) {
+    return _.omit(commentary.attrs, 'place_id', 'user_id');
+  }
+  return {};
+};
+
 
 var app = express();
 var api = express.Router();
@@ -190,18 +204,18 @@ secureAPI.get('/places/:id', function (req, res) {
     .where({ 'id' : req.params.id });
     return query.limit(1).fetchOne();
   })
-  .then(function(place) {
-    this.place = place;
+  .then(function(placeResult) {
+    this.placeResult = placeResult;
   })
   .then(function() {
     var query = Commentary.objects
-    .where({ place: this.place })
+    .where({ place: this.placeResult })
     .where({ user: req.user });
     return query.limit(1).fetch();
   })
-  .then(function(comments) {
-    res.send({ commentary: _.omit(comments.attrs, 'place_id', 'user_id'),
-                  details: _.omit(this.place.attrs, 'google_place_id') });
+  .then(function(commentaryResult) {
+    res.send({ commentary: filterCommentary(commentaryResult[0]),
+                  details: filterPlaceDetails(this.placeResult) });
   })
   .catch(handleError(res));
 });
@@ -258,7 +272,6 @@ secureAPI.get('/profile', function (req, res) {
 secureAPI.post('/places', function (req, res) {
   var newPlace = Place.create({
     name: req.body.name,
-    neighborhood: req.body.neighborhood,
   });
   newPlace.save().then(function() {
     res.send(newPlace.attrs);

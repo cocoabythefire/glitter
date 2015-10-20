@@ -33,7 +33,7 @@ module.exports.createAuthenticatedUser = function(name) {
 };
 
 module.exports.createSomePlaces = function() {
-  var placeA = this.placeA = Place.create({ name: 'Alma Chocolates', neighborhood: 'northeast' });
+  var placeA = this.placeA = Place.create({ name: 'Alma Chocolates' });
   var placeB = this.placeB = Place.create({ name: 'Barista' });
   var placeC = this.placeC = Place.create({ name: 'Coava Coffee' });
   var placeD = this.placeD = Place.create({ name: 'Dunkin Donuts' });
