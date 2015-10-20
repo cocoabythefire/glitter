@@ -84,8 +84,14 @@ describe('glitter', function() {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({
         places: [
-          { id: 1, name: 'Alma Chocolates' },
-          { id: 3, name: 'Coava Coffee' }
+          { address: null, country: null, google_place_id: null, icon_url: null,
+            id: 1, intl_phone: null, locality: null, location: null,
+            name: 'Alma Chocolates', neighborhood: null, phone: null, postal_code: null,
+            timezone: null, type: null, website: null },
+          { address: null, country: null, google_place_id: null, icon_url: null,
+            id: 3, intl_phone: null, locality: null, location: null,
+            name: 'Coava Coffee', neighborhood: null, phone: null, postal_code: null,
+            timezone: null, type: null, website: null }
         ]
       });
     });
@@ -144,7 +150,10 @@ describe('glitter', function() {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({
         places: [
-          { id: 1, name: 'Alma Chocolates' }
+          { address: null, country: null, google_place_id: null, icon_url: null,
+            id: 1, intl_phone: null, locality: null, location: null,
+            name: 'Alma Chocolates', neighborhood: null, phone: null, postal_code: null,
+            timezone: null, type: null, website: null }
         ]
       });
     });
@@ -182,7 +191,10 @@ describe('glitter', function() {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({
         places: [
-          { id: 9, name: 'New Place' } //id is 9 bc helpers created 8 already
+          { address: null, country: null, google_place_id: null, icon_url: null,
+            id: 9, intl_phone: null, locality: null, location: null,
+            name: 'New Place', neighborhood: null, phone: null, postal_code: null,
+            timezone: null, type: null, website: null } //id is 9 bc helpers created 8 already
         ]
       });
     });
@@ -246,8 +258,14 @@ describe('glitter', function() {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({
         places: [
-          { id: 2, name: 'Barista' },
-          { id: 4, name: 'Dunkin Donuts' }
+          { address: null, country: null, google_place_id: null, icon_url: null,
+            id: 2, intl_phone: null, locality: null, location: null,
+            name: 'Barista', neighborhood: null, phone: null, postal_code: null,
+            timezone: null, type: null, website: null },
+          { address: null, country: null, google_place_id: null, icon_url: null,
+            id: 4, intl_phone: null, locality: null, location: null,
+            name: 'Dunkin Donuts', neighborhood: null, phone: null, postal_code: null,
+            timezone: null, type: null, website: null }
         ]
       });
     })
@@ -263,7 +281,10 @@ describe('glitter', function() {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({
         places: [
-          { id: 2, name: 'Barista' }
+          { address: null, country: null, google_place_id: null, icon_url: null,
+            id: 2, intl_phone: null, locality: null, location: null,
+            name: 'Barista', neighborhood: null, phone: null, postal_code: null,
+            timezone: null, type: null, website: null }
         ]
       });
     });

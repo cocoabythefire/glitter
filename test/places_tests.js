@@ -167,7 +167,7 @@ describe('glitter', function() {
       .then(function() { return request({ url: baseURL + '/api/places', json: true }); })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(200);
-        expect(body).to.eql({ places: _.map(this.places, 'attrs') });
+        expect(body).to.eql({ places: helpers.testPlaceResults() });
       });
     });
 
@@ -176,7 +176,7 @@ describe('glitter', function() {
       .then(function() { return request({ url: baseURL + '/api/places/', headers: this.tokenHeader, json: true }); })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(200);
-        expect(body).to.eql({ places: _.map(this.places, 'attrs') });
+        expect(body).to.eql({ places: helpers.testPlaceResults() });
       })
       .then(function() {
         return request({ url: baseURL + '/api/places/99', method: 'delete', headers: this.tokenHeader, json: true });
@@ -193,7 +193,7 @@ describe('glitter', function() {
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(200);
         expect(body).to.eql({
-          places: _.map(this.places, 'attrs') });
+          places: helpers.testPlaceResults() });
       })
       .then(function() {
         return request({ url: baseURL + '/api/places/2', method: 'delete', headers: this.tokenHeader, json: true });

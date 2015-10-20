@@ -187,7 +187,10 @@ describe('glitter', function() {
       expect(response.statusCode).to.eql(200);
       expect(body).to.eql({
         places: [
-          { id: 1, name: 'Alma Chocolates' }
+          { address: null, country: null, google_place_id: null, icon_url: null,
+            id: 1, intl_phone: null, locality: null, location: null,
+            name: 'Alma Chocolates', neighborhood: null, phone: null, postal_code: null,
+            timezone: null, type: null, website: null }
         ]
       });
     });
