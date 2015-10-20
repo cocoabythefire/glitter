@@ -145,6 +145,7 @@ app.get('/api/places', function (req, res) {
 // https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food&key=API_KEY
 //       http://localhost:3000/api/maps/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food
 // https://maps.googleapis.com/maps/api/place/autocomplete/json?input=Amoeba&types=establishment&location=37.76999,-122.44696&radius=500&key=API_KEY
+// https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4&key=YOUR_API_KEY
 app.all('/api/maps/*', function (req, res) {
   var parsedURL = url.parse(req.url, true);
   parsedURL.search = null;
