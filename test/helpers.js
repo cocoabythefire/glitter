@@ -9,6 +9,7 @@ var Token = db.model('token');
 var User = db.model('user');
 var Place = db.model('place');
 var List = db.model('list');
+var Commentary = db.model('commentary');
 
 var assign = function(propertyName) {
   return function(result) {
@@ -32,7 +33,7 @@ module.exports.createAuthenticatedUser = function(name) {
 };
 
 module.exports.createSomePlaces = function() {
-  var placeA = this.placeA = Place.create({ name: 'Alma Chocolates' });
+  var placeA = this.placeA = Place.create({ name: 'Alma Chocolates', neighborhood: 'northeast' });
   var placeB = this.placeB = Place.create({ name: 'Barista' });
   var placeC = this.placeC = Place.create({ name: 'Coava Coffee' });
   var placeD = this.placeD = Place.create({ name: 'Dunkin Donuts' });
@@ -69,4 +70,21 @@ module.exports.createSomeLists = function() {
   .then(function() { return list5.save(); })
   .return([list1, list2, list3, list4, list5])
   .tap(assign('lists'));
+};
+
+module.exports.createSomeCommentary = function() {
+  var commentary1 = this.commentary1 = Commentary.create({ headline: 'this place rocks!' });
+  var commentary2 = this.commentary2 = Commentary.create({ headline: 'on the fence' });
+  var commentary3 = this.commentary3 = Commentary.create({ headline: 'SO GOOD I could die' });
+  var commentary4 = this.commentary4 = Commentary.create({ headline: 'Ok I will definitely be going back.' });
+  var commentary5 = this.commentary5 = Commentary.create({ headline: 'this was so much fun!' });
+
+  return BPromise.bind(this)
+  .then(function() { return commentary1.save(); })
+  .then(function() { return commentary2.save(); })
+  .then(function() { return commentary3.save(); })
+  .then(function() { return commentary4.save(); })
+  .then(function() { return commentary5.save(); })
+  .return([commentary1, commentary2, commentary3, commentary4, commentary5])
+  .tap(assign('commentary'));
 };

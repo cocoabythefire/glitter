@@ -192,7 +192,9 @@ describe('glitter', function() {
       .then(function() { return request({ url: baseURL + '/api/places/', json: true }); })
       .spread(function (response, body) {
         expect(response.statusCode).to.eql(200);
-        expect(body).to.eql({ places: _.map(this.places, 'attrs') });
+        console.log(_.map(this.places, 'attrs'));
+        expect(body).to.eql({
+          places: _.map(this.places, 'attrs') });
       })
       .then(function() {
         return request({ url: baseURL + '/api/places/2', method: 'delete', headers: this.tokenHeader, json: true });
@@ -208,13 +210,34 @@ describe('glitter', function() {
         expect(response.statusCode).to.eql(200);
         expect(body).to.eql({
           places: [
-            { id: 1, name: 'Alma Chocolates' },
-            { id: 3, name: 'Coava Coffee' },
-            { id: 4, name: 'Dunkin Donuts' },
-            { id: 5, name: 'Eb & Bean' },
-            { id: 6, name: 'Fire on the Mountain' },
-            { id: 7, name: 'Girl and the Goat' },
-            { id: 8, name: 'Hot Chocolate' }
+            { address: null, country: null, google_place_id: null, icon_url: null,
+              id: 1, intl_phone: null, locality: null, location: null,
+              name: 'Alma Chocolates', neighborhood: null, phone: null, postal_code: null,
+              timezone: null, type: null, website: null },
+            { address: null, country: null, google_place_id: null, icon_url: null,
+              id: 3, intl_phone: null, locality: null, location: null,
+              name: 'Coava Coffee', neighborhood: null, phone: null, postal_code: null,
+              timezone: null, type: null, website: null },
+            { address: null, country: null, google_place_id: null, icon_url: null,
+              id: 4, intl_phone: null, locality: null, location: null,
+              name: 'Dunkin Donuts', neighborhood: null, phone: null, postal_code: null,
+              timezone: null, type: null, website: null },
+            { address: null, country: null, google_place_id: null, icon_url: null,
+              id: 5, intl_phone: null, locality: null, location: null,
+              name: 'Eb & Bean', neighborhood: null, phone: null, postal_code: null,
+              timezone: null, type: null, website: null },
+            { address: null, country: null, google_place_id: null, icon_url: null,
+              id: 6, intl_phone: null, locality: null, location: null,
+              name: 'Fire on the Mountain', neighborhood: null, phone: null, postal_code: null,
+              timezone: null, type: null, website: null },
+            { address: null, country: null, google_place_id: null, icon_url: null,
+              id: 7, intl_phone: null, locality: null, location: null,
+              name: 'Girl and the Goat', neighborhood: null, phone: null, postal_code: null,
+              timezone: null, type: null, website: null },
+            { address: null, country: null, google_place_id: null, icon_url: null,
+              id: 8, intl_phone: null, locality: null, location: null,
+              name: 'Hot Chocolate', neighborhood: null, phone: null, postal_code: null,
+              timezone: null, type: null, website: null }
           ]
         });
       });

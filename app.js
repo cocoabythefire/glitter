@@ -19,24 +19,51 @@ var googleAPIKey = 'AIzaSyBF0MrwABAJ_Nf1bbNjBMeSps0aigriEJg';
 var env = process.env.NODE_ENV || 'development';
 var config = require('./azulfile')[env];
 var db = azul(config);
+
 var Place = db.model('place', {
   name: db.attr(),
-  lists: db.hasMany({ join: 'lists_places' })
+  google_place_id: db.attr(),
+  location: db.attr(),
+  icon_url: db.attr(),
+  address: db.attr(),
+  phone: db.attr(),
+  intl_phone: db.attr(),
+  locality: db.attr(),
+  neighborhood: db.attr(),
+  country: db.attr(),
+  postal_code: db.attr(),
+  timezone: db.attr(),
+  website: db.attr(),
+  type: db.attr(),
+  lists: db.hasMany({ join: 'lists_places' }),
+  commentaries: db.hasMany()
 });
+
 var List = db.model('list', {
   name: db.attr(),
   places: db.hasMany({ join: 'lists_places' }),
   user: db.belongsTo()
 });
+
 var User = db.model('user', {
   name: db.attr(),
   passwordDigest: db.attr(),
   lists: db.hasMany(),
-  tokens: db.hasMany()
+  tokens: db.hasMany(),
+  commentaries: db.hasMany()
 });
+
 var Token = db.model('token', {
   value: db.attr(),
   user: db.belongsTo()
+});
+
+var Commentary = db.model('commentary', {
+  headline: db.attr(),
+  rating: db.attr(),
+  date_added: db.attr(),
+  place: db.belongsTo(),
+  user: db.belongsTo(),
 });
 
 
@@ -155,6 +182,30 @@ app.all('/api/maps/*', function (req, res) {
   proxies.googleMaps.web(req, res);
 });
 
+// Get details on a specific Place
+secureAPI.get('/places/:id', function (req, res) {
+  BPromise.bind({})
+  .then(function() {
+    var query = Place.objects
+    .where({ 'id' : req.params.id });
+    return query.limit(1).fetchOne();
+  })
+  .then(function(place) {
+    this.place = place;
+  })
+  .then(function() {
+    var query = Commentary.objects
+    .where({ place: this.place })
+    .where({ user: req.user });
+    return query.limit(1).fetch();
+  })
+  .then(function(comments) {
+    res.send({ commentary: _.omit(comments.attrs, 'place_id', 'user_id'),
+                  details: _.omit(this.place.attrs, 'google_place_id') });
+  })
+  .catch(handleError(res));
+});
+
 // Get all Lists for a specific User
 secureAPI.get('/lists', function (req, res) {
   var query = List.objects
@@ -206,7 +257,8 @@ secureAPI.get('/profile', function (req, res) {
 // Create a new Place
 secureAPI.post('/places', function (req, res) {
   var newPlace = Place.create({
-    name: req.body.name
+    name: req.body.name,
+    neighborhood: req.body.neighborhood,
   });
   newPlace.save().then(function() {
     res.send(newPlace.attrs);
