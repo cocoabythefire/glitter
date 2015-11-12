@@ -1,0 +1,31 @@
+ {
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+      "id": "b710aacac02f6924d6da9bfb30c5a4023dee5c54",
+      "name": "Voodoo Doughnut",
+      "opening_hours": {
+        "open_now": true,
+        "weekday_text": []
+      },
+      "photos": [
+        {
+          "height": 975,
+          "html_attributions": [
+            "<a href=\"https://maps.google.com/maps/contrib/105539817238070523193\">Voodoo Doughnut</a>"
+          ],
+          "photo_reference": "CmRdAAAAcGywXyrG_i8XAFxAFBpBqifH-YgrLUCqiaMzlwSJAt20mx5wfbSBwkjiKmTd9I8EfG33jCLhXUnNemjmcKLw4W1pWRKkmUXhBQA3-11QYsHDTKoNsJfiR2lXlsacAH8GEhDMJ9PK1wb6gqOOJCXgtH9HGhSegYNADi0iiMy1t4nz5tykEh2FFw",
+          "width": 975
+        }
+      ],
+      "place_id": "ChIJ70AxJAcKlVQRde9D82gpfSU",
+      "rating": 4.2,
+      "reference": "CnRiAAAAmWCGlBlXHkYgcO5HVe8E-JAIQecigzKkQyqN2Yt_eMaLjJTlGWOWyburSHoiFkM9haX2YZX124ohiAceoo_R4xWfiaEbi-pdVeX9YdeoLXk3eQ9qd3FMMOr_uzOutZXL--a806ujFAl1_kpzqxeWXBIQnOqMTW8hhNPnGNl-ONVtfxoUoyAt3vh7YqFuY8wOX5GrZFreHGg",
+      "scope": "GOOGLE",
+      "types": [
+        "store",
+        "cafe",
+        "food",
+        "point_of_interest",
+        "establishment"
+      ],
+      "vicinity": "22 Southwest 3rd Avenue, Portland"
+    }

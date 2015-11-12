@@ -9,6 +9,12 @@ var NEARBY_SEARCH_URL = 'https://maps.googleapis.com' +
 var TYPES = 'bakery|bar|cafe|food|grocery_or_supermarket|liquor_store|' +
   'meal_delivery|meal_takeaway|night_club|restaurant';
 
+// TODO: delete these examples when done referencing
+// https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food&key=API_KEY
+// https://maps.googleapis.com/maps/api/place/autocomplete/json?input=Amoeba&types=establishment&location=37.76999,-122.44696&radius=500&key=API_KEY
+// https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4&key=YOUR_API_KEY
+// https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=PHOTO_REFERENCE&key=YOUR_API_KEY
+
 /**
  * Converts miles into meters.
  *

@@ -1,0 +1,765 @@
+[
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5226206,
+        "lng": -122.6731105
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "b710aacac02f6924d6da9bfb30c5a4023dee5c54",
+    "name": "Voodoo Doughnut",
+    "opening_hours": {
+      "open_now": true,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 975,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/105539817238070523193\">Voodoo Doughnut</a>"
+        ],
+        "photo_reference": "CmRdAAAAcGywXyrG_i8XAFxAFBpBqifH-YgrLUCqiaMzlwSJAt20mx5wfbSBwkjiKmTd9I8EfG33jCLhXUnNemjmcKLw4W1pWRKkmUXhBQA3-11QYsHDTKoNsJfiR2lXlsacAH8GEhDMJ9PK1wb6gqOOJCXgtH9HGhSegYNADi0iiMy1t4nz5tykEh2FFw",
+        "width": 975
+      }
+    ],
+    "place_id": "ChIJ70AxJAcKlVQRde9D82gpfSU",
+    "rating": 4.2,
+    "reference": "CnRiAAAAmWCGlBlXHkYgcO5HVe8E-JAIQecigzKkQyqN2Yt_eMaLjJTlGWOWyburSHoiFkM9haX2YZX124ohiAceoo_R4xWfiaEbi-pdVeX9YdeoLXk3eQ9qd3FMMOr_uzOutZXL--a806ujFAl1_kpzqxeWXBIQnOqMTW8hhNPnGNl-ONVtfxoUoyAt3vh7YqFuY8wOX5GrZFreHGg",
+    "scope": "GOOGLE",
+    "types": [
+      "store",
+      "cafe",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "22 Southwest 3rd Avenue, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.52007890000001,
+        "lng": -122.6747572
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "b4d34e83f3fb9ed6427c9a744cfad624083445f9",
+    "name": "Huber’s Cafe",
+    "opening_hours": {
+      "open_now": true,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 340,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/108608960651147140209\">Huber’s Cafe</a>"
+        ],
+        "photo_reference": "CmRdAAAA23OQoZG1fNjmPGk8YMdBDKNIWV7ZFa8ecI8NmicVcE9Fz0CuQ6vfiZF4V_Kaj-ZM5Za8OYLSNsAdsxdlGfkaFM44FQ_YiEOMVKdhwz7j3eZAvSB2YIxH1UQJkFje_wOiEhAOAtbZhosrAZV9aX5kbZABGhTKmg_YsMj_AxwQRjVO-Et4w8vhhw",
+        "width": 815
+      }
+    ],
+    "place_id": "ChIJMyTseAYKlVQRQCw2ERy5aqE",
+    "price_level": 2,
+    "rating": 4,
+    "reference": "CnRiAAAAv3791EX543J5j6Oo_CKjiSitCA6CKcixvOAAGz_e6ybo_habCNe-i4RezqtLdaobNiefW5LQEmhL0fhiJrsMB975YFD9JVt0oRc6n9EjA89gAmV-CfmpUdsSDllTO0MqYdE4BhNB1Ymh4VpDpLzitRIQkpXZQZfIBuZv3107kGrblRoU_wnsmF2H-_wtb5qM154MsksZFYM",
+    "scope": "GOOGLE",
+    "types": [
+      "cafe",
+      "bar",
+      "restaurant",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "411 Southwest 3rd Avenue, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.517768,
+        "lng": -122.6539525
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "01aba88c91d0ecbb1a3a2f96a78900a5ee0b64fb",
+    "name": "Rimsky-Korsakoffee House",
+    "opening_hours": {
+      "open_now": false,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 1363,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/104111246635874032234\">ZAGAT</a>"
+        ],
+        "photo_reference": "CmRdAAAAmGvxl8pILK-aCpCHKWaWIcDfhoOqkGsFjRMMvbkC2w2gwXTBfMAFlEVU8_-PL_dZnQY-mh8_TVFhkZvwWAfHHQk_r9BtPAcTsNeVVLTd4qn-SRc7dJI7jbiWQdsNxcEhEhDEbntZGYTkARqAfsbKRIUCGhQDC6OejM-oKH0qmRjUuChm6FixOA",
+        "width": 2048
+      }
+    ],
+    "place_id": "ChIJ-Q0vYKGglVQRSbrS5RVcQLY",
+    "price_level": 1,
+    "rating": 4.1,
+    "reference": "CnRsAAAAJFT6CshyhFONHtZlqw4ZrAVMGobdVty5KJJEdqmH076fsUGJ-Lq_4kSM_2C3V5X_1BKfKTYzFb64zjFTu6IjRLKwuqAxHUE1MjkOODPuoAhNcUVYgSBeCfRnauVxWiRxNNoakqZC3yKnJYl04jYEBxIQP6YNJz1nosp4vR24YQqGihoUCu10fAjt2OpaSMF8Tg15mRrb5bs",
+    "scope": "GOOGLE",
+    "types": [
+      "cafe",
+      "store",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "707 Southeast 12th Avenue, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.521524,
+        "lng": -122.6787123
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "86301642c1d23d453737c01cd93321c15885b784",
+    "name": "El Gaucho Portland",
+    "opening_hours": {
+      "open_now": true,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 1362,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/118378296490159152223\">El Gaucho Portland</a>"
+        ],
+        "photo_reference": "CmRdAAAA2Zjeebk0HvzTHvHlroIhmj0Bz62TkoFuyvJX_KL-1uqbNybLqDwEVvSdrpxzHATif0U545PavuJe6Hoj7DCfIvV08EC5DjXcO_kr7UYS49wBDaZJNrMZNPvkz8kBkou9EhC7YPKkjj4GxGwT7tdm1sSLGhT-YdJ96KyefhlcEmCTEnlL0c1KXw",
+        "width": 2048
+      }
+    ],
+    "place_id": "ChIJZe_uCwQKlVQR12oMzXx3wFQ",
+    "price_level": 3,
+    "rating": 4.1,
+    "reference": "CnRlAAAAXBXQnMxNzgMQjI5Xvu4KLk6598W9e3mirGVV0ltlGrTyIEGBNHDoUYv7AQz2gxbVZc1NG4ge-t6JztdABPqba_JfRD8EuFu8d15Hida1MEbPYSZcwBQAqUa9HXCwyBDCYoRHZITr1XcEieoPCy4OPRIQprzve2dCWGkzDKbKVMG1gBoU0lhkRG5xHmSQ2Papld5RLV8Y1tk",
+    "scope": "GOOGLE",
+    "types": [
+      "cafe",
+      "bar",
+      "restaurant",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "319 Southwest Broadway, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5217275,
+        "lng": -122.6732603
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "442f3d7b3aa3eaaa7971444d942460baacdebf70",
+    "name": "Stumptown Coffee Roasters",
+    "opening_hours": {
+      "open_now": true,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 1296,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/100109298121724457487\">Marco Bonechi</a>"
+        ],
+        "photo_reference": "CmRdAAAAPxiDyayysxv8tdONVrIpDh_W5VcC0dT76InKnEA4Juipbr4HAae4epevrUMNh0gvqufjqpGmYXoqFjcDje9zh62Pwpm7OqDVbf0w1s_QM_VqZg4w_C4ZbRjFOuoImnBLEhAR2eX8mrc9G3v-_JsLjsMKGhRwLz43Z-9Kn5msx26J1KJLrhC6PA",
+        "width": 972
+      }
+    ],
+    "place_id": "ChIJbT5i5AYKlVQRHZOtE8vGAz4",
+    "price_level": 1,
+    "rating": 4.5,
+    "reference": "CnRsAAAArX9iIHYno2Zk7j11jOKBSTBytyvpGcFx9dWSAXUsXhSy1r9rFw22Lv4FBOjB5HcuBt897oIKb_-MMTpgVxnb2Pza6ePOoXSouRAVl16e-GBRF1L-lbOVG_2DmSMJIFTazQgqZa_2EKarLXfANrLoWRIQ9UwV_Fpa7J0HC1DAHaJJRxoU6n8LN2lbKUcDAAq5rPmcImmTEJo",
+    "scope": "GOOGLE",
+    "types": [
+      "store",
+      "cafe",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "128 Southwest 3rd Avenue, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5156431,
+        "lng": -122.6786699
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "fc4bdd233bc191b9a1e43c86c0e9fff05c07d031",
+    "name": "Cafe Portlandia",
+    "opening_hours": {
+      "open_now": false,
+      "weekday_text": []
+    },
+    "place_id": "ChIJXXt45A8KlVQRUn7gWEihDBk",
+    "price_level": 1,
+    "rating": 3.7,
+    "reference": "CnRiAAAAEv8dZttyuN8Okw18nR8nYwgBcts6lPf9O1Ndff6bDUDBGSP-pIqapKYJvJlx479wgnes3GRvV-0YtbDo7-ysjWtn09Pffg7wMPeQispVhizYsCWy54Ll-9R5KRDcrBk76BXQSUdLwCwt05MCmiH80xIQauFBUTwp8YVnb-DNcT8bORoUFfPpFEQsOz5LaR1iItJGblas5DQ",
+    "scope": "GOOGLE",
+    "types": [
+      "cafe",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "410 Southwest Main Street, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5216455,
+        "lng": -122.6733552
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "e3adb9ba9c16370c2a67b91c8c1a008fb8ac7cdb",
+    "name": "Bijou Cafe",
+    "opening_hours": {
+      "open_now": false,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 800,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/113554853033263597841\">Bijou Cafe</a>"
+        ],
+        "photo_reference": "CmRdAAAAfMwk7NdARFkYCRb021r9K6vo5_bNO8Ct6zO_FO3W4dSXPII6mwlJnsjc5rrC836mPNzajZBNqU89xtRtm4tYsmel1B5-aP_vZ0qF1wMJMTmwIfKFD8gwSD2SXjkaCdcKEhDV-ROB6JWJ9pR4AWm5WHKAGhTBSPYY0haf4AbSPlRULjGleqp6Rg",
+        "width": 800
+      }
+    ],
+    "place_id": "ChIJS7x45gYKlVQRojNDqG9C17Y",
+    "price_level": 2,
+    "rating": 4,
+    "reference": "CmReAAAA1mhFkRZxDBbtizKrn2ZdO2jvEK1mUTWB-MTdVy_THmlKED7BLffpagKnPmtcqDZyDOeMnGVjz9zWVwc9wr7U-mE415JIUG0Ekd3Xq_OyFOWen04WTxmj7zb5ESsXfJcdEhDYe4L1s8G-a-hXkLRevrAIGhTS9OKa5Cpk5OZvyg1kCuH50FFoRA",
+    "scope": "GOOGLE",
+    "types": [
+      "cafe",
+      "night_club",
+      "bar",
+      "restaurant",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "132 Southwest 3rd Avenue, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5203458,
+        "lng": -122.6840513
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png",
+    "id": "ca60cc92e0ef87530d83cffea8c00a7baa9801f5",
+    "name": "Saint Cupcake",
+    "opening_hours": {
+      "open_now": false,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 1362,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/114156016854204223417\">Saint Cupcake Galore</a>"
+        ],
+        "photo_reference": "CmRdAAAAHL4Qjs5aRnWe6zpb5wEE1Qxvzguptonx7FdDdticLVkgz371DnQ3ehcYGK8VJSR52RCv6gwc1NgvH5A-tJ5E7598MMA5I68vHLFVNRsZtr14Uf1UA0ueH1rdnHKwk0-2EhBawhFPGWFmD6AfYARckCHRGhQR1a9lTONJCX3lsd9-gElNjt1aIQ",
+        "width": 2048
+      }
+    ],
+    "place_id": "ChIJUdEIVAMKlVQRso6TG4CGNx0",
+    "rating": 4.3,
+    "reference": "CmRgAAAAzfPqn_4DIKhr6qnYvkYcI_3Ksz2IyBP7tyTwrmEyEn2_GkUZuwe9x0kCRBa5MaiSPlnd6KRfIYm6GkGH2Y_GpjSghu1DuW3cAzRFkURTVwYQV_JQGJa9WwtHR5dAArRrEhAqnhIvwkpkLuv6Vcfbjsn4GhS306BUiwjaqhSjEwhwIoHDiPh5wQ",
+    "scope": "GOOGLE",
+    "types": [
+      "bakery",
+      "store",
+      "cafe",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "1138 Southwest Morrison Street, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5199524,
+        "lng": -122.6635569
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "6ae9fa368d27f1eba52da1a907b5b118782955ad",
+    "name": "Produce Row Cafe",
+    "opening_hours": {
+      "open_now": true,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 2048,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/104111246635874032234\">ZAGAT</a>"
+        ],
+        "photo_reference": "CmRdAAAAShTkzZxiwQNEtZ9x4bDSbg4iYyEzDNedp8icQ-iaIve6d69iR5u5VdxJzInjQy22lWGU4AdOI8X1QNwLRs9Pt0SIXzPAsHexFTWeMEp937839BM6AX3K4fmet5Jgm63CEhCDnQPoZsf9ft7_z8jHunRcGhRkwIugTGJIfk2hbnyfPw9e8FyIJQ",
+        "width": 1363
+      }
+    ],
+    "place_id": "ChIJ2d5YlaeglVQR1X4QBMB5WPg",
+    "price_level": 2,
+    "rating": 4.2,
+    "reference": "CnRkAAAATS9HHPruYDzk8usbUcwm6SaAOlcGFgNy3eulFIixIEgNbobQQzkJu_j4Z11j6lfxf8S6WIckn6ZG0q3lawW0ouG1kKaTcddXOSSpWAPOfvFlu5NEFQ3P9nPuNqvWgmFI5V2sXl1TJ-PyjIgbdDOoOhIQxH1is72T9aWjG2QZe0ILYhoU2uld1mntTQbbAGaZrgrQ34ihpEw",
+    "scope": "GOOGLE",
+    "types": [
+      "cafe",
+      "bar",
+      "restaurant",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "204 Southeast Oak Street, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5228184,
+        "lng": -122.6833121
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "56e2569e8f4b63bf02b04004fdca574df7932352",
+    "name": "McMenamins Crystal Hotel",
+    "photos": [
+      {
+        "height": 332,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/110213268790271358823\">McMenamins Crystal Hotel</a>"
+        ],
+        "photo_reference": "CmRdAAAAutQ7QynSDKJS38k7J71j8rLR9w8QiVrVgRvP6D4gRaCF6uwvxZgRWfZcvwho9MD94p2z0diJTe8WXHK8EUZxpgqT-MVtlEJc81QMnyNqROSOnRrv3THn2VgUpappU2v3EhAzw6vAA1lX98Izk7tGjcsDGhRW3j49aJ-XIAJVJ1ZshdBLhHtnvg",
+        "width": 332
+      }
+    ],
+    "place_id": "ChIJxzAqBwMKlVQRp-Qml3mv6aQ",
+    "rating": 4,
+    "reference": "CnRsAAAAkiIXT3IbdwpQtMc2HL__Az82FHvj7gQA-0dfhCpSdHpJ3_7D52cBNQr2gFeOPnCTgS3mt4SOMtGQcrhVsj0i2O3zEoa7ieMYciLxOtUJb-OTEXnbboxXl9FsNs2DfPuf8Y3h73nGwagdAEvCiQrUCBIQpud8K-gH6XGr4t6-DGc9hhoUrgSOp52iwpdGlCSXfmoWa9hMGHY",
+    "scope": "GOOGLE",
+    "types": [
+      "cafe",
+      "bar",
+      "restaurant",
+      "lodging",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "303 Southwest 12th Avenue, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5298548,
+        "lng": -122.6815678
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png",
+    "id": "3aaf4790093861a3fdc22ab981a516f265629faf",
+    "name": "Lovejoy Bakers - Pearl District",
+    "opening_hours": {
+      "open_now": false,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 720,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/105047198989683240956\">Kayshenn Jones</a>"
+        ],
+        "photo_reference": "CmRdAAAAFPyuheGudwY9P3zSQQqfXw9uQHnYxKZdLgzXLlGYgIOBn3IAeKytnyrYSBW6cPIc3vXCCd9wIEuKjp8eE8YOI3VqslkffCOtRr1FJ31UbS0cWMSFqm6ZUMBaHZPDCKZJEhBagql8rUs1J1wBvrFNvYj6GhTBkfLrGxn28p93wNuZkHuYIP8Svw",
+        "width": 1280
+      }
+    ],
+    "place_id": "ChIJVx6WQ_4JlVQRjnIeBS_E9YA",
+    "price_level": 1,
+    "rating": 4.3,
+    "reference": "CoQBcwAAALos4pMk7O-0genrDDydUSU9i2cNgP-6y_hmVj5d01J0Z0jOjOhltJttQjcmWcES1AGe2QEfc6uSq65vYDnJLO6nrKd7v03oUcOy-Tl1HIspx_2aBU0Ac-0z2IOG39Js75-szZhMXhvmToc9M2sBobXIUF4aylf3U1rm5EU3LLUfEhCBJ1sUsbOGRfVTmcFhJO2rGhRY3qah4HzOZK6N834C1k043CUjOQ",
+    "scope": "GOOGLE",
+    "types": [
+      "bakery",
+      "store",
+      "meal_takeaway",
+      "cafe",
+      "bar",
+      "restaurant",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "939 Northwest 10th Avenue, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5197072,
+        "lng": -122.6786546
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "a409a090cb843a02f51e94562569c8b5bc5dc853",
+    "name": "Moonstruck Chocolate Cafe",
+    "opening_hours": {
+      "open_now": false,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 1848,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/112818520622324227376\">Moonstruck Chocolate Cafe</a>"
+        ],
+        "photo_reference": "CmRdAAAACeicBGOgJbSVfyqy9_dtu6O2c-NUfEd8cEuwUEn6b4WWlyEi5_kDDRKl9o1OFGaHNNIPgYjqQZevYwN-pGYy_moYcfQ6U8ftk-Yep2srrVeOful92g_g9Slmj3-XkoYPEhAj8K7tmNU0J5CSC7q7zINUGhTZyBtjOGvtBbEUdlACuSRSjSjRrA",
+        "width": 1400
+      }
+    ],
+    "place_id": "ChIJW6U1VwQKlVQR6gkAPd60Tv0",
+    "price_level": 1,
+    "rating": 4.5,
+    "reference": "CnRtAAAAcEyCm61uJGAJi0mGzBKAoIADDY-Z39pRjjxBLcPuxynUy-Nscyrgjdw7Zc9MUMCYpSN5O4HZRJSfX6z1xCoSoNw_DcZCc8yU17NQsZrbGQgPZbYJrzWE9xnA3lFPKg95E2qz8KxnNicqIP2M1pPrlhIQIVmJ9A2KBOmS6TnthTvFGBoUMfZGIxxs0kGd3mUsH5otfcO_RAE",
+    "scope": "GOOGLE",
+    "types": [
+      "store",
+      "cafe",
+      "bar",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "608 Southwest Alder Street, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5225877,
+        "lng": -122.6839764
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "553ab83cd5267158f5ac97bc8b3a6499f5f1f213",
+    "name": "Cacao",
+    "opening_hours": {
+      "open_now": true,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 585,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/104996320499215000623\">ericrazy1</a>"
+        ],
+        "photo_reference": "CmRdAAAA8lSgv8greLOkPl7Wlu7c7Y283K62P_HKMfBrriPtAGpOmYHnmawYR_IwFd5nL38YWFdcyB9HVtCxh8fvUA34xO4KOAW7VVGXDWLQKZfeaZr4KXnXkWqZCVWYysEB8hrpEhCbWSzDvHQLTkGn0nJHkcNzGhRU1pWqCDuX8rqbFFImHtuM6ccPrw",
+        "width": 1040
+      }
+    ],
+    "place_id": "ChIJU_rZHAMKlVQRQYx_5uXrmWY",
+    "price_level": 1,
+    "rating": 4.6,
+    "reference": "CmRYAAAA0nkZHktpySJaxBBogF4g__nY4lkskOK4mFQuAnAPRGW62_qllCWHWEz2wv3RNDB22ftm6pannIxodh3IjSUU1-2UEuLM1tLX2s6RHc6wOZLETqaeLQ7ZDsjorm17HtkREhDUlx2bEL4RYBtA4318EZvnGhRLydLjrCFQL0pSm10SjGp7-ypAkg",
+    "scope": "GOOGLE",
+    "types": [
+      "store",
+      "cafe",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "414 Southwest 13th Avenue, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5226611,
+        "lng": -122.6584558
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "b4d57cf197ce64d05d97297cb8ebeace83018b36",
+    "name": "The Farm Cafe",
+    "opening_hours": {
+      "open_now": true,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 1365,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/117735313235839873291\">Beth Olson</a>"
+        ],
+        "photo_reference": "CmRdAAAA5esaWg8rF2YC9OoXqm5775rpHDqLLDPgGI_ZHnlStKQ5J6r3RiY5j2hEc6339Z-qHF3i2iKznyR6XsTL5filnTfbIe_pn_JEeBvURX54whb_poPVNYDNNfZ4_gkukfUvEhAg2YTD2ULgxXyuXl33vB3UGhTyaeGuH5fp-PdQqgrXuxOLScUqmw",
+        "width": 2048
+      }
+    ],
+    "place_id": "ChIJzVHX86WglVQRSfVjdDSHLnc",
+    "price_level": 2,
+    "rating": 4.3,
+    "reference": "CmRgAAAAf8WYiWuLRAfEUVz2M1VbwJkaQmHx-_YM6l4jGWXYMiNF-iR-6Wy0kC9NUp1XqaqdzAFnf_Rp8xS_h7E-X2hPZnCmomotXKtzHiJqLc7OMAI0z473K0piIBQexo8eSfZ9EhBk9UeFGWGK_BmtHYc7KqVcGhR0eP7e0hOZZfLyKAbgVMtn0XN6Uw",
+    "scope": "GOOGLE",
+    "types": [
+      "cafe",
+      "bar",
+      "restaurant",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "10 Southeast 7th Avenue, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.52170419999999,
+        "lng": -122.6763607
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "fbff4db45e26ffb48a0c6305a8f62f3e2c18bc15",
+    "name": "Starbucks",
+    "opening_hours": {
+      "open_now": true,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 1392,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/115308812455417629618\">Gary Sanford</a>"
+        ],
+        "photo_reference": "CmRdAAAAqGWwQX7A4npLQxxKz8Y7f5_uu4XxmHhuTgakPT35WbTBFxdBTQijpIJbhcQGqSuOfcKCMcu5ccf8PAyuS1aEsYvNuuo-lSeTmMMQYaRVy41HYtErABXOhcseNE4Flw_sEhD9TQjuxlqxK8Aff5Kt2ICoGhQstNAFpiIsq7ZpsEP8q5ypxBMMDA",
+        "width": 1392
+      }
+    ],
+    "place_id": "ChIJXw2IQAQKlVQR40-X6BMUqls",
+    "price_level": 2,
+    "rating": 3,
+    "reference": "CmRcAAAAt8hp3VM0uXInA1NK8F4LhCksTsobmCKB18UPRFOLbZC2o_D-Uc1AsqQBwOMo4NwamkpWn8_ENklrgl3KOO_r0s5H8I2dXWPFWgn0UP1mgfhZ0O3n8lLiVIMPmbL3_6jsEhAgiPwnzx9h6JoluzjxRsxBGhQNxrWLzv6mHJMfcPH3jLQVetSuEw",
+    "scope": "GOOGLE",
+    "types": [
+      "store",
+      "cafe",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "555 Southwest Oak Street, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.52520699999999,
+        "lng": -122.6835271
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "41d60f56f3101543eee07c9333d7b58243d87ec9",
+    "name": "Caffè Umbria",
+    "opening_hours": {
+      "open_now": true,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 1632,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/105394841216406071698\">Marco Paglia</a>"
+        ],
+        "photo_reference": "CmRdAAAAdRW04Hu45rrkRCa4qGvf75u2XQQySsxN_6DQyZq4y-ldmTv0EOTFihYeIUoQ1eLmvEQJFC0p4lnPcQ0niRTBIeEEG68As6Q-68RW8loTnMotsCzJczjjM2857sRkhd49EhADPN1_OJwGfmMbFneK8B-0GhSvACf8-uJRM1YszO8Z7EX2rOWeSg",
+        "width": 1224
+      }
+    ],
+    "place_id": "ChIJqf0ZDAIKlVQRJNAvje7XR8g",
+    "price_level": 1,
+    "rating": 4.2,
+    "reference": "CnRhAAAAmWX8sQtlu-c2xqGCL8MBj9PREV2YUtu1ZMiTOXiHOa8IhtFUKPdavKsdU_SCnKcFgTs8JswJdoNmJkUTmAPH3WbGWsNb7-pckmY2yzZNmdPk8L_W-eYH9OcRae2jkCESw1AZobf6_Gzm70EuBeFjFhIQkdL2-c6J0fQU7GTuq-cmHhoUKBwLwl1aB4naUrQlNSimodHpvNQ",
+    "scope": "GOOGLE",
+    "types": [
+      "store",
+      "cafe",
+      "bar",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "303 Northwest 12th Avenue, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5225751,
+        "lng": -122.6825872
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "4eea0b7b7f3b970ba88bb0635affd7615b45dc27",
+    "name": "The Roxy",
+    "opening_hours": {
+      "open_now": true,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 1536,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/106289152239499798297\">Pat Conwell</a>"
+        ],
+        "photo_reference": "CmRdAAAAh3VnaI5Hg9lk6PZmwXUMeo_0RE8uF1uFjnM-fV-e7cAfp55mOXgDNimPpSR5ys9CtPbcmxCelIj8Q5Z8QMFmbuiRNELDVs7Qllz-KgVDGNAqO7atGiyxtqT62nOySN4EEhD5fS6-j-0i_YKZTytc_qeEGhSd1yf9giaiSM3htb3CwyrPwzACSA",
+        "width": 2048
+      }
+    ],
+    "place_id": "ChIJORIPqAMKlVQRcM5_FUMed1I",
+    "price_level": 1,
+    "rating": 3.8,
+    "reference": "CmRbAAAA0NQzp__D5lReE6FCfD1440BjVBOZRPCvHtJK7jxqLFXNsQ42T_PPZ0l7ZLBtttSbDQld6VErKNhTZrkl5hBONxxXgqtivjE2HC5O7pQHSSFQYcza2EluUzBkBQPvE8wfEhCeMzBayC8tWBUoZvdIEQW8GhTfzC66S9TEF1ILgiLB3jMBynl46A",
+    "scope": "GOOGLE",
+    "types": [
+      "store",
+      "cafe",
+      "restaurant",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "1121 Southwest Stark Street, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.51674269999999,
+        "lng": -122.686541
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "fda2e11bd1a8288aa7d197d8eae55722760b0544",
+    "name": "West Cafe",
+    "opening_hours": {
+      "open_now": true,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 667,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/104557960685124318235\">Hiroshi Iwaya</a>"
+        ],
+        "photo_reference": "CmRdAAAAJs2kJgY8Ma5vgM6o5QDQBplJ_Mkupo_O97uIJ179hfI4aJBYAMMI3ckYiEUxA7IGdLrwr1MJOrlY-fI_HJBaD9REUX4-jJhIpwN6TSBdpWOFnm1f6WRvXrxjroTjbIk4EhDCinkyrpsZ3383A8JHfWsyGhTg97gdub7XxREK5UIDFVtBFtINDg",
+        "width": 1000
+      }
+    ],
+    "place_id": "ChIJReuJShoKlVQRX-IiUXgVvL0",
+    "price_level": 2,
+    "rating": 4.2,
+    "reference": "CmRdAAAAEHcteyLI8tQdop3p07JMK3ck2Zip3UQkb6AkxJXVNM8ZhzEUXQqN8b_LhFPosVjWHppNOtFn4k0riP51n2BohrPiHwP4TMXmJpHKrSUuA8TbHqVbIRVX9jUCgL4NER3CEhAEnlxvW4O424LOmpgfFnjHGhS5ei5AzJiLtKeE478hdKqtLKiuRg",
+    "scope": "GOOGLE",
+    "types": [
+      "cafe",
+      "night_club",
+      "bar",
+      "restaurant",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "1201 Southwest Jefferson Street, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5227706,
+        "lng": -122.6805276
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/cafe-71.png",
+    "id": "52f17ebfd9f73ea881abac56eccffb03139a5e40",
+    "name": "Courier Coffee",
+    "opening_hours": {
+      "open_now": false,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 1096,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/106337469464023365354\">Ryo Takahashi</a>"
+        ],
+        "photo_reference": "CmRdAAAAMz7VyhUi2blfcBpYWPN023TrModZnyHk-bC8tF61FRQRiifCtC9w-ZuAJngiMJ-CmomiX8qDvthQxGxOc0UQnZ_EaIgJCtnCfcn_-pgvDMHSDR_lyD7svb_oTOGtg7HIEhBbVJcXP6kr2nYXrK8dPkHZGhQQ6uoYr6tEg7_2R0GH-JJhvXaoJQ",
+        "width": 1096
+      }
+    ],
+    "place_id": "ChIJ60A86QMKlVQR6GrGl3dif4c",
+    "rating": 4.6,
+    "reference": "CnRiAAAAcNBXWSm4ANFbCYHVoU2VSJ7BbNH6CgTkaNpl44BwA-3Y6YHHkkCqaQAF025rm3zpzPbAldmPHEjKclzSZh7E5CVQESWZJrJHJpfr1UIIXhivbmP2gF7abp0DMmjBRdQjIkYqaqZWUe_Z4D0XmKtY8xIQBY9kQMu8AT1gYRBCuV5QExoUvpAJbAdiSc23za3AYY2WP5UiUf0",
+    "scope": "GOOGLE",
+    "types": [
+      "store",
+      "cafe",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "923 Southwest Oak Street, Portland"
+  },
+  {
+    "geometry": {
+      "location": {
+        "lat": 45.5238856,
+        "lng": -122.6964772
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/wine-71.png",
+    "id": "46db6047821a2fd0cd2420b3db34d82bfa788977",
+    "name": "Elephants Delicatessen",
+    "opening_hours": {
+      "open_now": true,
+      "weekday_text": []
+    },
+    "photos": [
+      {
+        "height": 712,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/107047374083597562374\">Elephants Delicatessen</a>"
+        ],
+        "photo_reference": "CmRdAAAAfKPK9XQXHO14c0UyXp9c35bsJRiWr20GemS_3q3srIOD3ppDTxawQB6eq5nnGfS23aJMInXZE48YZ3KuI5w4Be34qnfdOF3gjWgKDgfAWMUMelJxKArcaEjPWzuJ0Z00EhCwIhcFypCzdTTqgo0O_b6EGhTBDUSackb4zw1PccxMk4UJlCJ-qA",
+        "width": 1264
+      }
+    ],
+    "place_id": "ChIJadk4YvYJlVQR83x6r1xrS7E",
+    "price_level": 2,
+    "rating": 4.2,
+    "reference": "CnRqAAAAwTYk8BNAZ4YrDpJydEiyHCQ2UoG5fcUc0C5s1mI023ZJx0GAzc2rXoU7whGMPgWs4xSdXSE67LHSmuHY5xSLKRgX3PYx3KlvczrSx2Y0ckic-cRaklA6u2vL5EPccKF0edFkHAILC6AJuajISXVuFxIQLpsIzNOVi9fSwKoZ-5hxFhoU2ZdJ5Ox2gycrnVhTSBRBtCmM7A0",
+    "scope": "GOOGLE",
+    "types": [
+      "liquor_store",
+      "store",
+      "meal_takeaway",
+      "cafe",
+      "bar",
+      "restaurant",
+      "food",
+      "point_of_interest",
+      "establishment"
+    ],
+    "vicinity": "115 Northwest 22nd Avenue, Portland"
+  }
+]

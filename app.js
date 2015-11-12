@@ -22,6 +22,10 @@ var env = process.env.NODE_ENV || 'development';
 var config = require('./azulfile')[env];
 var db = azul(config);
 
+// TODO: add a temp property to Place that can
+// be used to determine if this is a saved object
+// or one we are just using for sorting/searching
+// and may or may not be saved in the future
 var Place = db.model('place', {
   name: db.attr(),
   google_place_id: db.attr(),
@@ -36,7 +40,7 @@ var Place = db.model('place', {
   postal_code: db.attr(),
   timezone: db.attr(),
   website: db.attr(),
-  type: db.attr(),
+  type: db.attr(),  //TODO: change this to typeS
   lists: db.hasMany({ join: 'lists_places' }),
   commentaries: db.hasMany()
 });
@@ -46,16 +50,46 @@ Place.reopenClass({
   /**
    * Create a Place from a Google Place
    *
+   * Note that resulting Place object is not saved to the
+   * database intentionally. It will only be saved at a later
+   * time if and when it is added to at least one user list.
+   *
    * @param {Object.<Google Place>} googlePlace
    * @return {Object.<Place>}
    */
   createFromGooglePlace: function(googlePlace) {
+    console.log(googlePlace);
+    if (!googlePlace.place_id) {
+      throw new Error('Missing place id.');
+    }
+
+    if (!googlePlace.geometry.location) {
+      throw new Error('Missing location data.');
+    }
     return Place.create({
       name: googlePlace.name,
       google_place_id: googlePlace.place_id,
-      icon_url: googlePlace.icon_url,
+      location: googlePlace.geometry.location,
+      address: googlePlace.vicinity,
       type: googlePlace.types
     });
+  },
+  /**
+   * Convert an Array of Google Places to
+   * an array of Place objects
+   *
+   * @param {Array.Object.<Google Place>} array of googlePlaces.
+   * @return {Array.Object.<Place>} array of Place objects.
+   */
+  createFromGooglePlaces: function(googlePlaces) {
+    var places = [];
+    for (var placeObject in googlePlaces) {
+      console.log('place object');
+      console.log(placeObject);
+      places.push(Place.createFromGooglePlace(placeObject));
+    }
+    // console.log(places);
+    return places;
   },
   /**
    * Merge two place lists and remove duplicates
@@ -65,6 +99,9 @@ Place.reopenClass({
    * @return {Array.<Place>}
    */
   merge: function(placesA, placesB) {
+    console.log('merging');
+    console.log(placesA);
+    console.log(placesB);
     var merged = _.uniq(_.union(placesA, placesB), 'google_place_id');
     console.log(merged);
     return merged;
@@ -244,14 +281,11 @@ app.get('/api/places', function (req, res) {
 });
 
 
-
-// Get Google Places for location
+// TODO: this should become a forwarder that uses the proxy
+// for Google requests like auto-complete or future mapping
+// functionality that the front-end will use
 // format is https://maps.googleapis.com/maps/api/place/nearbysearch/json?parameters
-// https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food&key=API_KEY
-//       http://localhost:3000/api/maps/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food
-// https://maps.googleapis.com/maps/api/place/autocomplete/json?input=Amoeba&types=establishment&location=37.76999,-122.44696&radius=500&key=API_KEY
-// https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4&key=YOUR_API_KEY
-// https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=PHOTO_REFERENCE&key=YOUR_API_KEY
+
 app.all('/api/maps/*', function (req, res) {
   var parsedURL = url.parse(req.url, true);
   parsedURL.search = null;
@@ -267,85 +301,48 @@ app.all('/api/maps/*', function (req, res) {
 /**
  * API resource for GET /place/nearbysearch.
  *
- * @param {String} keyword_search - The search string. i.e. "coffee and
- * tea".
+ * @param {String} keyword_search - search string. i.e. "coffee and tea".
  * @param {String} [location] - The location which must be a lat/long.
- * If no value is given, then the location of the user will be
- * found from their IP address.
- * @param {Number} [radius=5] Number of miles radius in which to
- * search.
+ * @param {Number} [radius=5] Number of miles radius to search in.
  */
 secureAPI.get('/place/nearbysearch', function(req, res) {
+  var keywordSearch = req.query['keyword_search'];
   var location = req.query.location;
   var radius = req.query.radius || 5;
-  var keywordSearch = req.query['keyword_search'];
 
-  var locationPromise;
-  var latLongLocation;
-  var googleResults;
-  var dbResults;
+  var googleResults = [];
+  var dbResults = [];
 
-  // if not location provided, we will use the IP address
-  // to calculate a lat/long based on user's current location
-  if (!location) {
-    locationPromise = getLatLongFromIpAddress();
-  } else {
-    locationPromise = BPromise.promisify(function() { return location; });
-  }
-
-  locationPromise.then(function(result) {
-    latLongLocation = result;
-  })
+  BPromise.resolve()
   .then(function() {
-    return googleNearbySearch(keywordSearch, latLongLocation, radius);
+    return googleNearbySearch(keywordSearch, location, radius);
   })
   .then(function(googlePlaces) {
-    // transform google places to Place format
-    googleResults = transformedPlaces;
+    for (var placeObject in googlePlaces) {
+      googleResults.push(Place.createFromGooglePlace(placeObject));
+    }
   })
   .then(function() {
-    // request data from the database matching query
+    // TODO: search the glitter database for any places that are near
+    // this geographic location & radius (use a default radius if not supplied)
+    // and have a keyword match against name (if a keyword was supplied)
   })
   .then(function(fetchedPlaces) {
     dbResults = fetchedPlaces;
 
-    // merge results
+    // TODO: merge the google search with our place search results by
+    // removing duplicates (favor keeping places from our database)
   })
   .then(function(places) {
+
+    // TODO: send a response object that contains
+    // both the google results and our place results
+    // in the response body (keep separate so front-end can display accordingly)
     res.send(_.map(places, 'attrs'));
   })
   .catch(function(e) {
     res.status(500).send('error of some sort!');
   });
-
-  // TODO: this stuff needs to go away and use the non-proxy way above only
-  var parsedURL = url.parse(req.url, true);
-  parsedURL.search = null;
-  parsedURL.query.key = googleAPIKey;
-  var keyword = parsedURL.query.keyword;
-  var location = parsedURL.query.location;
-  var radius = parsedURL.query.radius;
-  var types = parsedURL.query.types = 'bakery|bar|cafe|food|grocery_or_supermarket|liquor_store|meal_delivery|meal_takeaway|night_club|restaurant';
-
-  // TODO: search the glitter database for any places that are near
-  // this geographic location & radius (use a default radius if not supplied)
-  // and have a keyword match against name (if a keyword was supplied)
-
-  // Make a request to Google for the nearby search
-  req.url = url.format(parsedURL);
-  proxies.googleMaps.web(req, res);
-
-  // TODO: pass the google search result through the filter
-  // function to turn each google place into our Place format
-
-  // TODO: merge the google search with our place search results by
-  // removing duplicates (favor keeping places from our database)
-
-  // TODO: send a response object that contains
-  // both the google results and our place results
-  // in the response body (keep separate so front-end can display accordingly)
-
-
 });
 
 // Get details on a specific Place
