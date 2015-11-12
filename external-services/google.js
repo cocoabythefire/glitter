@@ -3,11 +3,18 @@
 var BPromise = require('bluebird');
 var request = BPromise.promisifyAll(require('request'));
 
-var googlePlaceNearbySearchURL = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
-var googleAPIKey = 'AIzaSyBF0MrwABAJ_Nf1bbNjBMeSps0aigriEJg';
-var placeTypes = 'bakery|bar|cafe|food|grocery_or_supermarket|liquor_store|meal_delivery|meal_takeaway|night_club|restaurant';
+var API_KEY = 'AIzaSyBF0MrwABAJ_Nf1bbNjBMeSps0aigriEJg';
+var NEARBY_SEARCH_URL = 'https://maps.googleapis.com' +
+  '/maps/api/place/nearbysearch/json';
+var TYPES = 'bakery|bar|cafe|food|grocery_or_supermarket|liquor_store|' +
+  'meal_delivery|meal_takeaway|night_club|restaurant';
 
-// Helper Functions
+/**
+ * Converts miles into meters.
+ *
+ * @param {Number} miles
+ * @return {Number} Meters (rounded to nearest meter).
+ */
 var milesToMeters = function(miles) {
   return Math.round(miles/0.00062137);
 };
@@ -31,8 +38,8 @@ var milesToMeters = function(miles) {
  *
  * @param {String} keywordSearch - The search string
  * @param {String} ll - Lat & long of location.
- * @param {Number} [radius] - in miles.
- * @return {Promise.<Array.<Place>>}
+ * @param {Number} [radius=5] - in miles.
+ * @return {Promise.<Array>}
  */
 exports.nearbySearch = function(keywordSearch, ll, radius) {
   if (!keywordSearch) {
@@ -44,13 +51,13 @@ exports.nearbySearch = function(keywordSearch, ll, radius) {
   }
 
   return request.getAsync({
-    url: googlePlaceNearbySearchURL,
+    url: NEARBY_SEARCH_URL,
     qs: {
       keyword: keywordSearch,
       location: ll,
       radius: milesToMeters(radius || 5),
-      types: placeTypes,
-      key: googleAPIKey
+      types: TYPES,
+      key: API_KEY
     },
     json: true
   })
