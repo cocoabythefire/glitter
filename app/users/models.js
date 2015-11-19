@@ -10,4 +10,6 @@ var User = db.model('user', {
   commentaries: db.hasMany()
 });
 
-module.exports = User;
+module.exports = {
+  User: User,
+};

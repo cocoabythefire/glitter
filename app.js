@@ -22,10 +22,11 @@ var googleNearbySearch = require('./external-services/google').nearbySearch;
  */
 
 var db = require('./app/db');
-var List = require('./app/lists/model');
-var Place = require('./app/places/model');
-var User = require('./app/users/model');
-var Commentary = require('./app/commentaries/model');
+var List = require('./app/lists/models').List;
+var Place = require('./app/places/models').Place;
+var User = require('./app/users/models').User;
+var Commentary = require('./app/commentary/models').Commentary;
+var Token = require('./app/auth/models').Token;
 
 
 
@@ -33,10 +34,7 @@ var Commentary = require('./app/commentaries/model');
 
 
 
-var Token = db.model('token', {
-  value: db.attr(),
-  user: db.belongsTo()
-});
+
 
 
 

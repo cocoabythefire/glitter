@@ -8,4 +8,6 @@ var List = db.model('list', {
   user: db.belongsTo()
 });
 
-module.exports = List;
+module.exports = {
+  List: List,
+};

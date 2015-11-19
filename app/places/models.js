@@ -89,4 +89,6 @@ Place.reopenClass({
   }
 });
 
-module.exports = Place;
+module.exports = {
+  Place: Place,
+};

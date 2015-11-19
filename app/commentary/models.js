@@ -10,4 +10,6 @@ var Commentary = db.model('commentary', {
   user: db.belongsTo(),
 });
 
-module.exports = Commentary;
+module.exports = {
+  Commentary: Commentary,
+};
