@@ -25,6 +25,7 @@ var db = require('./app/db');
 var List = require('./app/lists/model');
 var Place = require('./app/places/model');
 var User = require('./app/users/model');
+var Commentary = require('./app/commentaries/model');
 
 
 
@@ -37,13 +38,7 @@ var Token = db.model('token', {
   user: db.belongsTo()
 });
 
-var Commentary = db.model('commentary', {
-  headline: db.attr(),
-  rating: db.attr(),
-  date_added: db.attr(),
-  place: db.belongsTo(),
-  user: db.belongsTo(),
-});
+
 
 
 /**
