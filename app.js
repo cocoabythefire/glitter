@@ -7,13 +7,12 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var BPromise = require('bluebird');
 
-
-var crypto = BPromise.promisifyAll(require('crypto'));
 var bcrypt = BPromise.promisifyAll(require('bcrypt'));
 var proxies = require('./proxies');
-var googleAPIKey = 'AIzaSyBF0MrwABAJ_Nf1bbNjBMeSps0aigriEJg';
 
+var googleAPIKey = 'AIzaSyBF0MrwABAJ_Nf1bbNjBMeSps0aigriEJg';
 var googleNearbySearch = require('./external-services/google').nearbySearch;
+
 
 /**
  * Setup database
@@ -28,67 +27,11 @@ var Commentary = require('./app/commentary/models').Commentary;
 var Token = require('./app/auth/models').Token;
 
 
-
-
-
-
-
-
-
-
-
-
 /**
  * Setup application routes
  */
 
-
 var handleError = require('./app/middleware').error;
-
-
-/**
- * Generate and save a new auth Token
- *
- * @return {Object.<Token>} a new Token object.
- */
-var generateToken = function() {
-  return crypto.randomBytesAsync(256).then(function(data) {
-    var shasum = crypto.createHash('sha1');
-    shasum.update(data);
-    var tokenValue = shasum.digest('hex');
-    var newToken = Token.create({
-      value: tokenValue
-    });
-    return newToken.save();
-  });
-};
-
-
-/**
- * Delete a Token
- * @param {Object.<Token value>} the value of the token to delete.
- * @return {Object.<Result>} the result of saving the delete for the Token.
- */
-var deleteToken = function(tokenValue) {
-  return BPromise.resolve()
-  .then(function() {
-    return Token.objects.where({ value: tokenValue }).limit(1).fetchOne();
-  })
-  .then(function(token) {
-    token.delete();
-    return token.save();
-  })
-  .catch(function(e) {
-    if (e.code === 'NO_RESULTS_FOUND') {
-      var errorMessage = 'could not logout: token is not a valid session';
-      throw _.extend(new Error(errorMessage), { status: 401 });
-    }
-    else { throw e; }
-  })
-};
-
-
-
 
 var app = express();
 var api = express.Router();
@@ -109,8 +52,6 @@ app.get('/', function (req, res) {
 secureAPI.use(require('./app/middleware').auth);
 
 
-
-
 // TODO: this should become a forwarder that uses the proxy
 // for Google requests like auto-complete or future mapping
 // functionality that the front-end will use
@@ -124,8 +65,6 @@ app.all('/api/maps/*', function (req, res) {
   req.url = url.format(parsedURL);
   proxies.googleMaps.web(req, res);
 });
-
-
 
 
 /**
@@ -176,7 +115,6 @@ secureAPI.get('/place/nearbysearch', function(req, res) {
 });
 
 
-
 // Get all Lists for a specific User
 secureAPI.get('/lists', function (req, res) {
   var query = List.objects
@@ -224,7 +162,6 @@ secureAPI.get('/lists/:id/places', function (req, res) {
 secureAPI.get('/profile', function (req, res) {
   res.send(_.omit(req.user.attrs, 'password_digest'));
 });
-
 
 
 // Create a new List
@@ -306,7 +243,7 @@ secureAPI.post('/lists/:id/places/:pid', function (req, res) {
 // User Signup - not secure request
 app.post('/api/users/signup', function (req, res) {
   BPromise.bind({})
-  .then(function() { return generateToken(); })
+  .then(function() { return Token.generateToken(); })
   .then(function(newToken) { this.newToken = newToken; })
   .then(function() { return bcrypt.genSaltAsync(); })
   .then(function(salt) { return bcrypt.hashAsync(req.body.password, salt); })
@@ -343,7 +280,7 @@ app.post('/api/users/login', function (req, res) {
     if (!result) {
       throw _.extend(new Error(errorMessage), { status: 403 });
     }
-    return generateToken();
+    return Token.generateToken();
   })
   .then(function(token) {
     this.token = token;
@@ -366,7 +303,7 @@ app.post('/api/users/login', function (req, res) {
 
 // User Logout
 secureAPI.delete('/users/logout', function (req, res) {
-  deleteToken(req.headers['x-glitter-token']).then(function() {
+  Token.deleteToken(req.headers['x-glitter-token']).then(function() {
     res.setHeader('x-glitter-token', '');
     res.send({ message: 'OK' });
   })
