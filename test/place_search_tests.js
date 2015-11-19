@@ -68,7 +68,7 @@ describe('place search', function() {
       });
     });
 
-    it.only('should work when one of the lists is empty', function() {
+    it.skip('should work when one of the lists is empty', function() {
       var arr = [];
       var listA = require('./fixtures/google_place_list_a');
       for (var i in listA) {
