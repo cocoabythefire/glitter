@@ -6,7 +6,10 @@ var express = require('express');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var BPromise = require('bluebird');
-var azul = require('azul');
+
+// TODO: take env outta here?
+var env = process.env.NODE_ENV || 'development';
+
 var crypto = BPromise.promisifyAll(require('crypto'));
 var bcrypt = BPromise.promisifyAll(require('bcrypt'));
 var proxies = require('./proxies');
@@ -18,9 +21,8 @@ var googleNearbySearch = require('./external-services/google').nearbySearch;
  * Setup database
  */
 
-var env = process.env.NODE_ENV || 'development';
-var config = require('./azulfile')[env];
-var db = azul(config);
+var db = require('./app/db');
+var List = require('./app/lists/model');
 
 // TODO: add a temp property to Place that can
 // be used to determine if this is a saved object
@@ -108,11 +110,7 @@ Place.reopenClass({
   }
 });
 
-var List = db.model('list', {
-  name: db.attr(),
-  places: db.hasMany({ join: 'lists_places' }),
-  user: db.belongsTo()
-});
+
 
 var User = db.model('user', {
   name: db.attr(),
