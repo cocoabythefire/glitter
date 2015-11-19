@@ -88,32 +88,7 @@ var deleteToken = function(tokenValue) {
   })
 };
 
-/**
- * Filter Place Details
- * @param {Object.<Place details>} the place details.
- * @return {Object.<Filtered details>} the place details filtered
- * to remove the google_place_id key/value.
- */
-var filterPlaceDetails = function(placeDetails) {
-  if (placeDetails) {
-    return _.omit(placeDetails.attrs, 'google_place_id');
-  }
-  return {};
-};
 
-
-/**
- * Filter Commentary
- * @param {Object.<Commentary>} the commentary.
- * @return {Object.<Filtered commentary>} the commentary filtered
- * to remove the 'place_id', 'user_id' keys/values.
- */
-var filterCommentary = function(commentary) {
-  if(commentary) {
-    return _.omit(commentary.attrs, 'place_id', 'user_id');
-  }
-  return {};
-};
 
 
 var app = express();
@@ -135,16 +110,7 @@ app.get('/', function (req, res) {
 
 secureAPI.use(require('./app/middleware').auth);
 
-// Get all Places - not a secure request
-app.get('/api/places', function (req, res) {
-  var query = Place.objects
-    .order('id')
-    .limit(100);
-  query.fetch().then(function(places) {
-    res.send({ places: _.map(places, 'attrs') });
-  })
-  .catch(handleError(res));
-});
+
 
 
 // TODO: this should become a forwarder that uses the proxy
@@ -211,29 +177,7 @@ secureAPI.get('/place/nearbysearch', function(req, res) {
   });
 });
 
-// Get details on a specific Place
-secureAPI.get('/places/:id', function (req, res) {
-  BPromise.bind({})
-  .then(function() {
-    var query = Place.objects
-    .where({ 'id' : req.params.id });
-    return query.limit(1).fetchOne();
-  })
-  .then(function(placeResult) {
-    this.placeResult = placeResult;
-  })
-  .then(function() {
-    var query = Commentary.objects
-    .where({ place: this.placeResult })
-    .where({ user: req.user });
-    return query.limit(1).fetch();
-  })
-  .then(function(commentaryResult) {
-    res.send({ commentary: filterCommentary(commentaryResult[0]),
-                  details: filterPlaceDetails(this.placeResult) });
-  })
-  .catch(handleError(res));
-});
+
 
 // Get all Lists for a specific User
 secureAPI.get('/lists', function (req, res) {
@@ -283,16 +227,7 @@ secureAPI.get('/profile', function (req, res) {
   res.send(_.omit(req.user.attrs, 'password_digest'));
 });
 
-// Create a new Place
-secureAPI.post('/places', function (req, res) {
-  var newPlace = Place.create({
-    name: req.body.name,
-  });
-  newPlace.save().then(function() {
-    res.send(newPlace.attrs);
-  })
-  .catch(handleError(res));
-});
+
 
 // Create a new List
 secureAPI.post('/lists', function (req, res) {
@@ -493,38 +428,11 @@ secureAPI.delete('/lists/:listId/places/:placeId', function (req, res) {
   .catch(handleError(res));
 });
 
-// Delete a Place and remove from all Lists
-secureAPI.delete('/places/:id', function (req, res) {
-   BPromise.bind({})
-  .then(function() {
-    return Place.objects.find(req.params.id); })
-  .then(function(place) { this.place = place; })
-  .then(function() {
-    this.place.removeLists();
-    this.place.clearLists();
-    return this.place.save();
-  })
-  .then(function() {
-    this.place.delete();
-    return this.place.save();
-  })
-  .then(function() {
-    res.send({ status: "OK" });
-  })
-  .catch(function(e) {
-    if (e.code === 'NO_RESULTS_FOUND') {
-      res.status(404).send({ message: 'not found' });
-    }
-    else { throw e; }
-  })
-  .catch(handleError(res));
-});
-
 var features = [
   'places'
 ];
 features.forEach(function(feature) {
-  // app.use(require('./app/' + feature + '/routes'));
+  app.use(require('./app/' + feature + '/routes'));
 });
 
 app.use('/api', api);
