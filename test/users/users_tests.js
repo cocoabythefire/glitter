@@ -1,11 +1,6 @@
 'use strict';
 
-process.env.NODE_ENV = 'test';
-
 var _ = require('lodash');
-var chai = require('chai');
-var expect = chai.expect;
-var sinon = require('sinon');
 var BPromise = require('bluebird');
 var request = BPromise.promisify(require('request'));
 

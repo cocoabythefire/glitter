@@ -1,7 +1,5 @@
 'use strict';
 
-process.env.NODE_ENV = 'test';
-
 var _ = require('lodash');
 var chai = require('chai');
 var expect = chai.expect;
@@ -21,7 +19,6 @@ var db = app.get('db');
 var Place = db.model('place');
 var List = db.model('list');
 
-chai.use(require('sinon-chai'));
 
 describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });

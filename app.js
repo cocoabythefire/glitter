@@ -7,8 +7,6 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var BPromise = require('bluebird');
 
-// TODO: take env outta here?
-var env = process.env.NODE_ENV || 'development';
 
 var crypto = BPromise.promisifyAll(require('crypto'));
 var bcrypt = BPromise.promisifyAll(require('bcrypt'));
@@ -21,6 +19,7 @@ var googleNearbySearch = require('./external-services/google').nearbySearch;
  * Setup database
  */
 
+var config = require('./app/config');
 var db = require('./app/db');
 var List = require('./app/lists/models').List;
 var Place = require('./app/places/models').Place;
@@ -96,12 +95,11 @@ var api = express.Router();
 var secureAPI = express.Router();
 
 app.set('db', db);
-if (env === 'development') {
-  app.use(morgan('dev'));
+
+if (config.MORGAN_LOG_LEVEL) {
+  app.use(morgan(config.MORGAN_LOG_LEVEL));
 }
-else if (env === 'production') {
-  app.use(morgan('combined'));
-}
+
 app.use(bodyParser.json()); // for parsing application/json
 
 app.get('/', function (req, res) {

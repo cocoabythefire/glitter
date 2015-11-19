@@ -1,7 +1,5 @@
 'use strict';
 
-process.env.NODE_ENV = 'test';
-
 var BPromise = require('bluebird');
 var app = require('../app');
 var db = app.get('db');

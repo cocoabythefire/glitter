@@ -1,1 +1,3 @@
 --recursive
+--reporter=dot
+--require=./test/_preloader
