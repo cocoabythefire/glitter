@@ -8,11 +8,11 @@ var expect = chai.expect;
 var sinon = require('sinon');
 var BPromise = require('bluebird');
 var request = BPromise.promisify(require('request'));
-var helpers = require('./helpers');
-var proxies = require('../proxies');
+var helpers = require('../helpers');
+var proxies = require('../../proxies');
 
 var pg = require('pg');
-var app = require('../app');
+var app = require('../../app');
 var server;
 var port = 54210;
 var baseURL = 'http://localhost:' + port;
