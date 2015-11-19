@@ -14,7 +14,7 @@ var proxies = require('../proxies');
 var pg = require('pg');
 var app = require('../app');
 var server;
-var port = 93845;
+var port = 54210;
 var baseURL = 'http://localhost:' + port;
 
 var db = app.get('db');
