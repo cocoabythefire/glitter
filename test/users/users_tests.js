@@ -10,7 +10,7 @@ var BPromise = require('bluebird');
 var request = BPromise.promisify(require('request'));
 
 var pg = require('pg');
-var app = require('../app');
+var app = require('../../app');
 var server;
 var port = 54210;
 var baseURL = 'http://localhost:' + port;

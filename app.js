@@ -24,18 +24,13 @@ var googleNearbySearch = require('./external-services/google').nearbySearch;
 var db = require('./app/db');
 var List = require('./app/lists/model');
 var Place = require('./app/places/model');
+var User = require('./app/users/model');
 
 
 
 
 
-var User = db.model('user', {
-  name: db.attr(),
-  passwordDigest: db.attr(),
-  lists: db.hasMany(),
-  tokens: db.hasMany(),
-  commentaries: db.hasMany()
-});
+
 
 var Token = db.model('token', {
   value: db.attr(),
