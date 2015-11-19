@@ -44,22 +44,7 @@ var Token = require('./app/auth/models').Token;
  */
 
 
-/**
- * Handles unexpected HTTP Response errors
- *
- * @param {Object.<Response>} the response object.
- * @return {Function(error)} an error handler function.
- */
-var handleError = function(res) {
-  return function(e) {
-    if (e.status) {
-      res.status(e.status).send({ message: e.message });
-    }
-    else {
-      res.status(500).send({ error: 'unhandled error' });
-    }
-  };
-};
+var handleError = require('./app/middleware').error;
 
 
 /**
@@ -148,29 +133,7 @@ app.get('/', function (req, res) {
   res.send('This is the glitter service!');
 });
 
-// Authentication Middleware
-secureAPI.use(function(req, res, next) {
-  var tokenValue = "";
-  tokenValue = req.headers['x-glitter-token'];
-  BPromise.bind({})
-  .then(function() {
-    return Token.objects.where({
-      'value': tokenValue
-    }).fetchOne();
-  })
-  .tap(function(token) { req.token = token; })
-  .then(function(token) { return User.objects.find(token.userId); })
-  .then(function(user) { req.user = user; })
-  .catch(function(e) {
-    if (e.code === 'NO_RESULTS_FOUND') {
-      throw _.extend(new Error('invalid user'), { status: 401 });
-    }
-    else { throw e; }
-  })
-  .then(function() { next(); })
-  .catch(handleError(res));
-  // TODO: install real express error handling middleware
-});
+secureAPI.use(require('./app/middleware').auth);
 
 // Get all Places - not a secure request
 app.get('/api/places', function (req, res) {
@@ -555,6 +518,13 @@ secureAPI.delete('/places/:id', function (req, res) {
     else { throw e; }
   })
   .catch(handleError(res));
+});
+
+var features = [
+  'places'
+];
+features.forEach(function(feature) {
+  // app.use(require('./app/' + feature + '/routes'));
 });
 
 app.use('/api', api);
