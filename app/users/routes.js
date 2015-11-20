@@ -7,10 +7,10 @@ var bcrypt = BPromise.promisifyAll(require('bcrypt'));
 var Token = require('../auth/models').Token;
 var User = require('./models').User;
 var handleError = require('../middleware').error;
+var secure = require('../middleware').auth;
 
 var router = express.Router();
 var api = express.Router();
-var secure = require('../middleware').auth;
 
 
 // User Signup - not secure request

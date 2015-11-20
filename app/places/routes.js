@@ -6,10 +6,11 @@ var express = require('express');
 var Place = require('./models').Place;
 var Commentary = require('../commentary/models').Commentary;
 var handleError = require('../middleware').error;
+var secure = require('../middleware').auth;
 
 var router = express.Router();
 var api = express.Router();
-var secure = require('../middleware').auth;
+
 
 // TODO: there is an azul feature to replace these
 // helper filter functions
@@ -52,6 +53,11 @@ api.get('/places', function (req, res) {
   })
   .catch(handleError(res));
 });
+
+
+/**
+ * Secure Routes
+ */
 
 // Get details on a specific Place
 api.get('/places/:id', secure, function (req, res) {
@@ -115,6 +121,7 @@ api.delete('/places/:id', secure, function (req, res) {
   })
   .catch(handleError(res));
 });
+
 
 router.use('/api', api);
 
