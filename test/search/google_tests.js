@@ -4,7 +4,7 @@ var chai = require('chai');
 var expect = chai.expect;
 var sinon = require('sinon');
 var request = require('request');
-var google = require('../external-services/google');
+var google = require('../../external-services/google');
 var googleNearbySearch = google.nearbySearch;
 
 chai.use(require('sinon-chai'));
@@ -14,7 +14,7 @@ describe('google', function() {
   describe('nearby search for places', function() {
 
     beforeEach(function() {
-      var response = require('./fixtures/google_nearby_coffee_portland_2_miles');
+      var response = require('../fixtures/google_nearby_coffee_portland_2_miles');
       sinon.stub(request, 'get').yieldsAsync(null, [{}, response]);
     });
 

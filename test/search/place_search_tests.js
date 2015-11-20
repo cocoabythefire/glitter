@@ -6,11 +6,11 @@ var expect = chai.expect;
 var sinon = require('sinon');
 var BPromise = require('bluebird');
 var request = BPromise.promisifyAll(require('request'));
-var helpers = require('./helpers');
-var googleNearbySearch = require('../external-services/google').nearbySearch;
+var helpers = require('../helpers');
+var googleNearbySearch = require('../../external-services/google').nearbySearch;
 
 var pg = require('pg');
-var app = require('../app');
+var app = require('../../app');
 var server;
 var port = 54210;
 var baseURL = 'http://localhost:' + port;
@@ -24,7 +24,7 @@ describe('place search', function() {
 
   describe('google place conversion', function() {
     it('converts a valid google place into a Place object', function() {
-      var googlePlace = require('./fixtures/google_place_voodoo');
+      var googlePlace = require('../fixtures/google_place_voodoo');
       return BPromise.resolve()
       .then(function() { return Place.createFromGooglePlace(googlePlace); })
       .then(function(newPlace) {
@@ -41,14 +41,14 @@ describe('place search', function() {
 
     it('throws if google place does not have a placeID property', function() {
       expect (function() {
-        var googlePlace = require('./fixtures/google_place_missing_id');
+        var googlePlace = require('../fixtures/google_place_missing_id');
         Place.createFromGooglePlace(googlePlace);
       }).to.throw(/missing.*place.*id/i);
     });
 
     it('throws if google place is missing the geography/location component', function() {
       expect (function() {
-        var googlePlace = require('./fixtures/google_place_missing_location');
+        var googlePlace = require('../fixtures/google_place_missing_location');
         Place.createFromGooglePlace(googlePlace);
       }).to.throw(/missing.*location/i);
     });
@@ -68,7 +68,7 @@ describe('place search', function() {
 
     it.skip('should work when one of the lists is empty', function() {
       var arr = [];
-      var listA = require('./fixtures/google_place_list_a');
+      var listA = require('../fixtures/google_place_list_a');
       for (var i in listA) {
         arr.push(i);
       }
