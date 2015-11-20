@@ -9,8 +9,7 @@ var handleError = require('../middleware').error;
 
 var router = express.Router();
 var api = express.Router();
-var secureAPI = express.Router();
-secureAPI.use(require('../middleware').auth);
+var secure = require('../middleware').auth;
 
 // TODO: there is an azul feature to replace these
 // helper filter functions
@@ -55,7 +54,7 @@ api.get('/places', function (req, res) {
 });
 
 // Get details on a specific Place
-secureAPI.get('/places/:id', function (req, res) {
+api.get('/places/:id', secure, function (req, res) {
   BPromise.bind({})
   .then(function() {
     var query = Place.objects
@@ -80,7 +79,7 @@ secureAPI.get('/places/:id', function (req, res) {
 
 
 // Create a new Place
-secureAPI.post('/places', function (req, res) {
+api.post('/places', secure, function (req, res) {
   var newPlace = Place.create({
     name: req.body.name,
   });
@@ -91,7 +90,7 @@ secureAPI.post('/places', function (req, res) {
 });
 
 // Delete a Place and remove from all Lists
-secureAPI.delete('/places/:id', function (req, res) {
+api.delete('/places/:id', secure, function (req, res) {
    BPromise.bind({})
   .then(function() {
     return Place.objects.find(req.params.id); })
@@ -118,6 +117,5 @@ secureAPI.delete('/places/:id', function (req, res) {
 });
 
 router.use('/api', api);
-router.use('/api', secureAPI);
 
 module.exports = router;

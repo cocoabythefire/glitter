@@ -9,11 +9,10 @@ var handleError = require('../middleware').error;
 
 var router = express.Router();
 var api = express.Router();
-var secureAPI = express.Router();
-secureAPI.use(require('../middleware').auth);
+var authenticated = require('../middleware').auth;
 
 // Get all Lists for a specific User
-secureAPI.get('/lists', function (req, res) {
+api.get('/lists', authenticated, function (req, res) {
   var query = List.objects
     .where({ user: req.user })
     .order('id')
@@ -25,7 +24,7 @@ secureAPI.get('/lists', function (req, res) {
 });
 
 // Get a single list for a specific User
-secureAPI.get('/lists/:id', function (req, res) {
+api.get('/lists/:id', authenticated, function (req, res) {
   BPromise.bind({})
   .then(function() {
     var query = List.objects
@@ -45,7 +44,7 @@ secureAPI.get('/lists/:id', function (req, res) {
 });
 
 // Get the Places for a specific List for a specific User
-secureAPI.get('/lists/:id/places', function (req, res) {
+api.get('/lists/:id/places', authenticated, function (req, res) {
   var query = Place.objects
   .where({ 'lists.user':req.user })
   .where({ 'lists.id': req.params.id });
@@ -56,7 +55,7 @@ secureAPI.get('/lists/:id/places', function (req, res) {
 });
 
 // Create a new List
-secureAPI.post('/lists', function (req, res) {
+api.post('/lists', authenticated, function (req, res) {
   var newList = List.create({
     name: req.body.name,
     user: req.user
@@ -68,7 +67,7 @@ secureAPI.post('/lists', function (req, res) {
 });
 
 // Create a Place and Add to a List
-secureAPI.post('/lists/:id/places/', function (req, res) {
+api.post('/lists/:id/places/', authenticated, function (req, res) {
   BPromise.bind({})
   .then(function() {
     return List.objects.find(req.params.id);
@@ -100,7 +99,7 @@ secureAPI.post('/lists/:id/places/', function (req, res) {
 });
 
 // Add an Existing Place to a List
-secureAPI.post('/lists/:id/places/:pid', function (req, res) {
+api.post('/lists/:id/places/:pid', authenticated, function (req, res) {
   BPromise.bind({})
   .then(function() {
     return List.objects.find(req.params.id);
@@ -132,7 +131,7 @@ secureAPI.post('/lists/:id/places/:pid', function (req, res) {
 });
 
 // Delete a List
-secureAPI.delete('/lists/:id', function (req, res) {
+api.delete('/lists/:id', authenticated, function (req, res) {
   BPromise.bind({})
   .then(function() {
     return List.objects.find(req.params.id);
@@ -159,7 +158,7 @@ secureAPI.delete('/lists/:id', function (req, res) {
 });
 
 // Remove a Place from a List
-secureAPI.delete('/lists/:listId/places/:placeId', function (req, res) {
+api.delete('/lists/:listId/places/:placeId', authenticated, function (req, res) {
   BPromise.bind({})
   .then(function() {
     return Place.objects.find(req.params.placeId);
@@ -186,6 +185,5 @@ secureAPI.delete('/lists/:listId/places/:placeId', function (req, res) {
 
 
 router.use('/api', api);
-router.use('/api', secureAPI);
 
 module.exports = router;

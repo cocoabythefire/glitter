@@ -35,7 +35,7 @@ var handleError = require('./app/middleware').error;
 
 var app = express();
 var api = express.Router();
-var secureAPI = express.Router();
+var secure = require('./app/middleware').auth;
 
 app.set('db', db);
 
@@ -48,9 +48,6 @@ app.use(bodyParser.json()); // for parsing application/json
 app.get('/', function (req, res) {
   res.send('This is the glitter service!');
 });
-
-secureAPI.use(require('./app/middleware').auth);
-
 
 // TODO: this should become a forwarder that uses the proxy
 // for Google requests like auto-complete or future mapping
@@ -74,7 +71,7 @@ app.all('/api/maps/*', function (req, res) {
  * @param {String} [location] - The location which must be a lat/long.
  * @param {Number} [radius=5] Number of miles radius to search in.
  */
-secureAPI.get('/place/nearbysearch', function(req, res) {
+api.get('/place/nearbysearch', secure, function(req, res) {
   var keywordSearch = req.query['keyword_search'];
   var location = req.query.location;
   var radius = req.query.radius || 5;
@@ -114,35 +111,13 @@ secureAPI.get('/place/nearbysearch', function(req, res) {
   });
 });
 
-
 // Get a User's Profile
-secureAPI.get('/profile', function (req, res) {
+api.get('/profile', secure, function (req, res) {
   res.send(_.omit(req.user.attrs, 'password_digest'));
 });
 
 
-// User Signup - not secure request
-app.post('/api/users/signup', function (req, res) {
-  BPromise.bind({})
-  .then(function() { return Token.generateToken(); })
-  .then(function(newToken) { this.newToken = newToken; })
-  .then(function() { return bcrypt.genSaltAsync(); })
-  .then(function(salt) { return bcrypt.hashAsync(req.body.password, salt); })
-  .then(function(hash) { this.passwordDigest = hash; })
-  .then(function() {
-    var newUser = User.create({
-      name: req.body.username,
-      passwordDigest: this.passwordDigest
-    });
-    newUser.addToken(this.newToken);
-    res.setHeader('x-glitter-token', this.newToken.value);
-    return newUser.save();
-  })
-  .then(function(newUser) {
-    res.send(_.omit(newUser.attrs, 'password_digest'));
-  })
-  .catch(handleError(res));
-});
+
 
 // User Login - not secure request
 app.post('/api/users/login', function (req, res) {
@@ -183,7 +158,7 @@ app.post('/api/users/login', function (req, res) {
 
 
 // User Logout
-secureAPI.delete('/users/logout', function (req, res) {
+api.delete('/users/logout', secure, function (req, res) {
   Token.deleteToken(req.headers['x-glitter-token']).then(function() {
     res.setHeader('x-glitter-token', '');
     res.send({ message: 'OK' });
@@ -192,14 +167,14 @@ secureAPI.delete('/users/logout', function (req, res) {
 });
 
 
+
 var features = [
-  'places', 'lists',
+  'places', 'lists', 'users',
 ];
 features.forEach(function(feature) {
   app.use(require('./app/' + feature + '/routes'));
 });
 
 app.use('/api', api);
-app.use('/api', secureAPI);
 
 module.exports = app;
