@@ -8,8 +8,8 @@ var User = require('../users/models').User;
 /**
  * Handles unexpected HTTP Response errors
  *
- * @param {Object.<Response>} the response object.
- * @return {Function(error)} an error handler function.
+ * @param {http.Response} the response object.
+ * @return {function(Error)} an error handler function.
  */
 var handleError = function(res) {
   return function(e) {
@@ -22,14 +22,21 @@ var handleError = function(res) {
   };
 };
 
-// Authentication Middleware
+/**
+ * Authentication Middleware
+ *
+ * @todo
+ * @param {http.Request} req
+ * @param {http.Response} res
+ * @param {Function} next
+ */
 var auth = function(req, res, next) {
-  var tokenValue = "";
+  var tokenValue = '';
   tokenValue = req.headers['x-glitter-token'];
   BPromise.bind({})
   .then(function() {
     return Token.objects.where({
-      'value': tokenValue
+      value: tokenValue,
     }).fetchOne();
   })
   .tap(function(token) { req.token = token; })
@@ -43,6 +50,7 @@ var auth = function(req, res, next) {
   })
   .then(function() { next(); })
   .catch(handleError(res));
+
   // TODO: install real express error handling middleware
 };
 

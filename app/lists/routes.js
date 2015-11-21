@@ -17,7 +17,7 @@ var api = express.Router();
  */
 
 // Get all Lists for a specific User
-api.get('/lists', secure, function (req, res) {
+api.get('/lists', secure, function(req, res) {
   var query = List.objects
     .where({ user: req.user })
     .order('id')
@@ -29,11 +29,11 @@ api.get('/lists', secure, function (req, res) {
 });
 
 // Get a single list for a specific User
-api.get('/lists/:id', secure, function (req, res) {
+api.get('/lists/:id', secure, function(req, res) {
   BPromise.bind({})
   .then(function() {
     var query = List.objects
-    .where({ 'id' : req.params.id });
+    .where({ id: req.params.id });
     return query.limit(1).fetchOne();
   })
   .then(function(list) { this.list = list; })
@@ -49,7 +49,7 @@ api.get('/lists/:id', secure, function (req, res) {
 });
 
 // Get the Places for a specific List for a specific User
-api.get('/lists/:id/places', secure, function (req, res) {
+api.get('/lists/:id/places', secure, function(req, res) {
   var query = Place.objects
   .where({ 'lists.user':req.user })
   .where({ 'lists.id': req.params.id });
@@ -60,10 +60,10 @@ api.get('/lists/:id/places', secure, function (req, res) {
 });
 
 // Create a new List
-api.post('/lists', secure, function (req, res) {
+api.post('/lists', secure, function(req, res) {
   var newList = List.create({
     name: req.body.name,
-    user: req.user
+    user: req.user,
   });
   newList.save().then(function() {
     res.send(newList.attrs);
@@ -72,28 +72,29 @@ api.post('/lists', secure, function (req, res) {
 });
 
 // Create a Place and Add to a List
-api.post('/lists/:id/places/', secure, function (req, res) {
+api.post('/lists/:id/places/', secure, function(req, res) {
   BPromise.bind({})
   .then(function() {
     return List.objects.find(req.params.id);
   })
   .then(function(list) { this.list = list; })
   .then(function() {
-    if(this.list.userId !== req.user.id) {
+    if (this.list.userId !== req.user.id) {
       throw _.extend(new Error('invalid action'), { status: 403 });
     }
   })
   .then(function() {
     if (req.body.placeName) {
-      return Place.objects.findOrCreate({name: req.body.placeName});
-    } else {
+      return Place.objects.findOrCreate({ name: req.body.placeName });
+    }
+    else {
       throw _.extend(new Error('invalid action'), { status: 403 });
     }
   })
   .then(function(place) {
     return this.list.addPlace(place);
   })
-  .then(function() { res.send({ status: "OK" }); })
+  .then(function() { res.send({ status: 'OK' }); })
   .catch(function(e) {
     if (e.code === 'NO_RESULTS_FOUND') {
       res.status(404).send({ message: 'not found' });
@@ -104,28 +105,29 @@ api.post('/lists/:id/places/', secure, function (req, res) {
 });
 
 // Add an Existing Place to a List
-api.post('/lists/:id/places/:pid', secure, function (req, res) {
+api.post('/lists/:id/places/:pid', secure, function(req, res) {
   BPromise.bind({})
   .then(function() {
     return List.objects.find(req.params.id);
   })
   .then(function(list) { this.list = list; })
   .then(function() {
-    if(this.list.userId !== req.user.id) {
+    if (this.list.userId !== req.user.id) {
       throw _.extend(new Error('invalid action'), { status: 403 });
     }
   })
   .then(function() {
     if (req.params.pid) {
       return Place.objects.find(req.params.pid);
-    } else {
+    }
+    else {
       throw _.extend(new Error('invalid action'), { status: 403 });
     }
   })
   .then(function(place) {
     return this.list.addPlace(place);
   })
-  .then(function() { res.send({ status: "OK" }); })
+  .then(function() { res.send({ status: 'OK' }); })
   .catch(function(e) {
     if (e.code === 'NO_RESULTS_FOUND') {
       res.status(404).send({ message: 'not found' });
@@ -136,7 +138,7 @@ api.post('/lists/:id/places/:pid', secure, function (req, res) {
 });
 
 // Delete a List
-api.delete('/lists/:id', secure, function (req, res) {
+api.delete('/lists/:id', secure, function(req, res) {
   BPromise.bind({})
   .then(function() {
     return List.objects.find(req.params.id);
@@ -151,8 +153,8 @@ api.delete('/lists/:id', secure, function (req, res) {
     return this.list.save();
   })
   .then(function() {
-    res.send({ status: "OK" });
-   })
+    res.send({ status: 'OK' });
+  })
   .catch(function(e) {
     if (e.code === 'NO_RESULTS_FOUND') {
       res.status(404).send({ message: 'not found' });
@@ -163,7 +165,7 @@ api.delete('/lists/:id', secure, function (req, res) {
 });
 
 // Remove a Place from a List
-api.delete('/lists/:listId/places/:placeId', secure, function (req, res) {
+api.delete('/lists/:listId/places/:placeId', secure, function(req, res) {
   BPromise.bind({})
   .then(function() {
     return Place.objects.find(req.params.placeId);
@@ -177,8 +179,8 @@ api.delete('/lists/:listId/places/:placeId', secure, function (req, res) {
     return list.save();
   })
   .then(function() {
-    res.send({ status: "OK" });
-   })
+    res.send({ status: 'OK' });
+  })
   .catch(function(e) {
     if (e.code === 'NO_RESULTS_FOUND') {
       res.status(404).send({ message: 'not found' });

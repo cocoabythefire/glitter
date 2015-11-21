@@ -14,7 +14,8 @@ describe('google', function() {
   describe('nearby search for places', function() {
 
     beforeEach(function() {
-      var response = require('../fixtures/google_nearby_coffee_portland_2_miles');
+      var response =
+        require('../fixtures/google_nearby_coffee_portland_2_miles');
       sinon.stub(request, 'get').yieldsAsync(null, [{}, response]);
     });
 
@@ -23,7 +24,8 @@ describe('google', function() {
     });
 
     it('works with all possible parameters', function() {
-      var searchURL = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
+      var searchURL =
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
 
       var keyword = 'coffee';
       var latlong = '45.523062,-122.676482';
@@ -51,7 +53,7 @@ describe('google', function() {
       var keyword = 'coffee';
       var latlong = '45.523062,-122.676482';
 
-      return googleNearbySearch(keyword, latlong).then(function(results) {
+      return googleNearbySearch(keyword, latlong).then(function(/*results*/) {
         var requestConfig = request.get.getCall(0).args[0];
         expect(requestConfig.qs).to.have.property('keyword', keyword);
         expect(requestConfig.qs).to.have.property('location', latlong);

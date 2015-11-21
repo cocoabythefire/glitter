@@ -1,19 +1,10 @@
 'use strict';
 
-var _ = require('lodash');
 var chai = require('chai');
 var expect = chai.expect;
-var sinon = require('sinon');
 var BPromise = require('bluebird');
-var request = BPromise.promisifyAll(require('request'));
-var helpers = require('../helpers');
-var googleNearbySearch = require('../../external-services/google').nearbySearch;
 
-var pg = require('pg');
 var app = require('../../app');
-var server;
-var port = 54210;
-var baseURL = 'http://localhost:' + port;
 
 var db = app.get('db');
 var Place = db.model('place');
@@ -30,8 +21,11 @@ describe('place search', function() {
       .then(function(newPlace) {
         expect(newPlace).to.exist;
         expect(newPlace.name).to.eql('Voodoo Doughnut');
-        expect(newPlace.google_place_id).to.eql('ChIJ70AxJAcKlVQRde9D82gpfSU');
-        expect(newPlace.location).to.eql({ 'lat': 45.5226206, 'lng': -122.6731105 });
+        expect(newPlace.googlePlaceId).to.eql('ChIJ70AxJAcKlVQRde9D82gpfSU');
+        expect(newPlace.location).to.eql({
+          lat: 45.5226206,
+          lng: -122.6731105,
+        });
         expect(newPlace.address).to.eql('22 Southwest 3rd Avenue, Portland');
         expect(newPlace.type).to.eql(
           ['store', 'cafe', 'food', 'point_of_interest', 'establishment']
@@ -40,14 +34,14 @@ describe('place search', function() {
     });
 
     it('throws if google place does not have a placeID property', function() {
-      expect (function() {
+      expect(function() {
         var googlePlace = require('../fixtures/google_place_missing_id');
         Place.createFromGooglePlace(googlePlace);
       }).to.throw(/missing.*place.*id/i);
     });
 
-    it('throws if google place is missing the geography/location component', function() {
-      expect (function() {
+    it('throws if google place is missing the geography/location', function() {
+      expect(function() {
         var googlePlace = require('../fixtures/google_place_missing_location');
         Place.createFromGooglePlace(googlePlace);
       }).to.throw(/missing.*location/i);
@@ -72,8 +66,10 @@ describe('place search', function() {
       for (var i in listA) {
         arr.push(i);
       }
-      var converted = Place.createFromGooglePlaces(arr);
+
+      // var converted = Place.createFromGooglePlaces(arr);
       return BPromise.resolve()
+
       // .then(function() {
       //   return Place.createFromGooglePlaces(arr);
       // })
@@ -85,19 +81,19 @@ describe('place search', function() {
       });
     });
 
-    it('should remove a single overlap between lists ', function() {
+    it('removes a single overlap between lists ', function() {
     });
 
-    it('should remove duplicates in one of the lists', function() {
+    it('removes duplicates in one of the lists', function() {
     });
 
-    it('should just combine lists when no overlap or duplicates are present', function() {
+    it('combines lists when no overlap/duplicates are present', function() {
     });
 
-    it('should remove multiple overlaps between lists', function() {
+    it('removes multiple overlaps between lists', function() {
     });
 
-    it('should remove multiple duplicates and overlaps between lists', function() {
+    it('removes multiple duplicates and overlaps between lists', function() {
     });
 
   });

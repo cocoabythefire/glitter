@@ -14,7 +14,7 @@ var api = express.Router();
 
 
 // User Signup - not secure request
-api.post('/users/signup', function (req, res) {
+api.post('/users/signup', function(req, res) {
   BPromise.bind({})
   .then(function() { return Token.generateToken(); })
   .then(function(newToken) { this.newToken = newToken; })
@@ -24,7 +24,7 @@ api.post('/users/signup', function (req, res) {
   .then(function() {
     var newUser = User.create({
       name: req.body.username,
-      passwordDigest: this.passwordDigest
+      passwordDigest: this.passwordDigest,
     });
     newUser.addToken(this.newToken);
     res.setHeader('x-glitter-token', this.newToken.value);
@@ -37,13 +37,13 @@ api.post('/users/signup', function (req, res) {
 });
 
 // User Login - not secure request
-api.post('/users/login', function (req, res) {
+api.post('/users/login', function(req, res) {
   var errorMessage = 'username and/or password incorrect';
   BPromise.bind({})
   .then(function() {
     this.username = req.body.username;
     this.password = req.body.password;
-    return User.objects.where({name: this.username}).limit(1).fetchOne();
+    return User.objects.where({ name: this.username }).limit(1).fetchOne();
   })
   .then(function(theUser) {
     this.user = theUser;
@@ -79,12 +79,12 @@ api.post('/users/login', function (req, res) {
  */
 
 // Get a User's Profile
-api.get('/profile', secure, function (req, res) {
+api.get('/profile', secure, function(req, res) {
   res.send(_.omit(req.user.attrs, 'password_digest'));
 });
 
 // User Logout
-api.delete('/users/logout', secure, function (req, res) {
+api.delete('/users/logout', secure, function(req, res) {
   Token.deleteToken(req.headers['x-glitter-token']).then(function() {
     res.setHeader('x-glitter-token', '');
     res.send({ message: 'OK' });

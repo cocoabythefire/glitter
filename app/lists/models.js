@@ -5,7 +5,7 @@ var db = require('../db');
 var List = db.model('list', {
   name: db.attr(),
   places: db.hasMany({ join: 'lists_places' }),
-  user: db.belongsTo()
+  user: db.belongsTo(),
 });
 
 module.exports = {

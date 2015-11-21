@@ -6,23 +6,23 @@ module.exports = {
     connection: {
       database: 'glitter',
       user: 'root',
-      password: ''
-    }
+      password: '',
+    },
   },
   development: {
     adapter: 'pg',
     connection: {
       database: 'glitter',
       user: 'root',
-      password: ''
-    }
+      password: '',
+    },
   },
   test: {
     adapter: 'pg',
     connection: {
       database: 'glitter_test',
       user: 'root',
-      password: ''
-    }
-  }
+      password: '',
+    },
+  },
 };

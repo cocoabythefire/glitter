@@ -9,25 +9,31 @@ var db = require('../db');
 // and may or may not be saved in the future
 var Place = db.model('place', {
   name: db.attr(),
-  google_place_id: db.attr(),
+  googlePlaceId: db.attr(),
   location: db.attr(),
-  icon_url: db.attr(),
+  iconUrl: db.attr(),
   address: db.attr(),
   phone: db.attr(),
-  intl_phone: db.attr(),
+  intlPhone: db.attr(),
   locality: db.attr(),
   neighborhood: db.attr(),
   country: db.attr(),
-  postal_code: db.attr(),
+  postalCode: db.attr(),
   timezone: db.attr(),
   website: db.attr(),
-  type: db.attr(),  //TODO: change this to typeS
+  type: db.attr(),  // TODO: change this to typeS
   lists: db.hasMany({ join: 'lists_places' }),
-  commentaries: db.hasMany()
+  commentaries: db.hasMany(),
 });
 
 
 Place.reopenClass({
+  /**
+   * Places as they come back from the Google Places API.
+   *
+   * @typedef {Object} google.Place
+   */
+
   /**
    * Create a Place from a Google Place
    *
@@ -35,12 +41,11 @@ Place.reopenClass({
    * database intentionally. It will only be saved at a later
    * time if and when it is added to at least one user list.
    *
-   * @param {Object.<Google Place>} googlePlace
-   * @return {Object.<Place>}
+   * @param {google.Place} googlePlace
+   * @return {Place}
    */
   createFromGooglePlace: function(googlePlace) {
-    console.log(googlePlace);
-    if (!googlePlace.place_id) {
+    if (!googlePlace['place_id']) {
       throw new Error('Missing place id.');
     }
 
@@ -49,18 +54,17 @@ Place.reopenClass({
     }
     return Place.create({
       name: googlePlace.name,
-      google_place_id: googlePlace.place_id,
+      googlePlaceId: googlePlace['place_id'],
       location: googlePlace.geometry.location,
       address: googlePlace.vicinity,
-      type: googlePlace.types
+      type: googlePlace.types,
     });
   },
   /**
-   * Convert an Array of Google Places to
-   * an array of Place objects
+   * Convert an Array of Google Places to an array of Place objects.
    *
-   * @param {Array.Object.<Google Place>} array of googlePlaces.
-   * @return {Array.Object.<Place>} array of Place objects.
+   * @param {Array.<google.Place>} array of googlePlaces.
+   * @return {Array.<Place>} array of Place objects.
    */
   createFromGooglePlaces: function(googlePlaces) {
     var places = [];
@@ -69,6 +73,7 @@ Place.reopenClass({
       console.log(placeObject);
       places.push(Place.createFromGooglePlace(placeObject));
     }
+
     // console.log(places);
     return places;
   },
@@ -80,13 +85,9 @@ Place.reopenClass({
    * @return {Array.<Place>}
    */
   merge: function(placesA, placesB) {
-    console.log('merging');
-    console.log(placesA);
-    console.log(placesB);
-    var merged = _.uniq(_.union(placesA, placesB), 'google_place_id');
-    console.log(merged);
+    var merged = _.uniq(_.union(placesA, placesB), 'googlePlaceId');
     return merged;
-  }
+  },
 });
 
 module.exports = {

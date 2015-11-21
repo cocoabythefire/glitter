@@ -8,7 +8,7 @@ var crypto = BPromise.promisifyAll(require('crypto'));
 
 var Token = db.model('token', {
   value: db.attr(),
-  user: db.belongsTo()
+  user: db.belongsTo(),
 });
 
 Token.reopenClass({
@@ -23,7 +23,7 @@ Token.reopenClass({
       shasum.update(data);
       var tokenValue = shasum.digest('hex');
       var newToken = Token.create({
-        value: tokenValue
+        value: tokenValue,
       });
       return newToken.save();
     });
@@ -31,8 +31,9 @@ Token.reopenClass({
 
   /**
    * Delete a Token
-   * @param {Object.<Token value>} the value of the token to delete.
-   * @return {Object.<Result>} the result of saving the delete for the Token.
+   *
+   * @param {String} tokenValue The value of the token to delete.
+   * @return {Promise} The result of saving the delete for the token.
    */
   deleteToken: function(tokenValue) {
     return BPromise.resolve()
@@ -49,7 +50,7 @@ Token.reopenClass({
         throw _.extend(new Error(errorMessage), { status: 401 });
       }
       else { throw e; }
-    })
+    });
   },
 });
 

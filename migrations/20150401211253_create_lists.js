@@ -1,7 +1,7 @@
 'use strict';
 
 exports.up = function(schema) {
-    return schema.createTable('lists', function(table) {
+  return schema.createTable('lists', function(table) {
     table.serial('id').primaryKey();
     table.string('name');
   });

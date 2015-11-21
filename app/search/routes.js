@@ -4,13 +4,11 @@ var _ = require('lodash');
 var BPromise = require('bluebird');
 var express = require('express');
 var Place = require('../places/models').Place;
-var handleError = require('../middleware').error;
 var secure = require('../middleware').auth;
 
 var router = express.Router();
 var api = express.Router();
 
-var googleAPIKey = 'AIzaSyBF0MrwABAJ_Nf1bbNjBMeSps0aigriEJg';
 var googleNearbySearch = require('../../external-services/google').nearbySearch;
 
 
@@ -56,7 +54,7 @@ api.get('/place/nearbysearch', secure, function(req, res) {
     // in the response body (keep separate so front-end can display accordingly)
     res.send(_.map(places, 'attrs'));
   })
-  .catch(function(e) {
+  .catch(function() {
     res.status(500).send('error of some sort!');
   });
 });

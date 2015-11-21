@@ -17,9 +17,10 @@ var api = express.Router();
 
 /**
  * Filter Place Details
- * @param {Object.<Place details>} the place details.
- * @return {Object.<Filtered details>} the place details filtered
- * to remove the google_place_id key/value.
+ *
+ * @param {Object} placeDetails The place details.
+ * @return {Object} The place details filtered to remove the google_place_id
+ * key/value.
  */
 var filterPlaceDetails = function(placeDetails) {
   if (placeDetails) {
@@ -31,12 +32,13 @@ var filterPlaceDetails = function(placeDetails) {
 
 /**
  * Filter Commentary
- * @param {Object.<Commentary>} the commentary.
- * @return {Object.<Filtered commentary>} the commentary filtered
- * to remove the 'place_id', 'user_id' keys/values.
+ *
+ * @param {Object} commentary The commentary.
+ * @return {Object} The commentary filtered to remove the 'place_id', 'user_id'
+ * keys/values.
  */
 var filterCommentary = function(commentary) {
-  if(commentary) {
+  if (commentary) {
     return _.omit(commentary.attrs, 'place_id', 'user_id');
   }
   return {};
@@ -44,7 +46,7 @@ var filterCommentary = function(commentary) {
 
 
 // Get all Places - not a secure request
-api.get('/places', function (req, res) {
+api.get('/places', function(req, res) {
   var query = Place.objects
     .order('id')
     .limit(100);
@@ -60,11 +62,11 @@ api.get('/places', function (req, res) {
  */
 
 // Get details on a specific Place
-api.get('/places/:id', secure, function (req, res) {
+api.get('/places/:id', secure, function(req, res) {
   BPromise.bind({})
   .then(function() {
     var query = Place.objects
-    .where({ 'id' : req.params.id });
+    .where({ id: req.params.id });
     return query.limit(1).fetchOne();
   })
   .then(function(placeResult) {
@@ -78,14 +80,14 @@ api.get('/places/:id', secure, function (req, res) {
   })
   .then(function(commentaryResult) {
     res.send({ commentary: filterCommentary(commentaryResult[0]),
-                  details: filterPlaceDetails(this.placeResult) });
+                  details: filterPlaceDetails(this.placeResult), });
   })
   .catch(handleError(res));
 });
 
 
 // Create a new Place
-api.post('/places', secure, function (req, res) {
+api.post('/places', secure, function(req, res) {
   var newPlace = Place.create({
     name: req.body.name,
   });
@@ -96,8 +98,8 @@ api.post('/places', secure, function (req, res) {
 });
 
 // Delete a Place and remove from all Lists
-api.delete('/places/:id', secure, function (req, res) {
-   BPromise.bind({})
+api.delete('/places/:id', secure, function(req, res) {
+  BPromise.bind({})
   .then(function() {
     return Place.objects.find(req.params.id); })
   .then(function(place) { this.place = place; })
@@ -111,7 +113,7 @@ api.delete('/places/:id', secure, function (req, res) {
     return this.place.save();
   })
   .then(function() {
-    res.send({ status: "OK" });
+    res.send({ status: 'OK' });
   })
   .catch(function(e) {
     if (e.code === 'NO_RESULTS_FOUND') {

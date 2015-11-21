@@ -7,7 +7,7 @@ var User = db.model('user', {
   passwordDigest: db.attr(),
   lists: db.hasMany(),
   tokens: db.hasMany(),
-  commentaries: db.hasMany()
+  commentaries: db.hasMany(),
 });
 
 module.exports = {
