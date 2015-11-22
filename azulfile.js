@@ -5,7 +5,7 @@ module.exports = {
     adapter: 'pg',
     connection: {
       database: 'glitter',
-      user: 'root',
+      user: process.env.PG_USER || 'root',
       password: '',
     },
   },
@@ -13,7 +13,7 @@ module.exports = {
     adapter: 'pg',
     connection: {
       database: 'glitter',
-      user: 'root',
+      user: process.env.PG_USER || 'root',
       password: '',
     },
   },
@@ -21,7 +21,7 @@ module.exports = {
     adapter: 'pg',
     connection: {
       database: 'glitter_test',
-      user: 'root',
+      user: process.env.PG_USER || 'root',
       password: '',
     },
   },

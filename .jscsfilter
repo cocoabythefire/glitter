@@ -1,0 +1,12 @@
+'use strict';
+
+module.exports = function(e) {
+  var report = true;
+  var isTestFile = !!e.filename.match(/^\.\/test\//);
+  var isMigrationFile = !!e.filename.match(/^\.\/migrations\//);
+  var isJsDocWarning = e.message.match(/valid jsdoc-block definition/i);
+  if ((isTestFile || isMigrationFile) && isJsDocWarning) {
+    report = false;
+  }
+  return report;
+};

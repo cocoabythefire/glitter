@@ -1,0 +1,21 @@
+node_js:
+- '4.2'
+- '5.1'
+sudo: false
+language: node_js
+script: npm run-script test-travis
+before_script:
+  - psql -c 'create database "glitter_test";' -U postgres
+after_script:
+  - npm install coveralls@2 && cat ./coverage/lcov.info | coveralls
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+env:
+  global:
+    - NODE_ENV=test
+    - PG_USER=postgres
+    - CXX=g++-4.8

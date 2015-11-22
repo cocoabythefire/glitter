@@ -4,7 +4,8 @@
   "description": "everywhere you want to go",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report $(if [ \"$TRAVIS\" ]; then echo lcovonly; else echo html; fi) -- --recursive && if [ \"$TRAVIS\" ]; then cat ./coverage/lcov.info | ./node_modules/.bin/coveralls; fi"
+    "test": "jshint . && jscs . && istanbul cover node_modules/.bin/_mocha --report html --",
+    "test-travis": "jshint . && jscs . && azul migrate && istanbul cover node_modules/.bin/_mocha --report lcovonly --"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,8 @@
     "grunt": "^0.4.5",
     "grunt-ng-constant": "^1.1.0",
     "istanbul": "^0.3.13",
+    "jscs": "^2.6.0",
+    "jshint": "^2.8.0",
     "mocha": "^2.2.1",
     "morgan": "^1.6.1",
     "protractor": "^2.1.0",
