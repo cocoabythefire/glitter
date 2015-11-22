@@ -38,7 +38,8 @@
     "checkAnnotations": {
       "preset": "jsdoc3",
       "extra": {
-        "scope": "some"
+        "scope": "some",
+        "override": false
       }
     },
     "checkReturnTypes": true,

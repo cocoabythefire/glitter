@@ -160,7 +160,7 @@ describe('glitter', function() {
     })
     .spread(function(response, body) {
       expect(response.statusCode).to.eql(200);
-      expect(body).to.eql({ id: 1, name: 'Salt and Straw' });
+      expect(body).to.eql({ id: 1, name: 'Salt and Straw', temporary: false });
     });
   });
 
@@ -261,8 +261,9 @@ describe('glitter', function() {
               neighborhood: null,
               phone: null,
               postal_code: null,
+              temporary: false,
               timezone: null,
-              type: null,
+              types: null,
               website: null,
             },
             {
@@ -278,8 +279,9 @@ describe('glitter', function() {
               neighborhood: null,
               phone: null,
               postal_code: null,
+              temporary: false,
               timezone: null,
-              type: null,
+              types: null,
               website: null,
             },
             {
@@ -295,8 +297,9 @@ describe('glitter', function() {
               neighborhood: null,
               phone: null,
               postal_code: null,
+              temporary: false,
               timezone: null,
-              type: null,
+              types: null,
               website: null,
             },
             {
@@ -312,8 +315,9 @@ describe('glitter', function() {
               neighborhood: null,
               phone: null,
               postal_code: null,
+              temporary: false,
               timezone: null,
-              type: null,
+              types: null,
               website: null,
             },
             {
@@ -329,8 +333,9 @@ describe('glitter', function() {
               neighborhood: null,
               phone: null,
               postal_code: null,
+              temporary: false,
               timezone: null,
-              type: null,
+              types: null,
               website: null,
             },
             {
@@ -346,8 +351,9 @@ describe('glitter', function() {
               neighborhood: null,
               phone: null,
               postal_code: null,
+              temporary: false,
               timezone: null,
-              type: null,
+              types: null,
               website: null,
             },
             {
@@ -363,8 +369,9 @@ describe('glitter', function() {
               neighborhood: null,
               phone: null,
               postal_code: null,
+              temporary: false,
               timezone: null,
-              type: null,
+              types: null,
               website: null,
             },
           ],

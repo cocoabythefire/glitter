@@ -27,7 +27,8 @@ describe('place search', function() {
           lng: -122.6731105,
         });
         expect(newPlace.address).to.eql('22 Southwest 3rd Avenue, Portland');
-        expect(newPlace.type).to.eql(
+        expect(newPlace.temporary).to.eql(true);
+        expect(newPlace.types).to.eql(
           ['store', 'cafe', 'food', 'point_of_interest', 'establishment']
         );
       });

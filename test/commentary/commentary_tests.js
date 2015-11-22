@@ -13,8 +13,6 @@ var baseURL = 'http://localhost:' + port;
 
 var db = app.get('db');
 
-// require('azul-logger')(db.query);
-
 describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });
   after(function(done) { server.close(done); });
@@ -78,9 +76,10 @@ describe('glitter', function() {
           neighborhood: null,
           country: null,
           postal_code: null,
+          temporary: false,
           timezone: null,
           website: null,
-          type: null,
+          types: null,
         },
         commentary: {},
       });
@@ -116,9 +115,10 @@ describe('glitter', function() {
           neighborhood: null,
           country: null,
           postal_code: null,
+          temporary: false,
           timezone: null,
           website: null,
-          type: null,
+          types: null,
         },
         commentary: {
           id: 3,

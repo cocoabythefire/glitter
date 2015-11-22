@@ -3,10 +3,6 @@
 var _ = require('lodash');
 var db = require('../db');
 
-// TODO: add a temp property to Place that can
-// be used to determine if this is a saved object
-// or one we are just using for sorting/searching
-// and may or may not be saved in the future
 var Place = db.model('place', {
   name: db.attr(),
   googlePlaceId: db.attr(),
@@ -19,11 +15,23 @@ var Place = db.model('place', {
   neighborhood: db.attr(),
   country: db.attr(),
   postalCode: db.attr(),
+  temporary: db.attr(),
   timezone: db.attr(),
   website: db.attr(),
-  type: db.attr(),  // TODO: change this to typeS
+  types: db.attr(),  // TODO: change this to typeS
   lists: db.hasMany({ join: 'lists_places' }),
   commentaries: db.hasMany(),
+
+  /**
+   * Place constructor.
+   *
+   * @override
+   */
+  init: function(properties) {
+    this._super(_.defaults(properties, {
+      temporary: false,
+    }));
+  },
 });
 
 
@@ -57,7 +65,8 @@ Place.reopenClass({
       googlePlaceId: googlePlace['place_id'],
       location: googlePlace.geometry.location,
       address: googlePlace.vicinity,
-      type: googlePlace.types,
+      temporary: true,
+      types: googlePlace.types,
     });
   },
   /**
