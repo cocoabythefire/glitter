@@ -22,20 +22,16 @@
     "express": "^4.12.3",
     "http-proxy": "^1.11.1",
     "lodash": "^3.6.0",
-    "pg": "^4.3.0"
+    "morgan": "^1.6.1",
+    "pg": "^4.3.0",
+    "request": "^2.54.0"
   },
   "devDependencies": {
     "chai": "^2.2.0",
-    "coveralls": "^2.11.2",
-    "grunt": "^0.4.5",
-    "grunt-ng-constant": "^1.1.0",
     "istanbul": "^0.3.13",
     "jscs": "^2.6.0",
     "jshint": "^2.8.0",
     "mocha": "^2.2.1",
-    "morgan": "^1.6.1",
-    "protractor": "^2.1.0",
-    "request": "^2.54.0",
     "sinon": "^1.14.1",
     "sinon-chai": "^2.8.0"
   }
