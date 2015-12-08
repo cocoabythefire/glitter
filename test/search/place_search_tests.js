@@ -61,24 +61,21 @@ describe('place search', function() {
       });
     });
 
-    it.skip('should work when one of the lists is empty', function() {
-      var arr = [];
+    it('should work when one of the lists is empty', function() {
+      var googlePlaces = [];
       var listA = require('../fixtures/google_place_list_a');
-      for (var i in listA) {
-        arr.push(i);
+      for (var i=0; i < listA.length; i++) {
+        googlePlaces.push(listA[i]);
       }
-
-      // var converted = Place.createFromGooglePlaces(arr);
       return BPromise.resolve()
-
-      // .then(function() {
-      //   return Place.createFromGooglePlaces(arr);
-      // })
+      .then(function() {
+        return Place.createFromGooglePlaces(googlePlaces);
+      })
       .then(function(convertedList) {
         return Place.merge(convertedList, []);
       })
       .then(function(result) {
-        expect(result).to.eql(listA);
+        expect(result.length).to.eql(20);
       });
     });
 

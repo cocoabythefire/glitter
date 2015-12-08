@@ -13,6 +13,7 @@ var port = 54210;
 var baseURL = 'http://localhost:' + port;
 
 var db = app.get('db');
+var Place = db.model('place');
 
 describe('glitter', function() {
   before(function(done) { server = app.listen(port, done); });

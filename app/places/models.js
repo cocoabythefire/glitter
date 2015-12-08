@@ -61,6 +61,7 @@ Place.reopenClass({
       throw new Error('Missing location data.');
     }
     return Place.create({
+      id: 999, // TODO: this can't be hard coded
       name: googlePlace.name,
       googlePlaceId: googlePlace['place_id'],
       location: googlePlace.geometry.location,
@@ -77,13 +78,9 @@ Place.reopenClass({
    */
   createFromGooglePlaces: function(googlePlaces) {
     var places = [];
-    for (var placeObject in googlePlaces) {
-      console.log('place object');
-      console.log(placeObject);
-      places.push(Place.createFromGooglePlace(placeObject));
+    for (var i = 0; i < googlePlaces.length; i++) {
+      places.push(Place.createFromGooglePlace(googlePlaces[i]));
     }
-
-    // console.log(places);
     return places;
   },
   /**

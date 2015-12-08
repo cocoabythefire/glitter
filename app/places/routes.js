@@ -61,6 +61,30 @@ api.get('/places', function(req, res) {
  * Secure Routes
  */
 
+// // Get details on a specific Place
+// api.get('/places/:id', secure, function(req, res) {
+//   BPromise.bind({})
+//   .then(function() {
+//     var query = Place.objects
+//     .where({ id: req.params.id });
+//     return query.limit(1).fetchOne();
+//   })
+//   .then(function(placeResult) {
+//     this.placeResult = placeResult;
+//   })
+//   .then(function() {
+//     var query = Commentary.objects
+//     .where({ place: this.placeResult })
+//     .where({ user: req.user });
+//     return query.limit(1).fetch();
+//   })
+//   .then(function(commentaryResult) {
+//     res.send({ commentary: filterCommentary(commentaryResult[0]),
+//                   details: filterPlaceDetails(this.placeResult), });
+//   })
+//   .catch(handleError(res));
+// });
+
 // Get details on a specific Place
 api.get('/places/:id', secure, function(req, res) {
   BPromise.bind({})

@@ -25,7 +25,6 @@ api.get('/place/nearbysearch', secure, function(req, res) {
   var radius = req.query.radius || 5;
 
   var googleResults = [];
-  var dbResults = [];
 
   BPromise.resolve()
   .then(function() {
@@ -39,23 +38,23 @@ api.get('/place/nearbysearch', secure, function(req, res) {
   .then(function() {
     // TODO: search the glitter database for any places that are near
     // this geographic location & radius (use a default radius if not supplied)
-    // and have a keyword match against name (if a keyword was supplied)
+    // and have a better keyword match condition
+    var query = Place.objects
+    .order('id')
+    .where({ name$contains: keywordSearch })
+    .limit(20);
+    return query.fetch();
   })
-  .then(function(fetchedPlaces) {
-    dbResults = fetchedPlaces;
-
-    // TODO: merge the google search with our place search results by
-    // removing duplicates (favor keeping places from our database)
+  .then(function(fetchResults) {
+    // TODO: favor keeping places from our database over google results?
+    return Place.merge(fetchResults, googleResults);
   })
   .then(function(places) {
-
-    // TODO: send a response object that contains
-    // both the google results and our place results
-    // in the response body (keep separate so front-end can display accordingly)
     res.send(_.map(places, 'attrs'));
   })
   .catch(function() {
-    res.status(500).send('error of some sort!');
+    res.status(500)
+    .send('Could not complete nearby search due to unknown error.');
   });
 });
 
