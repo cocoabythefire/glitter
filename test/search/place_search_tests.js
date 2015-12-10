@@ -21,6 +21,7 @@ describe('place search', function() {
       .then(function(newPlace) {
         expect(newPlace).to.exist;
         expect(newPlace.name).to.eql('Voodoo Doughnut');
+        expect(newPlace.id).to.eql('temp_ChIJ70AxJAcKlVQRde9D82gpfSU');
         expect(newPlace.googlePlaceId).to.eql('ChIJ70AxJAcKlVQRde9D82gpfSU');
         expect(newPlace.location).to.eql({
           lat: 45.5226206,

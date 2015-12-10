@@ -6,6 +6,7 @@ var sinon = require('sinon');
 var request = require('request');
 var google = require('../../external-services/google');
 var googleNearbySearch = google.nearbySearch;
+var placeDetailSearch = google.placeDetails;
 
 chai.use(require('sinon-chai'));
 
@@ -77,6 +78,34 @@ describe('google', function() {
       expect(function() {
         googleNearbySearch('coffee');
       }).to.throw(/missing.*lat.*long.*nearby.*search/i);
+    });
+  });
+
+  describe('place detail request', function() {
+
+    beforeEach(function() {
+      var response =
+        require('../fixtures/google_place_details_voodoo');
+      sinon.stub(request, 'get').yieldsAsync(null, [{}, response]);
+    });
+
+    afterEach(function() {
+      request.get.restore();
+    });
+
+    it('with no placeId fails', function() {
+      expect(function() {
+        placeDetailSearch();
+      }).to.throw(/missing.*place.*id/i);
+    });
+
+    it('works with valid placeId', function() {
+      return placeDetailSearch('ChIJ70AxJAcKlVQRde9D82gpfSU').then(function(/*results*/) {
+        var requestConfig = request.get.getCall(0).args[0];
+        expect(requestConfig.qs).to.have.property('placeid', 'ChIJ70AxJAcKlVQRde9D82gpfSU');
+         expect(requestConfig.qs).to.have.property('key')
+          .with.match(/\w{39}/i);
+      });
     });
   });
 });

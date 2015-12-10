@@ -203,6 +203,63 @@ describe('glitter', function() {
     });
   });
 
+  // TODO: this test causes a real google request to take place
+  // going to need to sinon stub
+  // Try to add a Temporary Google Place to a List
+  it('POST /api/lists/1/places with temp google place', function() {
+    var baseRequest = {
+      url: baseURL + '/api/lists/1/places',
+      method: 'post',
+      headers: this.tokenHeader,
+      json: true,
+    };
+    var postRequest = _.extend({}, baseRequest, {
+      url: baseURL + '/api/lists/1/places/temp_ChIJ70AxJAcKlVQRde9D82gpfSU',
+    });
+    var getRequest = _.extend({}, baseRequest, { method: 'get' });
+
+    return BPromise.bind(this)
+    .then(function() {
+      this.list1.user = this.user;
+      return this.list1.save();
+    })
+    .then(function() { return request(postRequest); })
+    .spread(function(response, body) {
+      expect(body).to.eql({
+        status: 'OK',
+      });
+      expect(response.statusCode).to.eql(200);
+    })
+    .then(function() { return request(getRequest); })
+    .spread(function(response, body) {
+      expect(response.statusCode).to.eql(200);
+      expect(response.statusCode).to.eql(200);
+      expect(body).to.eql({
+        places: [
+          {
+            address: '22 Southwest 3rd Avenue, Portland',
+            country: null,
+            google_place_id: 'ChIJ70AxJAcKlVQRde9D82gpfSU',
+            icon_url: null,
+            id: 9, // id is 9 bc helpers created 8 already
+            intl_phone: null,
+            locality: null,
+            location: '{"lat":45.5226206,"lng":-122.6731105}',
+            name: 'Voodoo Doughnut',
+            neighborhood: null,
+            phone: null,
+            postal_code: null,
+            temporary: false,
+            timezone: null,
+            types: '["cafe","store","food","point_of_interest","establishment"]',
+            website: 'http://voodoodoughnut.com/',
+          },
+        ],
+      });
+    });
+  });
+
+
   // Try to Create and Add a New Place to a List
   it('POST /api/lists/1/places with new place', function() {
     var baseRequest = {

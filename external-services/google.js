@@ -6,6 +6,8 @@ var request = BPromise.promisifyAll(require('request'));
 var API_KEY = 'AIzaSyBF0MrwABAJ_Nf1bbNjBMeSps0aigriEJg';
 var NEARBY_SEARCH_URL = 'https://maps.googleapis.com' +
   '/maps/api/place/nearbysearch/json';
+var PLACE_DETAILS_URL = 'https://maps.googleapis.com' +
+  '/maps/api/place/details/json';
 var TYPES = 'bakery|bar|cafe|food|grocery_or_supermarket|liquor_store|' +
   'meal_delivery|meal_takeaway|night_club|restaurant';
 
@@ -14,12 +16,6 @@ var TYPES = 'bakery|bar|cafe|food|grocery_or_supermarket|liquor_store|' +
 //   location=-33.8670522,151.1957362&
 //   radius=500&
 //   types=food&
-//   key=API_KEY
-// https://maps.googleapis.com/maps/api/place/autocomplete/json?
-//   input=Amoeba&
-//   types=establishment&
-//   location=37.76999,-122.44696&
-//   radius=500&
 //   key=API_KEY
 // https://maps.googleapis.com/maps/api/place/details/json?
 //   placeid=ChIJN1t_tDeuEmsRUsoyG83frY4&
@@ -83,5 +79,29 @@ exports.nearbySearch = function(keywordSearch, ll, radius) {
   })
   .spread(function(response, apiResult) {
     return apiResult.results;
+  });
+};
+
+
+/**
+ * Make a request to Google for place details.
+ *
+ * @param {String} placeId - The Google Place Id
+ * @return {Promise.<Array>}
+ */
+exports.placeDetails = function(placeID) {
+  if (!placeID) {
+    throw new Error('Missing place id for place details request');
+  }
+  return request.getAsync({
+    url: PLACE_DETAILS_URL,
+    qs: {
+      placeid: placeID,
+      key: API_KEY,
+    },
+    json: true,
+  })
+  .spread(function(response, apiResult) {
+    return apiResult.result;
   });
 };

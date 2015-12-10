@@ -11,7 +11,6 @@ var secure = require('../middleware').auth;
 var router = express.Router();
 var api = express.Router();
 
-
 /**
  * Secure Routes
  */
@@ -117,12 +116,16 @@ api.post('/lists/:id/places/:pid', secure, function(req, res) {
     }
   })
   .then(function() {
-    if (req.params.pid) {
-      return Place.objects.find(req.params.pid);
+    var placeId = req.params.pid;
+    var result;
+    if (placeId.match(/^temp_/)) {
+      var googleId = placeId.slice(5);
+      result = Place.findAndSaveGooglePlace(googleId);
     }
     else {
-      throw _.extend(new Error('invalid action'), { status: 403 });
+      result = Place.objects.find(req.params.pid);
     }
+    return result;
   })
   .then(function(place) {
     return this.list.addPlace(place);
