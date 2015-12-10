@@ -139,7 +139,7 @@ Place.reopenClass({
     })
     .catch(function(e) { // TODO: code review discuss
       throw e;
-    })
+    });
   },
   /**
    * Merge two place lists and remove duplicates
