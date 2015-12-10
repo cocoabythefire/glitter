@@ -123,7 +123,7 @@ Place.reopenClass({
    * Request Google Place details, then save
    * result as a new Place object.
    *
-   * @param {string} placeId - Google placeId.
+   * @param {String} placeId - Google placeId.
    * @return {Promise.<Place>} new Place object.
    */
   findAndSaveGooglePlace: function(placeId) {

@@ -65,7 +65,7 @@ describe('place search', function() {
     it('should work when one of the lists is empty', function() {
       var googlePlaces = [];
       var listA = require('../fixtures/google_place_list_a');
-      for (var i=0; i < listA.length; i++) {
+      for (var i = 0; i < listA.length; i++) {
         googlePlaces.push(listA[i]);
       }
       return BPromise.resolve()

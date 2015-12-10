@@ -250,7 +250,8 @@ describe('glitter', function() {
             postal_code: null,
             temporary: false,
             timezone: null,
-            types: '["cafe","store","food","point_of_interest","establishment"]',
+            types:
+              '["cafe","store","food","point_of_interest","establishment"]',
             website: 'http://voodoodoughnut.com/',
           },
         ],

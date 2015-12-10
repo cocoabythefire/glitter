@@ -100,10 +100,12 @@ describe('google', function() {
     });
 
     it('works with valid placeId', function() {
-      return placeDetailSearch('ChIJ70AxJAcKlVQRde9D82gpfSU').then(function(/*results*/) {
+      var googlePlaceID = 'ChIJ70AxJAcKlVQRde9D82gpfSU';
+      return placeDetailSearch(googlePlaceID)
+      .then(function(/*results*/) {
         var requestConfig = request.get.getCall(0).args[0];
-        expect(requestConfig.qs).to.have.property('placeid', 'ChIJ70AxJAcKlVQRde9D82gpfSU');
-         expect(requestConfig.qs).to.have.property('key')
+        expect(requestConfig.qs).to.have.property('placeid', googlePlaceID);
+        expect(requestConfig.qs).to.have.property('key')
           .with.match(/\w{39}/i);
       });
     });
